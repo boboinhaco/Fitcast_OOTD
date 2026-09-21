@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fitcast Avatar Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Fitcast</div>
+      <div class="progress" aria-label="설정 진행 단계">
+        <span class="active">1</span><b>아바타 설정</b><i></i><span>2</span><b>스타일 선택</b><i></i><span>3</span><b>완료</b>
+      </div>
+      <button class="ghost" id="resetButton" type="button">초기화</button>
+    </header>
+
+    <main class="layout">
+      <aside class="panel choices">
+        <div class="panel-heading">
+          <span class="eyebrow">FACE</span>
+          <h2>얼굴 분위기</h2>
+          <p>나와 가장 가까운 인상을 골라주세요.</p>
+        </div>
+        <div class="choice-grid" id="faceOptions"></div>
+      </aside>
+
+      <section class="preview-panel">
+        <div class="preview-heading">
+          <div>
+            <span class="eyebrow">MY AVATAR</span>
+            <h1>나만의 핏을 만들어봐요</h1>
+          </div>
+          <span class="live-badge"><i></i> 실시간 미리보기</span>
+        </div>
+
+        <div class="avatar-wrap">
+          <div class="avatar-stage" id="avatarStage" aria-live="polite" aria-label="선택한 얼굴·헤어·체형으로 합성한 아바타"></div>
+        </div>
+
+        <div class="selection-summary" id="selectionSummary"></div>
+        <div class="preview-actions">
+          <button class="secondary" id="downloadButton" type="button">PNG 저장</button>
+          <button class="primary" type="button">이 모습으로 시작하기 <span>→</span></button>
+        </div>
+      </section>
+
+      <aside class="panel right-panel">
+        <section>
+          <div class="panel-heading compact">
+            <span class="eyebrow">HAIR</span>
+            <h2>헤어스타일</h2>
+          </div>
+          <div class="choice-grid hair-grid" id="hairOptions"></div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section>
+          <div class="panel-heading compact">
+            <span class="eyebrow">BODY</span>
+            <h2>체형</h2>
+          </div>
+          <div class="choice-grid body-grid" id="bodyOptions"></div>
+        </section>
+      </aside>
+    </main>
+
+    <script src="dist/layout.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

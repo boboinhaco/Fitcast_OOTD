@@ -1,0 +1,26 @@
+{
+  "faces": {
+    "puppy": "강아지상",
+    "cat": "고양이상",
+    "hamster": "햄스터상",
+    "deer": "사슴상",
+    "rabbit": "토끼상",
+    "fox": "여우상"
+  },
+  "hair": {
+    "long-straight": "긴 생머리",
+    "long-wave": "긴 웨이브",
+    "hush-cut": "허쉬컷",
+    "bob": "단발",
+    "ponytail": "포니테일",
+    "short-layered": "숏 레이어드"
+  },
+  "bodies": {
+    "pear": "하체 중심형",
+    "inverted-triangle": "상체 중심형",
+    "oval": "둥근 체형",
+    "rectangle": "일자형",
+    "hourglass": "굴곡형",
+    "athletic": "탄탄한 체형"
+  }
+}
