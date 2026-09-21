@@ -202,7 +202,24 @@ def photo_anchors(img: Image.Image) -> dict:
     widths = np.array(widths, dtype=np.float32)
     h, w = len(widths), img.width
     part = lambda frac: float(widths[: max(1, int(h * frac))].max() / w)
-    return {"top": round(part(0.25), 3), "waist": round(part(0.10), 3), "max": round(float(widths.max() / w), 3)}
+    return {"top": round(part(0.25), 3), "waist": round(part(0.10), 3), "max": round(float(widths.max() / w), 3), "color": main_color(img)}
+
+
+def main_color(img: Image.Image) -> str:
+    """누끼 사진의 대표색 (#rrggbb). 아바타에는 사진 대신 체형에 맞춰 그린 옷을 이 색으로 입힘.
+
+    색을 굵게 양자화해서 가장 넓은 색 묶음의 평균을 씀 (로고·단추 같은 작은 무늬는 묻힘).
+    """
+    small = img.convert("RGBA").resize((64, 64), Image.Resampling.BILINEAR)
+    arr = np.asarray(small, dtype=np.float32)
+    px = arr[arr[..., 3] > 200][:, :3]
+    if not len(px):
+        return "#8a8a8a"
+    keys = (px // 32).astype(np.int32)
+    ids = keys[:, 0] * 64 + keys[:, 1] * 8 + keys[:, 2]
+    top = np.bincount(ids).argmax()
+    r, g, b = px[ids == top].mean(0)
+    return f"#{int(r):02x}{int(g):02x}{int(b):02x}"
 
 
 def cache_path(url: str) -> Path:

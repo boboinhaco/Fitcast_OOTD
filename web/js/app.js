@@ -1,4 +1,4 @@
-/* 화면 상태·라우팅·렌더링 (랜딩 → 온보딩 5단계 → 피팅룸) */
+/* 화면 상태·라우팅·렌더링 (랜딩 → 온보딩 4단계 → 피팅룸) */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -23,7 +23,7 @@
   const state = {
     profile: { ...Avatar.DEFAULT_PROFILE, styles: [], ...(saved?.profile || {}) },
     outfit: saved?.outfit || {},
-    step: saved?.step || 0,
+    step: Math.min(saved?.step || 0, 3),
     done: !!saved?.done,
   };
   // 성별에 없는 헤어·얼굴이 남아 있으면 (예전 저장값·성별 변경) 첫 선택지로
@@ -174,16 +174,15 @@
 
     <section class="band">
       <div class="wrap">
-        ${bar("My Avatar", "나만의 아바타", "_5steps", "item 02")}
+        ${bar("My Avatar", "나만의 아바타", "_4steps", "item 02")}
         <div class="duo-grid">
           <div>
             ${tagline("STEP", "AVATAR", 70)}
             <ol class="stepline">
               <li><b>01</b>체형 — 모래시계·삼각·역삼각·일자·사과·탄탄한 체형</li>
               <li><b>02</b>옷 스타일 — 고프코어부터 올드머니까지 48가지</li>
-              <li><b>03</b>헤어 — 긴 생머리·허쉬컷·번 헤어·댄디컷 등 + 컬러</li>
-              <li><b>04</b>얼굴 분위기 — 강아지상·고양이상·햄스터상…</li>
-              <li><b>05</b>키·몸무게 — 비율과 실루엣에 그대로 반영</li>
+              <li><b>03</b>얼굴 & 헤어 — 강아지상·고양이상… + 긴 생머리·허쉬컷·단발 + 컬러</li>
+              <li><b>04</b>키·몸무게 — 비율과 실루엣에 그대로 반영</li>
             </ol>
             <p class="copy">고른 그대로 <b>나를 닮은 아바타가 세워지고</b>,<br>이 아바타가 앞으로 모든 옷을 대신 입어봐요.</p>
             <div class="cta-row"><span class="name">Build My Avatar</span><a class="btn dark" href="#setup">start ${arrow}</a></div>
@@ -250,8 +249,7 @@
   const STEPS = [
     { en: "Body Shape", ko: "체형", h: "어떤 체형에 가까우세요?", p: "성별·피부톤·체형을 고르면 아바타 실루엣이 바로 바뀌어요." },
     { en: "Style", ko: "옷 스타일", h: "좋아하는 옷 스타일을 골라주세요", p: "최대 5개까지 고를 수 있어요. 고른 스타일로 옷장을 먼저 채워드려요." },
-    { en: "Hair", ko: "헤어스타일", h: "지금 머리 스타일은요?", p: "기장과 컬러를 고르면 아바타에 그대로 반영돼요." },
-    { en: "Face Mood", ko: "얼굴 분위기", h: "어떤 얼굴상에 가까우세요?", p: "눈매·눈꼬리·볼살·턱선 표현이 달라져요." },
+    { en: "Face & Hair", ko: "얼굴 & 헤어", h: "얼굴 분위기와 헤어를 골라주세요", p: "고르는 대로 가운데 미리보기에 바로 반영돼요." },
     { en: "Height & Weight", ko: "키·몸무게", h: "키와 몸무게를 알려주세요", p: "아바타 비율과 핏 추천에만 쓰이고, 이 브라우저에만 저장돼요." },
   ];
   const MAX_STYLES = 5;
@@ -309,26 +307,34 @@
         </div>`).join("")}`;
   }
 
-  function stepHair() {
-    const p = state.profile;
-    return `
-      <div class="field-label">Hair color</div>
-      <div class="swatches">${HAIR_COLORS.map((c) => `<button class="swatch" data-k="hc-${c.id}" data-act="hairColor" data-v="${c.hex}" style="background:${c.hex}" aria-pressed="${p.hairColor === c.hex}" aria-label="${c.ko}" title="${c.ko}"></button>`).join("")}</div>
-      <div class="field-label">Hair style</div>
-      <div class="opt-grid face">${forGender(HAIR_STYLES, p.gender).map((h) => `
-        <button class="opt" data-k="h-${h.id}" data-act="hair" data-v="${h.id}" aria-pressed="${p.hair === h.id}">
-          <div class="pic">${Avatar.render({ ...p, hair: h.id }, {}, { view: "face" })}</div>
-          <span class="t">${h.ko}</span><span class="en">${h.group}</span>
-        </button>`).join("")}</div>`;
-  }
+  // 얼굴 & 헤어: 왼쪽 얼굴 분위기 · 가운데 큰 미리보기 · 오른쪽 헤어스타일
+  const CHECK = `<span class="check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+  const bustPreview = () => Avatar.render(state.profile, {}, { view: "bust", label: "내 아바타 미리보기" });
 
-  function stepFace() {
+  function stepLook() {
     const p = state.profile;
-    return `<div class="opt-grid face" style="margin-top:8px">${forGender(FACE_TYPES, p.gender).map((f) => `
-      <button class="opt" data-k="f-${f.id}" data-act="face" data-v="${f.id}" aria-pressed="${p.face === f.id}">
-        <div class="pic">${Avatar.render({ ...p, face: f.id, hair: Avatar.usesKit(p) ? "bun" : p.hair }, {}, { view: "face" })}</div>
-        <span class="t">${f.ko}</span><span class="en">${f.en}</span><div class="d">${f.desc}</div>
-      </button>`).join("")}</div>`;
+    const faceHair = Avatar.usesKit(p) ? "bun" : p.hair; // 얼굴만 비교되게 머리는 묶은 모습으로
+    return `
+      <div class="look-grid">
+        <section class="look-panel" aria-label="얼굴 분위기">
+          <h2>얼굴 분위기</h2><p>원하는 분위기의 얼굴을 선택하세요.</p>
+          <div class="look-opts faces">${forGender(FACE_TYPES, p.gender).map((f) => `
+            <button class="look-opt" data-k="f-${f.id}" data-act="face" data-v="${f.id}" aria-pressed="${p.face === f.id}" title="${esc(f.desc)}">
+              <span class="pic round">${Avatar.render({ ...p, face: f.id, hair: faceHair }, {}, { view: "face" })}</span>${CHECK}
+              <span class="t">${f.ko}</span>
+            </button>`).join("")}</div>
+        </section>
+        <section class="look-stage card bg-studio" id="look-stage" aria-label="아바타 미리보기">${bustPreview()}</section>
+        <section class="look-panel" aria-label="헤어스타일">
+          <h2>헤어스타일</h2><p>원하는 헤어스타일과 컬러를 선택하세요.</p>
+          <div class="swatches">${HAIR_COLORS.map((c) => `<button class="swatch" data-k="hc-${c.id}" data-act="hairColor" data-v="${c.hex}" style="background:${c.hex}" aria-pressed="${p.hairColor === c.hex}" aria-label="${c.ko}" title="${c.ko}"></button>`).join("")}</div>
+          <div class="look-opts hairs">${forGender(HAIR_STYLES, p.gender).map((h) => `
+            <button class="look-opt" data-k="h-${h.id}" data-act="hair" data-v="${h.id}" aria-pressed="${p.hair === h.id}">
+              <span class="pic">${Avatar.hairThumb(p, h.id)}</span>${CHECK}
+              <span class="t">${h.ko}</span>
+            </button>`).join("")}</div>
+        </section>
+      </div>`;
   }
 
   function bmiText() {
@@ -352,27 +358,28 @@
 
   function viewSetup() {
     const n = state.step, S = STEPS[n];
-    const body = [stepBody, stepStyle, stepHair, stepFace, stepSize][n]();
+    const look = n === 2; // 얼굴 & 헤어 단계는 가운데 미리보기가 있어 오른쪽 전신 미리보기를 뺌
+    const body = [stepBody, stepStyle, stepLook, stepSize][n]();
     const canNext = n !== 1 || state.profile.styles.length > 0;
     return `
     <section class="band alt setup">
       <div class="wrap">
-        ${bar(`Step ${pad2(n + 1)} · ${S.en}`, S.ko, "", `step ${pad2(n + 1)}/05`)}
+        ${bar(`Step ${pad2(n + 1)} · ${S.en}`, S.ko, "", `step ${pad2(n + 1)}/${pad2(STEPS.length)}`)}
         <div class="progress" aria-hidden="true">${STEPS.map((_, i) => `<span class="${i <= n ? "on" : ""}"></span>`).join("")}</div>
-        <div class="setup-grid">
+        <div class="setup-grid${look ? " wide" : ""}">
           <div class="fade-in" key="${n}">
             <div class="step-head"><h1>${S.h}</h1><p>${S.p}</p></div>
             ${body}
             <div class="nav-row">
               <button class="btn" data-act="prev" data-k="prev">${n === 0 ? "처음으로" : "이전"}</button>
-              <button class="btn dark lg" data-act="next" data-k="next" ${canNext ? "" : "disabled"}>${n === 4 ? "피팅룸 입장" : "다음"} ${arrow}</button>
+              <button class="btn dark lg" data-act="next" data-k="next" ${canNext ? "" : "disabled"}>${n === STEPS.length - 1 ? "피팅룸 입장" : "다음"} ${arrow}</button>
             </div>
           </div>
-          <aside class="preview" aria-label="아바타 미리보기">
+          ${look ? "" : `<aside class="preview" aria-label="아바타 미리보기">
             <div class="card bg-studio" id="preview-card">${ruler()}${Avatar.render(state.profile, previewLook(), { label: "내 아바타 미리보기" })}</div>
             <span class="tag">@MY <b>FIT</b></span>
             <div class="summary" id="summary">${previewSummary()}</div>
-          </aside>
+          </aside>`}
         </div>
       </div>
     </section>`;
@@ -725,7 +732,7 @@
         state.step--;
         break;
       case "next":
-        if (state.step < 4) state.step++;
+        if (state.step < STEPS.length - 1) state.step++;
         else {
           state.done = true;
           if (!Object.keys(state.outfit).length) state.outfit = autoLook(p.styles);
