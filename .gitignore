@@ -1,0 +1,20 @@
+# 비밀키
+.env
+.env.*
+!.env.example
+
+# 파이썬
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+.pytest_cache/
+
+# Gradio 캐시
+.gradio/
+flagged/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
