@@ -387,3 +387,9 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
   .tag { font-size: 15px; padding: 10px 20px; }
   .connector { display: none; }
 }
+
+/* 개발 중(남성) 표시 */
+.seg button.soon { opacity: 0.45; cursor: not-allowed; }
+.seg button.soon small { font-size: 10px; margin-left: 4px; }
+.soon-card { display: flex; align-items: center; justify-content: center; text-align: center; font: 800 22px/1.2 var(--latin); letter-spacing: 0.06em; color: #b5aca6; }
+.soon-card small { display: block; font: 600 12px/1.6 var(--kr); letter-spacing: 0; }

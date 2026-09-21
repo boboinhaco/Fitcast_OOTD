@@ -186,6 +186,25 @@ def product_only_flags(images: list[bytes]) -> list[bool] | None:
     return [(i + 1) in picked for i in range(len(images))]
 
 
+def photo_anchors(img: Image.Image) -> dict:
+    """누끼 사진의 기준폭 (이미지 폭 대비 비율). 아바타 골격 치수에 맞춰 사진 크기를 정할 때 씀.
+
+    top: 위쪽 25% 구간의 최대 폭 (상의·아우터·원피스의 어깨선), waist: 위쪽 10% 구간의 최대 폭 (하의 허리선), max: 전체 최대 폭
+    """
+    alpha = np.asarray(img.getchannel("A")) > 64
+    rows = np.flatnonzero(alpha.any(1))
+    if not len(rows):
+        return {"top": 1.0, "waist": 1.0, "max": 1.0}
+    widths = []
+    for y in range(rows[0], rows[-1] + 1):
+        xs = np.flatnonzero(alpha[y])
+        widths.append(xs[-1] - xs[0] + 1 if len(xs) else 0)
+    widths = np.array(widths, dtype=np.float32)
+    h, w = len(widths), img.width
+    part = lambda frac: float(widths[: max(1, int(h * frac))].max() / w)
+    return {"top": round(part(0.25), 3), "waist": round(part(0.10), 3), "max": round(float(widths.max() / w), 3)}
+
+
 def cache_path(url: str) -> Path:
     return config.CUTOUT_CACHE_DIR / (hashlib.sha1(url.encode()).hexdigest()[:24] + ".png")
 
@@ -205,8 +224,7 @@ def cutout_for_url(url: str, raw: bytes | None = None) -> dict:
         config.CUTOUT_CACHE_DIR.mkdir(parents=True, exist_ok=True)
         img.save(path, optimize=True)
     with Image.open(path) as im:
-        w, h = im.size
-    return {"image": f"/cutouts/{path.name}", "w": w, "h": h}
+        return {"image": f"/cutouts/{path.name}", "w": im.width, "h": im.height, **photo_anchors(im.convert("RGBA"))}
 
 
 def _safe_download(url: str) -> bytes | None:

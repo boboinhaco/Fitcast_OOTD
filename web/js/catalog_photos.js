@@ -8,7 +8,10 @@ window.CATALOG_PHOTOS = {
   "mall": "더그란데",
   "price": 98000,
   "link": "https://www.google.com/search?ibp=oshop&q=화이트 반팔 티셔츠&prds=productid:4693468203582263592,headlineOfferDocid:4693468203582263592,imageDocid:1160600582100781590,rds:PC_7277791458779456857|PROD_PC_7277791458779456857,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRQNv283GVTJsGBjnGtoFwwoHLAbXzZVHRtElaIUOOsbQNM7KU3gtyk-K7LPnW7HTkZovROmlaFMGdcogEYM036Cy3SGQ7tgiAQqxPWr-DTeCVD7r1VVhz5Ng"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRQNv283GVTJsGBjnGtoFwwoHLAbXzZVHRtElaIUOOsbQNM7KU3gtyk-K7LPnW7HTkZovROmlaFMGdcogEYM036Cy3SGQ7tgiAQqxPWr-DTeCVD7r1VVhz5Ng",
+  "top": 0.921,
+  "waist": 0.625,
+  "max": 0.978
  },
  "b04": {
   "image": "/static/catalog/b04.png",
@@ -19,7 +22,10 @@ window.CATALOG_PHOTOS = {
   "mall": "프레리 공식 스토어",
   "price": 61600,
   "link": "https://www.google.com/search?ibp=oshop&q=핀턱 와이드 슬랙스&prds=catalogid:17858166464084704301,productid:414177133386502372,headlineOfferDocid:4398918415669942470,imageDocid:1498304120433230584,gpcid:3731390156129151185,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSrfhQ7Dm_f2Ad4wtMskrWJhuNcScy5rU6Mz9nC0YK6JhiCrNqE8j3au5tO_mdr8L6j0n4TssJ0"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSrfhQ7Dm_f2Ad4wtMskrWJhuNcScy5rU6Mz9nC0YK6JhiCrNqE8j3au5tO_mdr8L6j0n4TssJ0",
+  "top": 0.722,
+  "waist": 0.665,
+  "max": 0.907
  },
  "s01": {
   "image": "/static/catalog/s01.png",
@@ -30,7 +36,10 @@ window.CATALOG_PHOTOS = {
   "mall": "firstmall.kr",
   "price": 308000,
   "link": "https://www.google.com/search?ibp=oshop&q=러닝 스니커즈&prds=productid:6381862533614821419,headlineOfferDocid:6381862533614821419,imageDocid:7483408385809558102,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRxkE-ZNrMg6gOQQeDWkdSuNdpWd1Dd7RXOSSWzyrTcb8cBA6Yfwx6-lmZ1Yfs8M8eCD0AgU26NxQCxFjyhk2JgdEH6W9FXGkKOaR7xe2hRtUSlGLF7QAB0"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRxkE-ZNrMg6gOQQeDWkdSuNdpWd1Dd7RXOSSWzyrTcb8cBA6Yfwx6-lmZ1Yfs8M8eCD0AgU26NxQCxFjyhk2JgdEH6W9FXGkKOaR7xe2hRtUSlGLF7QAB0",
+  "top": 0.506,
+  "waist": 0.378,
+  "max": 0.977
  },
  "g01": {
   "image": "/static/catalog/g01.png",
@@ -41,7 +50,10 @@ window.CATALOG_PHOTOS = {
   "mall": "ARENA",
   "price": 69000,
   "link": "https://www.google.com/search?ibp=oshop&q=레더 숄더백&prds=catalogid:4715572485423339022,productid:16858705397776459577,headlineOfferDocid:3323086139618541700,imageDocid:17970394420631422282,gpcid:4374432713256310610,mid:576462567297658753,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ2MR_TsYuBxCSUNB_g34SVz09jV2uwMeG-bTLqd-k3ucWupvEL7CmJrzG6dWlpY_C34DP0qNokQSLezyAgGY7d4TcNS7oHAG54_h3Op7zVLjwpJEfO3Q9L"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ2MR_TsYuBxCSUNB_g34SVz09jV2uwMeG-bTLqd-k3ucWupvEL7CmJrzG6dWlpY_C34DP0qNokQSLezyAgGY7d4TcNS7oHAG54_h3Op7zVLjwpJEfO3Q9L",
+  "top": 0.929,
+  "waist": 0.886,
+  "max": 0.946
  },
  "h01": {
   "image": "/static/catalog/h01.png",
@@ -52,7 +64,10 @@ window.CATALOG_PHOTOS = {
   "mall": "롤링롤라이 코리아 RollingRolleye",
   "price": 72000,
   "link": "https://www.google.com/search?ibp=oshop&q=볼캡&prds=productid:12243985058827679474,headlineOfferDocid:12243985058827679474,imageDocid:4370076573542336606,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSiD2lM-4ngCkoHnqKH5MFJt3Gmn7sVh3PafSFW_myviv7Q15zC3G6K7lkKezoxknGvzf8Yi7zyrNg0J1YzXMhZtChPBCfavjFCccZs5qb4MevAwk8wkVbj"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSiD2lM-4ngCkoHnqKH5MFJt3Gmn7sVh3PafSFW_myviv7Q15zC3G6K7lkKezoxknGvzf8Yi7zyrNg0J1YzXMhZtChPBCfavjFCccZs5qb4MevAwk8wkVbj",
+  "top": 0.615,
+  "waist": 0.434,
+  "max": 0.946
  },
  "o02": {
   "image": "/static/catalog/o02.png",
@@ -63,7 +78,10 @@ window.CATALOG_PHOTOS = {
   "mall": "주 원더플레이스",
   "price": 28500,
   "link": "https://www.google.com/search?ibp=oshop&q=니트 볼레로&prds=productid:16631206051691571314,headlineOfferDocid:16631206051691571314,imageDocid:3217674754305635851,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRUjgerZUxN8Q8j1a_LNbCuqcR4_cukTHoe4MVaSwOCO8US3cBArX9S5-i_pLAfo1qgcqWESbND8Yvp0Ve1wIPfIlQn4a_kA34RGi47dPFtyTdenExpb8OABxE"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRUjgerZUxN8Q8j1a_LNbCuqcR4_cukTHoe4MVaSwOCO8US3cBArX9S5-i_pLAfo1qgcqWESbND8Yvp0Ve1wIPfIlQn4a_kA34RGi47dPFtyTdenExpb8OABxE",
+  "top": 0.849,
+  "waist": 0.704,
+  "max": 0.942
  },
  "t03": {
   "image": "/static/catalog/t03.png",
@@ -74,7 +92,10 @@ window.CATALOG_PHOTOS = {
   "mall": "아이러브브랜드",
   "price": 80000,
   "link": "https://www.google.com/search?ibp=oshop&q=옥스포드 셔츠&prds=catalogid:12227011622561923374,productid:8737518887392162581,headlineOfferDocid:4577444216680148744,imageDocid:3986871821971376766,rds:PC_9831321049877779692|PROD_PC_9831321049877779692,gpcid:8525732836238594719,mid:576462778114702741,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT1b8W0vGU1D-N9Xtg0S0txDAZmkmB7Lmql5DFPOF5f1CMmzwW0viN0jTej5p2WBRkG8N-mFYEO5_UsEkgPzrVst8FTwmUbCWHdl8VoUbRN60wIZ3rKcjnE"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT1b8W0vGU1D-N9Xtg0S0txDAZmkmB7Lmql5DFPOF5f1CMmzwW0viN0jTej5p2WBRkG8N-mFYEO5_UsEkgPzrVst8FTwmUbCWHdl8VoUbRN60wIZ3rKcjnE",
+  "top": 0.59,
+  "waist": 0.416,
+  "max": 0.995
  },
  "t05": {
   "image": "/static/catalog/t05.png",
@@ -85,7 +106,10 @@ window.CATALOG_PHOTOS = {
   "mall": "써니11",
   "price": 41600,
   "link": "https://www.google.com/search?ibp=oshop&q=퍼프소매 블라우스&prds=productid:1975775590042744287,headlineOfferDocid:1975775590042744287,imageDocid:5279613029386489824,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRYiqVwWwa-eu84gmWKhQJhLRYKhIi6Ib8hK_UW9m1gcUEMGK8_MkaqeRccJTV7idN27aA35rY"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRYiqVwWwa-eu84gmWKhQJhLRYKhIi6Ib8hK_UW9m1gcUEMGK8_MkaqeRccJTV7idN27aA35rY",
+  "top": 0.772,
+  "waist": 0.538,
+  "max": 0.881
  },
  "t06": {
   "image": "/static/catalog/t06.png",
@@ -96,7 +120,10 @@ window.CATALOG_PHOTOS = {
   "mall": "케이케이에스티",
   "price": 19000,
   "link": "https://www.google.com/search?ibp=oshop&q=케이블 니트&prds=productid:11461496914823715775,headlineOfferDocid:11461496914823715775,imageDocid:10579070745102367825,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRhai1ieg7kY2wW5OOBdejruPGgubiuRs7_qrdCWVb2XemKQn7ZPsRAEXhZl2v83vkBiYPybZTW4p0I6IRLa03o1wF7CKMwY9MxXz0PlNU65_rKdePUjgUM"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRhai1ieg7kY2wW5OOBdejruPGgubiuRs7_qrdCWVb2XemKQn7ZPsRAEXhZl2v83vkBiYPybZTW4p0I6IRLa03o1wF7CKMwY9MxXz0PlNU65_rKdePUjgUM",
+  "top": 0.689,
+  "waist": 0.551,
+  "max": 0.942
  },
  "t07": {
   "image": "/static/catalog/t07.png",
@@ -107,7 +134,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Massimo Dutti",
   "price": 109000,
   "link": "https://www.google.com/search?ibp=oshop&q=레이스 캐미솔&prds=catalogid:39602552936996725,productid:17734798019551229565,headlineOfferDocid:15519360237936245990,imageDocid:14399807260756249649,gpcid:759829963281334699,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTz4xhL0cer43rh_H5-YiLeQLWjgOhMwt5iq9TxZ044Lx0ZEXmyDWyoC6b8jIQE0hI0cS7w4A8ufw"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTz4xhL0cer43rh_H5-YiLeQLWjgOhMwt5iq9TxZ044Lx0ZEXmyDWyoC6b8jIQE0hI0cS7w4A8ufw",
+  "top": 0.749,
+  "waist": 0.749,
+  "max": 0.905
  },
  "t08": {
   "image": "/static/catalog/t08.png",
@@ -118,7 +148,10 @@ window.CATALOG_PHOTOS = {
   "mall": "코오롱몰",
   "price": 152100,
   "link": "https://www.google.com/search?ibp=oshop&q=오버핏 후드티&prds=catalogid:15014992099095571861,productid:15916043726583130813,headlineOfferDocid:9917759306352437394,imageDocid:3111174886410331256,gpcid:3453219817650310266,mid:576462550324686242,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSR-65WQsKkqV-8zc-mIeGhc9QydbgUhF0Uh7dKzU2pNL9JYHIAs7vx7LCbI7Nk9-4FIhO853k"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSR-65WQsKkqV-8zc-mIeGhc9QydbgUhF0Uh7dKzU2pNL9JYHIAs7vx7LCbI7Nk9-4FIhO853k",
+  "top": 0.377,
+  "waist": 0.31,
+  "max": 0.94
  },
  "t09": {
   "image": "/static/catalog/t09.png",
@@ -129,7 +162,10 @@ window.CATALOG_PHOTOS = {
   "mall": "TUNE",
   "price": 105000,
   "link": "https://www.google.com/search?ibp=oshop&q=크루넥 맨투맨&prds=productid:9852976418947126500,headlineOfferDocid:9852976418947126500,imageDocid:14067340091309866262,rds:PC_8625880274248972877|PROD_PC_8625880274248972877,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRR-wsnSqbc6ErPwU5LItyG8VEOH1KRpvEVJ2GcN3dOskZIL4OunHVSwWWHobztv33pBq-KQQbH8p_Dq13XADFLbxAYHeaUNkvRYfHscSTCrehG7Fhm6f5t"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRR-wsnSqbc6ErPwU5LItyG8VEOH1KRpvEVJ2GcN3dOskZIL4OunHVSwWWHobztv33pBq-KQQbH8p_Dq13XADFLbxAYHeaUNkvRYfHscSTCrehG7Fhm6f5t",
+  "top": 0.783,
+  "waist": 0.554,
+  "max": 1.0
  },
  "t10": {
   "image": "/static/catalog/t10.png",
@@ -140,7 +176,10 @@ window.CATALOG_PHOTOS = {
   "mall": "vsmall.co.kr",
   "price": 43800,
   "link": "https://www.google.com/search?ibp=oshop&q=크롭 티셔츠&prds=productid:17583109595300434751,headlineOfferDocid:17583109595300434751,imageDocid:1909169970697915182,rds:PC_12757706205992656682|PROD_PC_12757706205992656682,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSxRtNkD2mq9KpOVZM1cjF7fyl0odUhzQaqJdCZZCEidFCL4xDaGVloXadSgchAInpTKGs-YFMzrrKKZEDq9-bomq8ZBsquPAodq9CDDeMODBO1rQg80LMV"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSxRtNkD2mq9KpOVZM1cjF7fyl0odUhzQaqJdCZZCEidFCL4xDaGVloXadSgchAInpTKGs-YFMzrrKKZEDq9-bomq8ZBsquPAodq9CDDeMODBO1rQg80LMV",
+  "top": 0.799,
+  "waist": 0.653,
+  "max": 0.935
  },
  "t11": {
   "image": "/static/catalog/t11.png",
@@ -151,7 +190,10 @@ window.CATALOG_PHOTOS = {
   "mall": "lookpin",
   "price": 132000,
   "link": "https://www.google.com/search?ibp=oshop&q=레트로 축구 저지&prds=catalogid:15294338083588362977,productid:9390858518960487399,headlineOfferDocid:1912899922291972783,imageDocid:4616177665782089422,rds:PC_4522129894176620133|PROD_PC_4522129894176620133,gpcid:4522129894176620133,mid:576462557396376456,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTuPtNaXEkttG6WoyP_jcFd3_tm3ZspSJ026ClHzC4JUoAqCfpHrmTVJkAcwWNbS9usJBzXJ06ngOuadUyBkN-Wg0f5Ym-Hc9MwD2FHhQjWK51H4z1Q5UZT"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTuPtNaXEkttG6WoyP_jcFd3_tm3ZspSJ026ClHzC4JUoAqCfpHrmTVJkAcwWNbS9usJBzXJ06ngOuadUyBkN-Wg0f5Ym-Hc9MwD2FHhQjWK51H4z1Q5UZT",
+  "top": 0.832,
+  "waist": 0.484,
+  "max": 0.928
  },
  "t12": {
   "image": "/static/catalog/t12.png",
@@ -162,7 +204,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Massimo Dutti",
   "price": 129000,
   "link": "https://www.google.com/search?ibp=oshop&q=슬림 터틀넥&prds=catalogid:15122109530335161612,productid:18317992796696482975,headlineOfferDocid:7443478626673555668,imageDocid:13090202751586824140,gpcid:12495434939075133873,mid:576462567185979064,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTEkn-fRAKZfvRfo0kFzZlIEpL2V6KeyEf28c7-1_T5T_CB5crbpoiRYMuugrCLSsNfVrIzpi5k-m8AYEMMI910RBo3zhVNHgBVfrPBrryypQ8U2gwoLEpq_A"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTEkn-fRAKZfvRfo0kFzZlIEpL2V6KeyEf28c7-1_T5T_CB5crbpoiRYMuugrCLSsNfVrIzpi5k-m8AYEMMI910RBo3zhVNHgBVfrPBrryypQ8U2gwoLEpq_A",
+  "top": 0.775,
+  "waist": 0.638,
+  "max": 0.925
  },
  "t13": {
   "image": "/static/catalog/t13.png",
@@ -173,7 +218,10 @@ window.CATALOG_PHOTOS = {
   "mall": "구구제제",
   "price": 9000,
   "link": "https://www.google.com/search?ibp=oshop&q=피케 폴로셔츠&prds=productid:2797248882060586191,headlineOfferDocid:2797248882060586191,imageDocid:12897397731298122489,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQieOi-kNPLtDd6Wbe3lJwM7Q7C5fLTfZaFfxf9_NEl7AJzMWVrbJlHUcf1hJqE8SBI5vdgZzIeS0-6vM9nqsMW2J0G-VlrFvMAsC3KYeYbQpnafzAB6Pa6"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQieOi-kNPLtDd6Wbe3lJwM7Q7C5fLTfZaFfxf9_NEl7AJzMWVrbJlHUcf1hJqE8SBI5vdgZzIeS0-6vM9nqsMW2J0G-VlrFvMAsC3KYeYbQpnafzAB6Pa6",
+  "top": 0.704,
+  "waist": 0.394,
+  "max": 0.941
  },
  "t14": {
   "image": "/static/catalog/t14.png",
@@ -184,7 +232,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Massimo Dutti",
   "price": 69000,
   "link": "https://www.google.com/search?ibp=oshop&q=슬리브리스 탑&prds=catalogid:1784565762022664500,productid:7526210856134576278,headlineOfferDocid:6206910449820736632,imageDocid:7851911139913294994,gpcid:15784434190285060855,mid:576462562952014842,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ3pvUqAGl6bZW4HXUOygviC8RLbIYNFtFFfC3OWmt9z2JBXdwx1iSYKAfImPh-vtHabifIP7KUm0kfNT-oZBBdyP6ebkeNYQYKKSu0WbaIdPDXJNYoPygCasM"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ3pvUqAGl6bZW4HXUOygviC8RLbIYNFtFFfC3OWmt9z2JBXdwx1iSYKAfImPh-vtHabifIP7KUm0kfNT-oZBBdyP6ebkeNYQYKKSu0WbaIdPDXJNYoPygCasM",
+  "top": 0.896,
+  "waist": 0.888,
+  "max": 0.92
  },
  "t15": {
   "image": "/static/catalog/t15.png",
@@ -195,7 +246,10 @@ window.CATALOG_PHOTOS = {
   "mall": "JDX 공식 온라인몰",
   "price": 99000,
   "link": "https://www.google.com/search?ibp=oshop&q=보더 티셔츠&prds=productid:2703429441616503710,headlineOfferDocid:2703429441616503710,imageDocid:14339912167048395624,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQljEbQ2XiF73gaEncVhESY2VG6UJ_y_8l3N_pThigXjpeUYwY3jOkdi6el_1NilgblaQoiuOqS8O80E5l4K4Xu6Ua7JfLCXE-ZVsFHwNBVX0p7qFQJskjbPA"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQljEbQ2XiF73gaEncVhESY2VG6UJ_y_8l3N_pThigXjpeUYwY3jOkdi6el_1NilgblaQoiuOqS8O80E5l4K4Xu6Ua7JfLCXE-ZVsFHwNBVX0p7qFQJskjbPA",
+  "top": 0.853,
+  "waist": 0.601,
+  "max": 0.939
  },
  "b01": {
   "image": "/static/catalog/b01.png",
@@ -206,7 +260,10 @@ window.CATALOG_PHOTOS = {
   "mall": "후아유닷컴",
   "price": 24950,
   "link": "https://www.google.com/search?ibp=oshop&q=와이드 데님 팬츠&prds=catalogid:12036927699954899311,productid:443980779735038533,headlineOfferDocid:16479708680856174382,imageDocid:6818789418665225238,gpcid:16551522252437788412,mid:576462893119897679,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQGH_ph25hDOqQCapxsikdAPtgNaXLIwdog7rti1yezq9ckG3kqIP9qMSnKJlKvMux2jWDAGuW3nj7JBDXSmTN6g_DOpAtTS2JAB__nwXZ60TH7NIarC4Iu"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQGH_ph25hDOqQCapxsikdAPtgNaXLIwdog7rti1yezq9ckG3kqIP9qMSnKJlKvMux2jWDAGuW3nj7JBDXSmTN6g_DOpAtTS2JAB__nwXZ60TH7NIarC4Iu",
+  "top": 0.814,
+  "waist": 0.709,
+  "max": 0.899
  },
  "b02": {
   "image": "/static/catalog/b02.png",
@@ -217,7 +274,10 @@ window.CATALOG_PHOTOS = {
   "mall": "kyobobook.co.kr",
   "price": 23900,
   "link": "https://www.google.com/search?ibp=oshop&q=스트레이트 청바지&prds=productid:2549233639249817863,headlineOfferDocid:2549233639249817863,imageDocid:13607186472903717177,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQUoz1k34NWDL9yeLUdAFnwOIRyTZ0eWPm3AxWxyhlFbi3tZf0WNevHU1GDEADg5rB3SwiboPZ6rpwvFNeBUmyRGtS87fKWmDmw-iOJMyTbrEDtQv8U6W363A"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQUoz1k34NWDL9yeLUdAFnwOIRyTZ0eWPm3AxWxyhlFbi3tZf0WNevHU1GDEADg5rB3SwiboPZ6rpwvFNeBUmyRGtS87fKWmDmw-iOJMyTbrEDtQv8U6W363A",
+  "top": 0.641,
+  "waist": 0.562,
+  "max": 0.935
  },
  "b03": {
   "image": "/static/catalog/b03.png",
@@ -228,7 +288,10 @@ window.CATALOG_PHOTOS = {
   "mall": "벤제프골프 공식 온라인스토어",
   "price": 120000,
   "link": "https://www.google.com/search?ibp=oshop&q=블랙 부츠컷 팬츠&prds=catalogid:11169883094764548316,productid:4581286227190132782,headlineOfferDocid:3126893220748805015,imageDocid:16475536609297021841,gpcid:14453454606626030185,mid:576462896372129479,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ23Un7rTUJD9E-ffILUMNBP66nk1DR4xX3EMr_u9JrcS3LV8AT28PpfnG8whuqiwBHaDBFn9k"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ23Un7rTUJD9E-ffILUMNBP66nk1DR4xX3EMr_u9JrcS3LV8AT28PpfnG8whuqiwBHaDBFn9k",
+  "top": 0.8,
+  "waist": 0.757,
+  "max": 0.871
  },
  "b05": {
   "image": "/static/catalog/b05.png",
@@ -239,7 +302,10 @@ window.CATALOG_PHOTOS = {
   "mall": "후루츠패밀리",
   "price": 25000,
   "link": "https://www.google.com/search?ibp=oshop&q=나일론 카고 팬츠&prds=catalogid:17136612351545776642,productid:15422365400112027697,headlineOfferDocid:9157570701376558842,imageDocid:14613310247414180572,rds:PC_2900713328734791983|PROD_PC_2900713328734791983,gpcid:3845672689123397110,mid:576462892311930897,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTwPZy1Xds_UG-epDDrR3vlin16hNfreULuNbobxiMV3vpnKS2Kwy94ME_WC5CD4qHXSuIi1FOiXSoEdnPObjcbDpjimYFSWUerLLzHCDE"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTwPZy1Xds_UG-epDDrR3vlin16hNfreULuNbobxiMV3vpnKS2Kwy94ME_WC5CD4qHXSuIi1FOiXSoEdnPObjcbDpjimYFSWUerLLzHCDE",
+  "top": 0.924,
+  "waist": 0.845,
+  "max": 1.0
  },
  "b06": {
   "image": "/static/catalog/b06.png",
@@ -250,7 +316,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Goodwearmall",
   "price": 37900,
   "link": "https://www.google.com/search?ibp=oshop&q=트랙 조거 팬츠&prds=productid:8946173756377748427,headlineOfferDocid:8946173756377748427,imageDocid:16170759753008923454,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSFyWL-emenzerqhllETHWdIS2c6VL0Is-_nuzEbOsnNmB3bCf5yj5ezhelSEiSgXMf3VZCjmE"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSFyWL-emenzerqhllETHWdIS2c6VL0Is-_nuzEbOsnNmB3bCf5yj5ezhelSEiSgXMf3VZCjmE",
+  "top": 0.715,
+  "waist": 0.605,
+  "max": 0.91
  },
  "b07": {
   "image": "/static/catalog/b07.png",
@@ -261,7 +330,10 @@ window.CATALOG_PHOTOS = {
   "mall": "fruit of the loom",
   "price": 49000,
   "link": "https://www.google.com/search?ibp=oshop&q=버뮤다 팬츠&prds=catalogid:13960083908468153056,productid:4091001823393560767,headlineOfferDocid:1503984644099006387,imageDocid:18064493904478666360,gpcid:2997362274697235674,mid:576462543288047114,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSucZ-9HjbqGc8sq537bAAAVjABnqIh5seS_6DLLLlYCphoD1TEXfnX60QYfD7bd2-ktgMxi4NVDW8Ur2u1jmfhyUfkxDWPGU9uDWqkG7iNWmZCw0yHpi2b2A"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSucZ-9HjbqGc8sq537bAAAVjABnqIh5seS_6DLLLlYCphoD1TEXfnX60QYfD7bd2-ktgMxi4NVDW8Ur2u1jmfhyUfkxDWPGU9uDWqkG7iNWmZCw0yHpi2b2A",
+  "top": 0.69,
+  "waist": 0.598,
+  "max": 0.981
  },
  "b08": {
   "image": "/static/catalog/b08.png",
@@ -272,7 +344,10 @@ window.CATALOG_PHOTOS = {
   "mall": "인조이라이프",
   "price": 45000,
   "link": "https://www.google.com/search?ibp=oshop&q=요가 레깅스&prds=productid:14377311931335693728,headlineOfferDocid:14377311931335693728,imageDocid:3208311775863240510,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR5N1XMqJMGJCDFnG-f44dul9E2QG68tDoy2sZRzZRVOEdRJxJIWyVJCeKpsUtFuwEcC3MrdrzPoDot2oufIX6Mgp3xXUAyxpycusG83UcLu5jiscG4aR9b"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR5N1XMqJMGJCDFnG-f44dul9E2QG68tDoy2sZRzZRVOEdRJxJIWyVJCeKpsUtFuwEcC3MrdrzPoDot2oufIX6Mgp3xXUAyxpycusG83UcLu5jiscG4aR9b",
+  "top": 0.879,
+  "waist": 0.772,
+  "max": 0.879
  },
  "b09": {
   "image": "/static/catalog/b09.png",
@@ -283,7 +358,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Goodwearmall",
   "price": 3900,
   "link": "https://www.google.com/search?ibp=oshop&q=A라인 미니스커트&prds=productid:3716610119335367746,headlineOfferDocid:3716610119335367746,imageDocid:11618125957254845887,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS7tSwyot8j25XhTEI9_2hhAFGg7kHgPVXi-ZoST3Zbc4s5En6uqvb7SnYo9DPz_qhYd8QfIvYORrp4VxHSXsZNiq-LJ701gdej5tKhYhNUyvbZPCAIHKPJt24"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS7tSwyot8j25XhTEI9_2hhAFGg7kHgPVXi-ZoST3Zbc4s5En6uqvb7SnYo9DPz_qhYd8QfIvYORrp4VxHSXsZNiq-LJ701gdej5tKhYhNUyvbZPCAIHKPJt24",
+  "top": 0.773,
+  "waist": 0.661,
+  "max": 0.941
  },
  "b10": {
   "image": "/static/catalog/b10.png",
@@ -294,7 +372,10 @@ window.CATALOG_PHOTOS = {
   "mall": "희볕",
   "price": 75000,
   "link": "https://www.google.com/search?ibp=oshop&q=체크 플리츠 스커트&prds=productid:16724330251149845728,headlineOfferDocid:16724330251149845728,imageDocid:8383524410033760286,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTzIBXdXv3r5t8G1s_sf1WcdeCyPtSXztHK-sDUw726ESh3MSRD3h3jXalWcJgfBfE8xxN_2OCJaeJoGBFbleZfy3lV3kunSQ2Hf5YiqxdrQZfBgNZwykPc"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTzIBXdXv3r5t8G1s_sf1WcdeCyPtSXztHK-sDUw726ESh3MSRD3h3jXalWcJgfBfE8xxN_2OCJaeJoGBFbleZfy3lV3kunSQ2Hf5YiqxdrQZfBgNZwykPc",
+  "top": 0.66,
+  "waist": 0.584,
+  "max": 0.985
  },
  "b11": {
   "image": "/static/catalog/b11.png",
@@ -305,7 +386,10 @@ window.CATALOG_PHOTOS = {
   "mall": "휠라 코리아",
   "price": 79900,
   "link": "https://www.google.com/search?ibp=oshop&q=테니스 스커트&prds=catalogid:3426116576813451720,productid:15327204500192909399,headlineOfferDocid:1628733701802712805,imageDocid:17513860719499886641,gpcid:12222421988277482787,mid:576462887096594566,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRryZFvSibXLn5Ur5GWjjmIm97g-sINpf-4jJQinlZ_z06t1yjJl2k6yE0WMo3mIsSOow2x2it3gzIIBOkmqVQ7GCaJZJugC6A2BJvzhu527lBZiRfyCcglaQ"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRryZFvSibXLn5Ur5GWjjmIm97g-sINpf-4jJQinlZ_z06t1yjJl2k6yE0WMo3mIsSOow2x2it3gzIIBOkmqVQ7GCaJZJugC6A2BJvzhu527lBZiRfyCcglaQ",
+  "top": 0.84,
+  "waist": 0.807,
+  "max": 0.997
  },
  "b13": {
   "image": "/static/catalog/b13.png",
@@ -316,7 +400,10 @@ window.CATALOG_PHOTOS = {
   "mall": "비바무역 을지 던던동대문점",
   "price": 15200,
   "link": "https://www.google.com/search?ibp=oshop&q=린넨 롱스커트&prds=productid:9260258774118016880,headlineOfferDocid:9260258774118016880,imageDocid:9283519480154676581,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSC8-P1aiYFHrqEe9d8GMfgJqzrcWpzs32uqEb5jGf1Ve7kcROjEzm2KmkrXMNAcBr1kujUzrSn"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSC8-P1aiYFHrqEe9d8GMfgJqzrcWpzs32uqEb5jGf1Ve7kcROjEzm2KmkrXMNAcBr1kujUzrSn",
+  "top": 0.737,
+  "waist": 0.679,
+  "max": 0.911
  },
  "b14": {
   "image": "/static/catalog/b14.png",
@@ -327,7 +414,10 @@ window.CATALOG_PHOTOS = {
   "mall": "주 원더플레이스",
   "price": 44500,
   "link": "https://www.google.com/search?ibp=oshop&q=카펜터 팬츠&prds=productid:2454399732187263777,headlineOfferDocid:2454399732187263777,imageDocid:202140523421528443,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS25BNcIU0KMvyoPHbGHo03p8eAG4N10qyqgsiW4E-S2irkN9KNmcascyHKiWNNcZoqH6xU_oc"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS25BNcIU0KMvyoPHbGHo03p8eAG4N10qyqgsiW4E-S2irkN9KNmcascyHKiWNNcZoqH6xU_oc",
+  "top": 0.732,
+  "waist": 0.651,
+  "max": 0.914
  },
  "b15": {
   "image": "/static/catalog/b15.png",
@@ -338,7 +428,10 @@ window.CATALOG_PHOTOS = {
   "mall": "후루츠패밀리",
   "price": 43000,
   "link": "https://www.google.com/search?ibp=oshop&q=레더 팬츠&prds=productid:14594090862678281557,headlineOfferDocid:14594090862678281557,imageDocid:15576901776766247002,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTtLzpq1VnRYcKO0npv1p14YmVZgBBcrDhpZ0I2BDZnW7PeZv2gIhI7QodyNANhpxU-QnotEXE3qU4D8-o4TgP2nsngpgwC3rp24lrA8UA"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTtLzpq1VnRYcKO0npv1p14YmVZgBBcrDhpZ0I2BDZnW7PeZv2gIhI7QodyNANhpxU-QnotEXE3qU4D8-o4TgP2nsngpgwC3rp24lrA8UA",
+  "top": 0.624,
+  "waist": 0.516,
+  "max": 0.946
  },
  "d01": {
   "image": "/static/catalog/d01.png",
@@ -349,7 +442,10 @@ window.CATALOG_PHOTOS = {
   "mall": "아데쿠베",
   "price": 708000,
   "link": "https://www.google.com/search?ibp=oshop&q=슬립 드레스&prds=productid:11817610407784497007,headlineOfferDocid:11817610407784497007,imageDocid:10236644370993325622,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ7aDk121N-0gEYxbxD_Aj8wVFsdk63LIpltaDLEQTv3XGLQHhtfrOWkqxCrVTTMpR8R9Z9HXSSIsw9Iubfofv9-iSVOyaSvTCLbaNeAKaB93tQW997vSLb"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ7aDk121N-0gEYxbxD_Aj8wVFsdk63LIpltaDLEQTv3XGLQHhtfrOWkqxCrVTTMpR8R9Z9HXSSIsw9Iubfofv9-iSVOyaSvTCLbaNeAKaB93tQW997vSLb",
+  "top": 0.572,
+  "waist": 0.377,
+  "max": 0.862
  },
  "d02": {
   "image": "/static/catalog/d02.png",
@@ -360,7 +456,10 @@ window.CATALOG_PHOTOS = {
   "mall": "오즈키즈",
   "price": 29900,
   "link": "https://www.google.com/search?ibp=oshop&q=플로럴 롱원피스&prds=catalogid:12281032816495116852,productid:17862605996374347935,headlineOfferDocid:16738366921210994943,imageDocid:3865350264045410043,gpcid:886186755348683813,mid:576462563959555360,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRZKQmlCRUU86G395KoclaTSBxNjGEOxwZYpkbA3XxV-Lu9tx5JV9Z_rgpxk3gC2kdNcGaOg9_l0PV0qwJ5XORKEfHqbdJd_qA9-l5CQVnpDo0Mt8hxD_on2uw"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRZKQmlCRUU86G395KoclaTSBxNjGEOxwZYpkbA3XxV-Lu9tx5JV9Z_rgpxk3gC2kdNcGaOg9_l0PV0qwJ5XORKEfHqbdJd_qA9-l5CQVnpDo0Mt8hxD_on2uw",
+  "top": 0.878,
+  "waist": 0.702,
+  "max": 0.946
  },
  "d03": {
   "image": "/static/catalog/d03.png",
@@ -371,7 +470,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Dior.com",
   "price": 5200000,
   "link": "https://www.google.com/search?ibp=oshop&q=니트 원피스&prds=catalogid:4973217375185816563,productid:2563318165941149393,headlineOfferDocid:11570709797803866417,imageDocid:249501514524266829,gpcid:8102320566687383882,mid:576462882019913602,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSLAGknsnHh0QUxyp9uMMrKbN1pt65EBkXekoeT9QOUjMZEOEtEk2Sc3uymJ2EtIk5TLcWuK5oAf3PMsb-PTvs4Z3GyQbIqL4WUa1bCaxQs9XjpsDBBSZwW5A"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSLAGknsnHh0QUxyp9uMMrKbN1pt65EBkXekoeT9QOUjMZEOEtEk2Sc3uymJ2EtIk5TLcWuK5oAf3PMsb-PTvs4Z3GyQbIqL4WUa1bCaxQs9XjpsDBBSZwW5A",
+  "top": 0.759,
+  "waist": 0.572,
+  "max": 0.892
  },
  "d04": {
   "image": "/static/catalog/d04.png",
@@ -382,7 +484,10 @@ window.CATALOG_PHOTOS = {
   "mall": "코오롱몰",
   "price": 108290,
   "link": "https://www.google.com/search?ibp=oshop&q=레이스 롱 드레스&prds=productid:1692970867282262255,headlineOfferDocid:1692970867282262255,imageDocid:11722802221600496328,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRwZfQmYQFiLN0eNIlKoMCb9hcu7FrHZNnANjAZiDXKR6Taj6d2YIbUY7LDF5MQwOL_y9UZ7-HEVhCLh78Zu6dgfFQM_62Q6MMPYA13P3zXPASj1UDu3YIwzw"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRwZfQmYQFiLN0eNIlKoMCb9hcu7FrHZNnANjAZiDXKR6Taj6d2YIbUY7LDF5MQwOL_y9UZ7-HEVhCLh78Zu6dgfFQM_62Q6MMPYA13P3zXPASj1UDu3YIwzw",
+  "top": 0.569,
+  "waist": 0.545,
+  "max": 0.891
  },
  "o01": {
   "image": "/static/catalog/o01.png",
@@ -393,29 +498,38 @@ window.CATALOG_PHOTOS = {
   "mall": "sisun.com/michaa",
   "price": 359400,
   "link": "https://www.google.com/search?ibp=oshop&q=시스루 가디건&prds=productid:17005700049421623264,headlineOfferDocid:17005700049421623264,imageDocid:1644937559683713118,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT8FQ7gDeTywMU5SO7WjenFfEs0_WDBkTMx2DLJSXUTmbe0Gk6QkqbhGc_jXpifLQlWcfHA_2FXcgX4lsfUTxZFx6Cesh3uWwsFRZlvHK4manZFBNggpOqxTg"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT8FQ7gDeTywMU5SO7WjenFfEs0_WDBkTMx2DLJSXUTmbe0Gk6QkqbhGc_jXpifLQlWcfHA_2FXcgX4lsfUTxZFx6Cesh3uWwsFRZlvHK4manZFBNggpOqxTg",
+  "top": 0.766,
+  "waist": 0.316,
+  "max": 0.922
  },
  "o03": {
   "image": "/static/catalog/o03.png",
-  "w": 329,
-  "h": 368,
-  "name": "아날로그무드 ANALOG MOOD TR 오버사이즈 블레이저 셋업 (차콜) AN26SS0805",
-  "brand": "ABC마트 온라인몰",
-  "mall": "ABC마트 온라인몰",
-  "price": 149800,
-  "link": "https://www.google.com/search?ibp=oshop&q=오버핏 블레이저&prds=productid:14759472210623261242,headlineOfferDocid:14759472210623261242,imageDocid:8388864282421275491,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS3ZXhm0sEd4uO_sl7vsLugfEhv6d661_W1B0PGgGYAhSuwPWG1mGoEWT87zCn0Ey6nrgGBMgDUwkpiJog4zi9UGjXnPZ8M9uE1ZP9v57nFGEmQY2_hm8c_mQ"
+  "w": 314,
+  "h": 299,
+  "top": 0.701,
+  "waist": 0.411,
+  "max": 0.898,
+  "name": "[아날로그무드] 빅대디 오버사이즈 블레이저 (블랙) 검정색 PG6AN25FW1801 AN25FW1801",
+  "brand": "ssfshop.com",
+  "mall": "ssfshop.com",
+  "price": 67620,
+  "link": "https://www.google.com/search?ibp=oshop&q=오버핏 블레이저&prds=productid:17644489218144497575,headlineOfferDocid:17644489218144497575,imageDocid:2203364738112568609,pvt:hg&hl=ko&gl=kr&udm=28",
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS2qDr2aBPzF4gm4hDxV4BQYFLQqXlBInvbzzIoEDlDKZ3B2ibgSdgxnzFdYhQYKRccdm2e6WVsP10_j5ZlcoTYmFSDnkyJZ1RhcooB99q1SOYCWnIusAU-"
  },
  "o04": {
   "image": "/static/catalog/o04.png",
-  "w": 323,
-  "h": 296,
-  "name": "남성 발마칸 트렌치코트 2종 택1",
+  "w": 286,
+  "h": 323,
+  "top": 0.636,
+  "waist": 0.416,
+  "max": 0.937,
+  "name": "클래식 트렌치 롱 코트 (베이지)",
   "brand": "Goodwearmall",
   "mall": "Goodwearmall",
-  "price": 39900,
-  "link": "https://www.google.com/search?ibp=oshop&q=트렌치 코트&prds=productid:17327566488336023555,headlineOfferDocid:17327566488336023555,imageDocid:13422682285896459334,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ4k4PNbVO0cEBihthP4PDoQQUa1n1qZ3tA5W2P6bjgkPPoW-wl2yh3bqkAhsCGTMelXut_8KvGjdJHYtovfREKARQQBcoMBHb_rpsplUH5nOqThRjJpWDr7w"
+  "price": 118800,
+  "link": "https://www.google.com/search?ibp=oshop&q=트렌치 코트&prds=productid:8239729690592034471,headlineOfferDocid:8239729690592034471,imageDocid:8730840541205653243,pvt:hg&hl=ko&gl=kr&udm=28",
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQucQ_rWzf_9Tp2mFdhTLWAbC2STdtEww0-oK1dMCIiYXTkp7XDL3DlqbV8be66bG1t7B5RdWD3Ma00xa0TFw16uocjOjV-joGfRmA-4-jfnSFyszLKLmhN"
  },
  "o05": {
   "image": "/static/catalog/o05.png",
@@ -426,7 +540,10 @@ window.CATALOG_PHOTOS = {
   "mall": "아보떼",
   "price": 120000,
   "link": "https://www.google.com/search?ibp=oshop&q=울 롱코트&prds=catalogid:8258153556143036437,productid:8115971615026463511,headlineOfferDocid:14246162205712046891,imageDocid:2558312102774108445,gpcid:4370089851087897569,mid:576462869048096590,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ4jzZO2hNBiUxmVzoCCdYfl7PHFH6gTgOGFtnysckF7J9sNRYLnm8l3XDkUlgHB4t_otmPcQTy7HZeHGHzlv5Kf3NC8Qagd5LtwXa4q7wDRUezIWn3OTrCZw"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ4jzZO2hNBiUxmVzoCCdYfl7PHFH6gTgOGFtnysckF7J9sNRYLnm8l3XDkUlgHB4t_otmPcQTy7HZeHGHzlv5Kf3NC8Qagd5LtwXa4q7wDRUezIWn3OTrCZw",
+  "top": 0.795,
+  "waist": 0.595,
+  "max": 0.908
  },
  "o06": {
   "image": "/static/catalog/o06.png",
@@ -437,7 +554,10 @@ window.CATALOG_PHOTOS = {
   "mall": "ARENA",
   "price": 76000,
   "link": "https://www.google.com/search?ibp=oshop&q=숏패딩&prds=catalogid:4693005135842085193,productid:16466744836195093566,headlineOfferDocid:4781119561206604409,imageDocid:3867612020396866370,gpcid:11009183770170798390,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRPan-GnbHXlJWc4IRydvtmnFLrXTG-QLUMcF2R_sN5Q5mc2SOO4RoGpoImmVLJb_ZJRpuHRNe-ZoH551ivZBxEQg4qqBNVZ66N1Xmgv_SFc6Kt0tkXTuV_"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRPan-GnbHXlJWc4IRydvtmnFLrXTG-QLUMcF2R_sN5Q5mc2SOO4RoGpoImmVLJb_ZJRpuHRNe-ZoH551ivZBxEQg4qqBNVZ66N1Xmgv_SFc6Kt0tkXTuV_",
+  "top": 0.663,
+  "waist": 0.277,
+  "max": 0.984
  },
  "o08": {
   "image": "/static/catalog/o08.png",
@@ -448,7 +568,10 @@ window.CATALOG_PHOTOS = {
   "mall": "써플",
   "price": 109800,
   "link": "https://www.google.com/search?ibp=oshop&q=바람막이 자켓&prds=productid:8120468060838315466,headlineOfferDocid:8120468060838315466,imageDocid:14813578089253534185,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTNgGGr1Cz794yvHPVXwNtUrwzltl05YavQ6eQRmY-khNodWtlMIWfCRF4BHpc0Vqf1fLXCg47VcSoKHgM77Kv6ug3xd38g0kIZIVYo5F2DP3A3DiYwEfj9"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTNgGGr1Cz794yvHPVXwNtUrwzltl05YavQ6eQRmY-khNodWtlMIWfCRF4BHpc0Vqf1fLXCg47VcSoKHgM77Kv6ug3xd38g0kIZIVYo5F2DP3A3DiYwEfj9",
+  "top": 0.708,
+  "waist": 0.268,
+  "max": 0.939
  },
  "o09": {
   "image": "/static/catalog/o09.png",
@@ -459,7 +582,10 @@ window.CATALOG_PHOTOS = {
   "mall": "무신사",
   "price": 105000,
   "link": "https://www.google.com/search?ibp=oshop&q=데님 자켓&prds=catalogid:1339589258480281772,productid:8148512304357408457,headlineOfferDocid:6730571210452390416,imageDocid:13436994871813841544,gpcid:9932691381352126419,mid:576462848754645278,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSaW58XszNV-C_sm6ohlxVxsbbwwRlbm3B5-GdACH8Ipw7jvm97bT8CWLMIALFVu6Zs--yq-qwwLRVjpXjvnxR2K7kdBDguDaa5VwfNxy18eJGRUQ3lvRWqpA"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSaW58XszNV-C_sm6ohlxVxsbbwwRlbm3B5-GdACH8Ipw7jvm97bT8CWLMIALFVu6Zs--yq-qwwLRVjpXjvnxR2K7kdBDguDaa5VwfNxy18eJGRUQ3lvRWqpA",
+  "top": 0.733,
+  "waist": 0.458,
+  "max": 0.939
  },
  "o10": {
   "image": "/static/catalog/o10.png",
@@ -470,7 +596,10 @@ window.CATALOG_PHOTOS = {
   "mall": "무신사",
   "price": 170910,
   "link": "https://www.google.com/search?ibp=oshop&q=초어 자켓&prds=productid:17811668361793979962,headlineOfferDocid:17811668361793979962,imageDocid:6666648998143110869,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcST3BM9WMkFlGj1zOqxEthzIIKQ11YG8yZdIAen07GpSVdTOcP4qXAo8UEmNCs_TvYu7Or9iz-S"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcST3BM9WMkFlGj1zOqxEthzIIKQ11YG8yZdIAen07GpSVdTOcP4qXAo8UEmNCs_TvYu7Or9iz-S",
+  "top": 0.678,
+  "waist": 0.408,
+  "max": 0.945
  },
  "o11": {
   "image": "/static/catalog/o11.png",
@@ -481,7 +610,10 @@ window.CATALOG_PHOTOS = {
   "mall": "문트",
   "price": 38000,
   "link": "https://www.google.com/search?ibp=oshop&q=니트 베스트&prds=productid:12997889429779118744,headlineOfferDocid:12997889429779118744,imageDocid:17058023711607210567,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT5EYDZfYnBUw397qmwwRVfrHSYo5nHEw80_NCX0RApzGXYSrPM8pbnF1V5SWvAvdvvRghuLgfQvLKvakIzxwlspKf5CrlM7cuLUN1fRUPoAuEDVK72YXO2eA"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT5EYDZfYnBUw397qmwwRVfrHSYo5nHEw80_NCX0RApzGXYSrPM8pbnF1V5SWvAvdvvRghuLgfQvLKvakIzxwlspKf5CrlM7cuLUN1fRUPoAuEDVK72YXO2eA",
+  "top": 0.917,
+  "waist": 0.917,
+  "max": 0.917
  },
  "s02": {
   "image": "/static/catalog/s02.png",
@@ -492,7 +624,10 @@ window.CATALOG_PHOTOS = {
   "mall": "코오롱스포츠",
   "price": 220000,
   "link": "https://www.google.com/search?ibp=oshop&q=트레킹 슈즈&prds=catalogid:9433012112025244065,productid:6554922815839172663,headlineOfferDocid:4308438259104618623,imageDocid:2207250359152761685,gpcid:14051018397425339186,mid:576462846666474765,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR_l0nJL5n93mJMSAoxAkXs6iIDqBLtJNKE2eVo_jj68htUCJC09aCSvucgWkKbWY1WfrQT3AXOYHZ8yvd1iZ_SpF93yADInKajuxKbZCmcKt_u5lAtkJN-"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR_l0nJL5n93mJMSAoxAkXs6iIDqBLtJNKE2eVo_jj68htUCJC09aCSvucgWkKbWY1WfrQT3AXOYHZ8yvd1iZ_SpF93yADInKajuxKbZCmcKt_u5lAtkJN-",
+  "top": 0.489,
+  "waist": 0.361,
+  "max": 0.981
  },
  "s03": {
   "image": "/static/catalog/s03.png",
@@ -503,7 +638,10 @@ window.CATALOG_PHOTOS = {
   "mall": "ABC마트 온라인몰",
   "price": 66000,
   "link": "https://www.google.com/search?ibp=oshop&q=페니 로퍼&prds=productid:11003635539640821653,headlineOfferDocid:11003635539640821653,imageDocid:13146040348150254628,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRRXCyayRkqocEM6zM8L4NJYcABd8kJK7VTA38Xb96cGD9hjedbPgiVwhJS8yKkOuBqIQsAlKhW9IbWdYGY5MV5-u35NF1hW5oAl4hdWrKf1pDEktCaXV6a7Q"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRRXCyayRkqocEM6zM8L4NJYcABd8kJK7VTA38Xb96cGD9hjedbPgiVwhJS8yKkOuBqIQsAlKhW9IbWdYGY5MV5-u35NF1hW5oAl4hdWrKf1pDEktCaXV6a7Q",
+  "top": 0.66,
+  "waist": 0.557,
+  "max": 0.989
  },
  "s04": {
   "image": "/static/catalog/s04.png",
@@ -514,7 +652,10 @@ window.CATALOG_PHOTOS = {
   "mall": "AITCH",
   "price": 159000,
   "link": "https://www.google.com/search?ibp=oshop&q=첼시 부츠&prds=productid:5235041396359071317,headlineOfferDocid:5235041396359071317,imageDocid:5877316725764144266,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcXuqb4v96PzLGyq7STJfzJ7_okB8uEdak3cJrRhqhjFRiLoH3PgJPF6FGDcB_zjD5KXjFAzsEwgVbXX8XZPK6mbsyeN7AmMVZvavTs6SL8kbs8p10-x_OTQ"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcXuqb4v96PzLGyq7STJfzJ7_okB8uEdak3cJrRhqhjFRiLoH3PgJPF6FGDcB_zjD5KXjFAzsEwgVbXX8XZPK6mbsyeN7AmMVZvavTs6SL8kbs8p10-x_OTQ",
+  "top": 0.486,
+  "waist": 0.265,
+  "max": 0.696
  },
  "s05": {
   "image": "/static/catalog/s05.png",
@@ -525,7 +666,10 @@ window.CATALOG_PHOTOS = {
   "mall": "구구스",
   "price": 340000,
   "link": "https://www.google.com/search?ibp=oshop&q=워커 부츠&prds=productid:9619571717241388240,headlineOfferDocid:9619571717241388240,imageDocid:4745574114873967802,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTBI3Ms5QFpXLQj09NSDTHhiztj_iDBcyQ0pz3nQJZQ8HprofmCdrgquimdmoCSoP1vd1aOwlvCAsg8s37hgNOHrE489xdACbHviSrNIZjVSNzJYsub479FSQ"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTBI3Ms5QFpXLQj09NSDTHhiztj_iDBcyQ0pz3nQJZQ8HprofmCdrgquimdmoCSoP1vd1aOwlvCAsg8s37hgNOHrE489xdACbHviSrNIZjVSNzJYsub479FSQ",
+  "top": 0.703,
+  "waist": 0.703,
+  "max": 0.861
  },
  "s06": {
   "image": "/static/catalog/s06.png",
@@ -536,7 +680,10 @@ window.CATALOG_PHOTOS = {
   "mall": "dustunit 더스트유닛",
   "price": 69000,
   "link": "https://www.google.com/search?ibp=oshop&q=롱부츠&prds=productid:8811254724499301052,headlineOfferDocid:8811254724499301052,imageDocid:14530585006296190136,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRmRYUSqt6UWrODZ8csvPcmG_fWKgA6Q95tuwVu9quFoyFL4sG-VkOGrlr4pi5MR1M8Zpfl6EFfOATZkOHE8lhl7DeCViTBhNeFiCQTW-U"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRmRYUSqt6UWrODZ8csvPcmG_fWKgA6Q95tuwVu9quFoyFL4sG-VkOGrlr4pi5MR1M8Zpfl6EFfOATZkOHE8lhl7DeCViTBhNeFiCQTW-U",
+  "top": 0.489,
+  "waist": 0.489,
+  "max": 0.787
  },
  "s07": {
   "image": "/static/catalog/s07.png",
@@ -547,7 +694,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Neroli",
   "price": 49500,
   "link": "https://www.google.com/search?ibp=oshop&q=스퀘어 뮬&prds=productid:696311810003161712,headlineOfferDocid:696311810003161712,imageDocid:1790026860201756066,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR5CBsjJKZfQlhaCGWRdFkO5Xcr9Y54I22dXd8e6hDIKLzvc7QC09rA0nxCWUIIdOLkg_o9sbq651G2LWPnlvOHrP_hn1CgvQ"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR5CBsjJKZfQlhaCGWRdFkO5Xcr9Y54I22dXd8e6hDIKLzvc7QC09rA0nxCWUIIdOLkg_o9sbq651G2LWPnlvOHrP_hn1CgvQ",
+  "top": 0.289,
+  "waist": 0.249,
+  "max": 0.971
  },
  "s08": {
   "image": "/static/catalog/s08.png",
@@ -558,7 +708,10 @@ window.CATALOG_PHOTOS = {
   "mall": "무신사",
   "price": 58990,
   "link": "https://www.google.com/search?ibp=oshop&q=스트랩 샌들&prds=catalogid:10760476401164239257,productid:14379990684361837062,headlineOfferDocid:611083582486261958,imageDocid:702789399442096449,rds:PC_17043884405108396518|PROD_PC_17043884405108396518,gpcid:17043884405108396518,mid:576462518444938688,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ1tvwGGl7Vdw98BpE9xNSpoh7oQvtreaxvR00pCXc2sO15Enc156fO9E4bfxGKDswJVXKi1yLLNnsPSC-ovypoAz3OebdJovnyJSxdyLsJHkYYv7bA12Bi"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ1tvwGGl7Vdw98BpE9xNSpoh7oQvtreaxvR00pCXc2sO15Enc156fO9E4bfxGKDswJVXKi1yLLNnsPSC-ovypoAz3OebdJovnyJSxdyLsJHkYYv7bA12Bi",
+  "top": 0.505,
+  "waist": 0.122,
+  "max": 0.981
  },
  "s09": {
   "image": "/static/catalog/s09.png",
@@ -569,7 +722,10 @@ window.CATALOG_PHOTOS = {
   "mall": "charleskeith.com",
   "price": 89900,
   "link": "https://www.google.com/search?ibp=oshop&q=메리제인&prds=catalogid:17715005756885209415,productid:11508247230163432595,headlineOfferDocid:6515632264230146641,imageDocid:7222377771462234695,gpcid:16478047736965860064,mid:576462892683119838,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSHuYQUG_X6X2ZoN2CmTcTSmv4P5u_suhTzznGKkkEdZsoTCQRNMYWsFOD4FRU0EmVVWYpnwODA87vKRYDwxiRMneQigigJ9RLV8qaA2tK05fJD5DI-yX6TWvg"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSHuYQUG_X6X2ZoN2CmTcTSmv4P5u_suhTzznGKkkEdZsoTCQRNMYWsFOD4FRU0EmVVWYpnwODA87vKRYDwxiRMneQigigJ9RLV8qaA2tK05fJD5DI-yX6TWvg",
+  "top": 0.582,
+  "waist": 0.402,
+  "max": 0.997
  },
  "s10": {
   "image": "/static/catalog/s10.png",
@@ -580,7 +736,10 @@ window.CATALOG_PHOTOS = {
   "mall": "필웨이",
   "price": 1093000,
   "link": "https://www.google.com/search?ibp=oshop&q=발레 플랫슈즈&prds=productid:2534069198895107238,headlineOfferDocid:2534069198895107238,imageDocid:10463436484580060798,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQd84_fyTCXMuByFi9Z1HarkiwjwCQPodi81Ui0JsLLs12E3D0hvsDLw_IuC0Wup2Behp7fGuh76S3Ivwb5wE-yIlF7Bi9BWNd2fuNKaQGDZvVEAoGlaAN_"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQd84_fyTCXMuByFi9Z1HarkiwjwCQPodi81Ui0JsLLs12E3D0hvsDLw_IuC0Wup2Behp7fGuh76S3Ivwb5wE-yIlF7Bi9BWNd2fuNKaQGDZvVEAoGlaAN_",
+  "top": 0.523,
+  "waist": 0.093,
+  "max": 0.997
  },
  "s11": {
   "image": "/static/catalog/s11.png",
@@ -591,7 +750,10 @@ window.CATALOG_PHOTOS = {
   "mall": "GLYD 글로벌야드",
   "price": 59800,
   "link": "https://www.google.com/search?ibp=oshop&q=포인티드 펌프스&prds=productid:11325922729967251283,headlineOfferDocid:11325922729967251283,imageDocid:8389970026517567732,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQp0VBoahA57GrQvqDbxo58odtJL6UEJwJkCiV9HMQcqJTPsojVi6Jv9DCR2OwctRPEzNSd5UkRy-1FVXQFd2Hgkl36m8c-Rt5kwV332FX_GPiDXJ1zVMfi"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQp0VBoahA57GrQvqDbxo58odtJL6UEJwJkCiV9HMQcqJTPsojVi6Jv9DCR2OwctRPEzNSd5UkRy-1FVXQFd2Hgkl36m8c-Rt5kwV332FX_GPiDXJ1zVMfi",
+  "top": 0.554,
+  "waist": 0.19,
+  "max": 0.923
  },
  "g02": {
   "image": "/static/catalog/g02.png",
@@ -602,7 +764,10 @@ window.CATALOG_PHOTOS = {
   "mall": "elegance-paris.co.kr",
   "price": 84000,
   "link": "https://www.google.com/search?ibp=oshop&q=캔버스 토트백&prds=catalogid:498653315540292645,productid:4255372653698430030,headlineOfferDocid:11283457017483907269,imageDocid:8582071540510729112,gpcid:11563103109372912926,mid:576462563961623819,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTLpwZT3pFq8Me4aBkcjLHUw9WXNcIAQpVzd9v7z8DOgjiE4MMxh2lixaJFHJkUPQ9sfp_2NrknC-rP6Ut_vZXChcIfVkiWltehAO104Up3sUptSso-H8bHFiX6"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTLpwZT3pFq8Me4aBkcjLHUw9WXNcIAQpVzd9v7z8DOgjiE4MMxh2lixaJFHJkUPQ9sfp_2NrknC-rP6Ut_vZXChcIfVkiWltehAO104Up3sUptSso-H8bHFiX6",
+  "top": 0.451,
+  "waist": 0.405,
+  "max": 0.986
  },
  "g03": {
   "image": "/static/catalog/g03.png",
@@ -613,7 +778,10 @@ window.CATALOG_PHOTOS = {
   "mall": "후루츠패밀리",
   "price": 60000,
   "link": "https://www.google.com/search?ibp=oshop&q=나일론 크로스백&prds=productid:5617797013921739704,headlineOfferDocid:5617797013921739704,imageDocid:1985472398768954181,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTYmDZe_HaByGO4AWGeIAAZr9hFC2NTtHVe3CNqdWxEBgMbJqxLbtQMCP3h1ZYSzL2EP6iDmjBhR2bpNluzayYdKRNnLO1drWgIVmtXrfF5UKcxbhcJVzvj"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTYmDZe_HaByGO4AWGeIAAZr9hFC2NTtHVe3CNqdWxEBgMbJqxLbtQMCP3h1ZYSzL2EP6iDmjBhR2bpNluzayYdKRNnLO1drWgIVmtXrfF5UKcxbhcJVzvj",
+  "top": 0.915,
+  "waist": 0.912,
+  "max": 0.939
  },
  "g04": {
   "image": "/static/catalog/g04.png",
@@ -624,7 +792,10 @@ window.CATALOG_PHOTOS = {
   "mall": "투미 코리아",
   "price": 1430000,
   "link": "https://www.google.com/search?ibp=oshop&q=백팩&prds=catalogid:7072696326761996956,productid:18408636869651975021,headlineOfferDocid:7935570355784050402,imageDocid:14389743565542839716,rds:PC_340093988353133377|PROD_PC_340093988353133377,gpcid:340093988353133377,mid:576462826535997122,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTyiR3teRZNdUxXsFO1vpnxucDaY5-ip0phAithyMsoKK3y7mv_fMJ0EfgI3etM83adXg6YNzTaTh9zr96SQII9aZu9XH8gdMTt-YpZ_DFAv8biq2NOdwC5"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTyiR3teRZNdUxXsFO1vpnxucDaY5-ip0phAithyMsoKK3y7mv_fMJ0EfgI3etM83adXg6YNzTaTh9zr96SQII9aZu9XH8gdMTt-YpZ_DFAv8biq2NOdwC5",
+  "top": 0.876,
+  "waist": 0.657,
+  "max": 0.918
  },
  "h02": {
   "image": "/static/catalog/h02.png",
@@ -635,18 +806,24 @@ window.CATALOG_PHOTOS = {
   "mall": "Bottega Veneta",
   "price": 350000,
   "link": "https://www.google.com/search?ibp=oshop&q=니트 비니&prds=catalogid:15985636486796747658,productid:9875429827228440757,headlineOfferDocid:6617878265120350677,imageDocid:6230406554527329306,gpcid:6904841504685253647,mid:576462912535427003,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR7LOmX5OJB3W5wCwJEUrZpfFDCAVKfhI0l5pbmq7I0zoYKyJMJWNXnWzaew6-VjjOvHMpbek0LAC9JEW0X8vhXcLDNkGRVCGVzFkg1CDzL4ass980gTSmbLnac"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR7LOmX5OJB3W5wCwJEUrZpfFDCAVKfhI0l5pbmq7I0zoYKyJMJWNXnWzaew6-VjjOvHMpbek0LAC9JEW0X8vhXcLDNkGRVCGVzFkg1CDzL4ass980gTSmbLnac",
+  "top": 0.733,
+  "waist": 0.508,
+  "max": 0.99
  },
  "h03": {
   "image": "/static/catalog/h03.png",
-  "w": 187,
-  "h": 211,
-  "name": "베레모",
-  "brand": "wzggt.co.kr",
-  "mall": "wzggt.co.kr",
-  "price": 9000,
-  "link": "https://www.google.com/search?ibp=oshop&q=베레모&prds=productid:3268893322517307260,headlineOfferDocid:3268893322517307260,imageDocid:7124949305287030683,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSBzUlaKlL-8-SVP6tgGKQWW4dWnG3PcgtLUlD-GSoIJRaCTpugP8zl82Se4VBUUNIrJ4RaKnqT6AyLY0ct4zRN4qrl3mrHbGE5BMao0Y_wxRg0Lis5hbEgtw"
+  "w": 307,
+  "h": 234,
+  "top": 0.661,
+  "waist": 0.397,
+  "max": 0.896,
+  "name": "베레모 브라운",
+  "brand": "베스트유니폼",
+  "mall": "베스트유니폼",
+  "price": 9900,
+  "link": "https://www.google.com/search?ibp=oshop&q=베레모&prds=catalogid:9834961203057881173,productid:6445066678690610491,headlineOfferDocid:5878860913477911227,imageDocid:11787327170669913681,gpcid:2273161210967833955,mid:576462525218853123,pvt:hg&hl=ko&gl=kr&udm=28",
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR4gWm2A_DqqQIq9rvKIKTOQjqbYSMd2cuL2a8Zdn0q9EIdBkdFWIbkmXTQao_tyBgEJq0lYhZ0Q5w-nhWMRHg-NdXoH2Qd0TtntYG8sZtAG7mrvH9fHCwcDqY"
  },
  "h04": {
   "image": "/static/catalog/h04.png",
@@ -657,7 +834,10 @@ window.CATALOG_PHOTOS = {
   "mall": "코오롱스포츠",
   "price": 88000,
   "link": "https://www.google.com/search?ibp=oshop&q=버킷햇&prds=catalogid:15285342504300230418,productid:10378897709852326787,headlineOfferDocid:17455801810558395575,imageDocid:3782519119777616998,gpcid:7368360906918399635,mid:576462881336949552,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRCdV449Th4V8tj9EKh66O2qChXgSUClX8O4ll9Zh2P9hHM302DQuVm5tE8k7PW_EezwGVREAdIsEx_yF7lpDPiE9a1I5Mn2ysLypqx5O7YMfbF3z1OhVfNBQ"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRCdV449Th4V8tj9EKh66O2qChXgSUClX8O4ll9Zh2P9hHM302DQuVm5tE8k7PW_EezwGVREAdIsEx_yF7lpDPiE9a1I5Mn2ysLypqx5O7YMfbF3z1OhVfNBQ",
+  "top": 0.657,
+  "waist": 0.608,
+  "max": 0.945
  },
  "e01": {
   "image": "/static/catalog/e01.png",
@@ -668,7 +848,10 @@ window.CATALOG_PHOTOS = {
   "mall": "트렌비",
   "price": 214900,
   "link": "https://www.google.com/search?ibp=oshop&q=스퀘어 선글라스&prds=productid:9966632038260426452,headlineOfferDocid:9966632038260426452,imageDocid:7172881208962724868,rds:PC_10637906265972488307|PROD_PC_10637906265972488307,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQYpOqnaHQYsPrtdkZmyifsaA0A2B1tqQwreXvtW51gyX3eTq53Iul9vHcX96M_8Cm3psk4Mn-yiju_o-6zcZamk8-2U9DE6ckPcnZom2dvdOyRXkypmez5uA"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQYpOqnaHQYsPrtdkZmyifsaA0A2B1tqQwreXvtW51gyX3eTq53Iul9vHcX96M_8Cm3psk4Mn-yiju_o-6zcZamk8-2U9DE6ckPcnZom2dvdOyRXkypmez5uA",
+  "top": 0.975,
+  "waist": 0.926,
+  "max": 0.985
  },
  "e02": {
   "image": "/static/catalog/e02.png",
@@ -679,7 +862,10 @@ window.CATALOG_PHOTOS = {
   "mall": "코오롱몰",
   "price": 480250,
   "link": "https://www.google.com/search?ibp=oshop&q=라운드 메탈 안경&prds=productid:17889696505838453007,headlineOfferDocid:17889696505838453007,imageDocid:15181723542000690626,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTc9Tv91fmBlSmIY1NAJXNQXkGZ0sVjLlaFHchwdcXZJUB3wE1oC6jhW-zwnNOlWgdPQxSJlMqzCxZUn8T0jGNtjGdQ5Vp62azfA5Xqme99mn1EzCZkp-BC"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTc9Tv91fmBlSmIY1NAJXNQXkGZ0sVjLlaFHchwdcXZJUB3wE1oC6jhW-zwnNOlWgdPQxSJlMqzCxZUn8T0jGNtjGdQ5Vp62azfA5Xqme99mn1EzCZkp-BC",
+  "top": 0.941,
+  "waist": 0.463,
+  "max": 0.945
  },
  "n01": {
   "image": "/static/catalog/n01.png",
@@ -690,7 +876,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Tiffany & Co.",
   "price": 18600000,
   "link": "https://www.google.com/search?ibp=oshop&q=드롭 목걸이&prds=catalogid:15876006437624895370,productid:1758142515016168100,headlineOfferDocid:299999418798739475,imageDocid:12395656775318616386,gpcid:287303930070941615,mid:576462823341337064,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcsDZDI111qU3BvtQcMABSXfKE3_mJBMdbt8ubvmH4rzUCVHi4KLb1-HssfyDYISXlMiFIoS5ser7w9Pd3FUNm3C5FClzFQtGIPku0D_QPBDIc3PihU5nPLw"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcsDZDI111qU3BvtQcMABSXfKE3_mJBMdbt8ubvmH4rzUCVHi4KLb1-HssfyDYISXlMiFIoS5ser7w9Pd3FUNm3C5FClzFQtGIPku0D_QPBDIc3PihU5nPLw",
+  "top": 0.81,
+  "waist": 0.506,
+  "max": 0.949
  },
  "n02": {
   "image": "/static/catalog/n02.png",
@@ -701,7 +890,10 @@ window.CATALOG_PHOTOS = {
   "mall": "후루츠패밀리",
   "price": 15000,
   "link": "https://www.google.com/search?ibp=oshop&q=진주 초커&prds=productid:11312690307803063224,headlineOfferDocid:11312690307803063224,imageDocid:893214459806051200,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSGiUSc3pskt0jB13iRJU-CalRogExm1s8XmMJNSw5vsDeJj2Ra7DVaLRWH4fuGot9CeZSWefzrAXnp4ilYDOMBcHudx7ttC81VZDdyK7eaisTYTvpIFVzpBA"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSGiUSc3pskt0jB13iRJU-CalRogExm1s8XmMJNSw5vsDeJj2Ra7DVaLRWH4fuGot9CeZSWefzrAXnp4ilYDOMBcHudx7ttC81VZDdyK7eaisTYTvpIFVzpBA",
+  "top": 0.78,
+  "waist": 0.757,
+  "max": 0.929
  },
  "n03": {
   "image": "/static/catalog/n03.png",
@@ -712,7 +904,10 @@ window.CATALOG_PHOTOS = {
   "mall": "골드리아",
   "price": 13639000,
   "link": "https://www.google.com/search?ibp=oshop&q=체인 목걸이&prds=productid:550732149291665763,headlineOfferDocid:550732149291665763,imageDocid:4395527577683557856,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRAE9kS1ficu3H3LdmXenPBSiQ2XMLtNeRicECk0vIr70bA47aAXPMqMgAcEmVZbXSJFL8vD20JYno4B_v_963EMLKbwGwgrYw3An7slyWRaty58feonn_e"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRAE9kS1ficu3H3LdmXenPBSiQ2XMLtNeRicECk0vIr70bA47aAXPMqMgAcEmVZbXSJFL8vD20JYno4B_v_963EMLKbwGwgrYw3An7slyWRaty58feonn_e",
+  "top": 1.0,
+  "waist": 1.0,
+  "max": 1.0
  },
  "n04": {
   "image": "/static/catalog/n04.png",
@@ -723,7 +918,10 @@ window.CATALOG_PHOTOS = {
   "mall": "nomstyle.com",
   "price": 18800,
   "link": "https://www.google.com/search?ibp=oshop&q=울 머플러&prds=productid:5134626311823582163,headlineOfferDocid:5134626311823582163,imageDocid:11715275162908992061,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQBeu1nJpK6OTzg8r_HrpLOMRIsys3Xep9aBn2Ve15a_VXj_D35VpVIBPyMJK2Gq43t5qYmWYG_2KoKGaWg9qV2laR8K3n1pj25l1qezSa3b2v_QnlwyWA-"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQBeu1nJpK6OTzg8r_HrpLOMRIsys3Xep9aBn2Ve15a_VXj_D35VpVIBPyMJK2Gq43t5qYmWYG_2KoKGaWg9qV2laR8K3n1pj25l1qezSa3b2v_QnlwyWA-",
+  "top": 0.457,
+  "waist": 0.25,
+  "max": 0.837
  },
  "l01": {
   "image": "/static/catalog/l01.png",
@@ -734,7 +932,10 @@ window.CATALOG_PHOTOS = {
   "mall": "ssfshop.com",
   "price": 143640,
   "link": "https://www.google.com/search?ibp=oshop&q=위빙 레더 벨트&prds=productid:17609650420372779177,headlineOfferDocid:17609650420372779177,imageDocid:18285486233216618243,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT304YOy4i9p1nUuMLW1RztOyOBbfBq2P3wedg_CBkChcQUCY9cd0fpUj_lKLJ38SDHUAPwE8xtYrcAwrj9ca-sYx_nD31GeDkkivRL5Wv9YS6OHD3uSA-vdg"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT304YOy4i9p1nUuMLW1RztOyOBbfBq2P3wedg_CBkChcQUCY9cd0fpUj_lKLJ38SDHUAPwE8xtYrcAwrj9ca-sYx_nD31GeDkkivRL5Wv9YS6OHD3uSA-vdg",
+  "top": 0.967,
+  "waist": 0.91,
+  "max": 0.984
  },
  "l02": {
   "image": "/static/catalog/l02.png",
@@ -745,7 +946,10 @@ window.CATALOG_PHOTOS = {
   "mall": "후루츠패밀리",
   "price": 35000,
   "link": "https://www.google.com/search?ibp=oshop&q=스터드 벨트&prds=productid:5449630027555212829,headlineOfferDocid:5449630027555212829,imageDocid:12446370164152608638,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSfLtU13BIKSagqVu1AcD4eIX45Cr3GObWgL03g6Bv5To-860hSG6LB2L4Ie-syTasGkacZXPq3Vxbl_7bpHgTkYX5T5VPa1ZN_bAClcOlnHWTmnKs6tFgi"
+  "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSfLtU13BIKSagqVu1AcD4eIX45Cr3GObWgL03g6Bv5To-860hSG6LB2L4Ie-syTasGkacZXPq3Vxbl_7bpHgTkYX5T5VPa1ZN_bAClcOlnHWTmnKs6tFgi",
+  "top": 0.848,
+  "waist": 0.448,
+  "max": 0.94
  },
  "o07": {
   "image": "/static/catalog/o07.png",
@@ -756,7 +960,10 @@ window.CATALOG_PHOTOS = {
   "mall": "Goodwearmall",
   "price": 69300,
   "link": "https://www.google.com/search?ibp=oshop&q=여성 레더 자켓&prds=productid:477855418572729482,headlineOfferDocid:477855418572729482,imageDocid:2926817297537812187,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRnXzcpa23i1fyF1WVzzHPZIKEtp-bazYZCS7jf19tYJkwvRmThkkJ6YWD7FgS7D0OtsydupZNJoK4xC7GO3L-Zs746Z_2luJD4JF1X3-XW0G0YaoNAOCcgxQ"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRnXzcpa23i1fyF1WVzzHPZIKEtp-bazYZCS7jf19tYJkwvRmThkkJ6YWD7FgS7D0OtsydupZNJoK4xC7GO3L-Zs746Z_2luJD4JF1X3-XW0G0YaoNAOCcgxQ",
+  "top": 0.642,
+  "waist": 0.441,
+  "max": 0.885
  },
  "t02": {
   "image": "/static/catalog/t02.png",
@@ -767,6 +974,9 @@ window.CATALOG_PHOTOS = {
   "mall": "케이케이에스티",
   "price": 45800,
   "link": "https://www.google.com/search?ibp=oshop&q=그래픽 오버핏 반팔티&prds=productid:684212682904321314,headlineOfferDocid:684212682904321314,imageDocid:16459147534606034692,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQ3J6kNdzOc2q6qGfz0okDgR7kTvBDTqAggUIX3dSLJ4SCEoAGkqJejzcv774OO9q4lI6YXU0aw4dWyMpD8wAJj0Dimo1JjpQJDR47v9RKm8tCoykEUoRlw4dc"
+  "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQ3J6kNdzOc2q6qGfz0okDgR7kTvBDTqAggUIX3dSLJ4SCEoAGkqJejzcv774OO9q4lI6YXU0aw4dWyMpD8wAJj0Dimo1JjpQJDR47v9RKm8tCoykEUoRlw4dc",
+  "top": 0.803,
+  "waist": 0.618,
+  "max": 0.912
  }
 };

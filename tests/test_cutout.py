@@ -50,7 +50,8 @@ def test_cutout_for_url_uses_cache(tmp_path, monkeypatch):
     url = "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:abc"
     _rgba(30, 40).save(cutout.cache_path(url))
     out = cutout.cutout_for_url(url)
-    assert out == {"image": f"/cutouts/{cutout.cache_path(url).name}", "w": 30, "h": 40}
+    assert (out["image"], out["w"], out["h"]) == (f"/cutouts/{cutout.cache_path(url).name}", 30, 40)
+    assert out["top"] == 1.0 and out["waist"] == 1.0  # 꽉 찬 사각형이라 기준폭 = 전체 폭
 
 
 def test_rank_products_puts_product_only_first(tmp_path, monkeypatch):
@@ -102,3 +103,25 @@ def test_kit_layout_has_ponytail_back_layer():
     layout = json.loads((config.AVATAR_KIT_DIR / "layout.json").read_text(encoding="utf-8"))
     assert "ponytail" in layout["hairBack"]
     assert (config.AVATAR_KIT_DIR / "hair" / "ponytail-back.png").exists()
+
+
+def test_hair_color_pngs_match_data_js():
+    # 빌드 스크립트의 컬러 목록이 web/js/data.js HAIR_COLORS와 같고, 컬러별 헤어 PNG가 모두 있는지
+    js = (config.WEB_DIR / "js" / "data.js").read_text(encoding="utf-8")
+    block = js[js.index("const HAIR_COLORS") : js.index("];", js.index("const HAIR_COLORS"))]
+    colors = dict(re.findall(r'id: "(\w+)", ko: "[^"]+", hex: "(#[0-9a-f]{6})"', block))
+    build = (config.ROOT_DIR / "avatar_kit" / "tools" / "build_assets.py").read_text(encoding="utf-8")
+    line = build[build.index("HAIR_COLORS = {") : build.index("}", build.index("HAIR_COLORS = {"))]
+    assert dict(re.findall(r'"(\w+)": "(#[0-9a-f]{6})"', line)) == colors
+    layout = json.loads((config.AVATAR_KIT_DIR / "layout.json").read_text(encoding="utf-8"))
+    assert layout["hairColors"] == list(colors)
+    for cid in colors:
+        assert (config.AVATAR_KIT_DIR / "hair" / f"long-straight.{cid}.png").exists()
+        assert (config.AVATAR_KIT_DIR / "hair" / f"ponytail-back.{cid}.png").exists()
+        assert (config.AVATAR_KIT_DIR / "faces" / f"puppy-hair.{cid}.png").exists()
+
+
+def test_body_cloth_layers_exist():
+    layout = json.loads((config.AVATAR_KIT_DIR / "layout.json").read_text(encoding="utf-8"))
+    for body in layout["bodies"]:
+        assert (config.AVATAR_KIT_DIR / "bodies" / f"{body}-cloth.png").exists()

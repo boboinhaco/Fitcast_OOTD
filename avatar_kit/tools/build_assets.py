@@ -27,6 +27,8 @@ SOLE = 900  # 발바닥 y
 NECK_OVERLAP = 1.12  # 얼굴 목을 몸 목보다 살짝 넓게 덮어 이음새 숨김
 HOLE = (180.0, 215.0, 102.0, 138.0)  # 헤어 원본에서 얼굴 자리로 지워져 있던 타원 (cx, cy, rx, ry)
 HAIR_OVERLAP = 1.02  # 헤어 안쪽 가장자리가 볼 폭보다 살짝 넓게 (귀·옆머리를 덮음)
+# 헤어 컬러별 PNG를 미리 만들어 둠 (브라우저 SVG 필터는 Safari 등에서 네모 자국이 생김). web/js/data.js HAIR_COLORS와 같아야 함
+HAIR_COLORS = {"black": "#1f1b1a", "darkbrown": "#3a2a22", "choco": "#5b3a28", "ash": "#6d5d52", "milk": "#a07a5c", "blonde": "#cdb892", "wine": "#5e2331"}
 
 
 # ───────── 공통 유틸 ─────────
@@ -96,16 +98,20 @@ def transform(img: Image.Image, scale: float, dx: float, dy: float, size: tuple[
     return canvas
 
 
-def crop_save(img: Image.Image, path: Path, origin: tuple[float, float], unit: float) -> dict:
+def crop_save(img: Image.Image, path: Path, origin: tuple[float, float], unit: float, tinted: str | None = None) -> dict:
     """알파 bbox로 잘라 저장하고, 골격 단위의 배치 사각형을 돌려준다.
 
-    origin: 이미지 픽셀 (0,0)이 골격 좌표에서 놓이는 위치, unit: 픽셀당 골격 단위.
+    origin: 이미지 픽셀 (0,0)이 골격 좌표에서 놓이는 위치, unit: 픽셀당 골격 단위. tinted: 헤어 기준색이면 컬러별 사본도 저장.
     """
     box = img.getchannel("A").point(lambda a: 255 if a > 3 else 0).getbbox()
-    img.crop(box).save(path, optimize=True)
+    cropped = img.crop(box)
+    cropped.save(path, optimize=True)
     x0, y0, x1, y1 = box
     r = lambda v: round(float(v), 2)
-    return {"x": r(origin[0] + x0 * unit), "y": r(origin[1] + y0 * unit), "w": r((x1 - x0) * unit), "h": r((y1 - y0) * unit)}
+    entry = {"x": r(origin[0] + x0 * unit), "y": r(origin[1] + y0 * unit), "w": r((x1 - x0) * unit), "h": r((y1 - y0) * unit)}
+    if tinted is not None:
+        save_tinted(cropped, path, tinted)
+    return entry
 
 
 # ───────── 얼굴 ─────────
@@ -220,6 +226,23 @@ def hair_base_color(layers: list[tuple[np.ndarray, np.ndarray]]) -> str:
     return "#" + "".join(f"{int(v):02x}" for v in px.mean(0))
 
 
+def tint_hair(img: Image.Image, base_hex: str, target_hex: str) -> Image.Image:
+    """원본 갈색의 명암(휘도)을 유지한 채 목표 색으로 (web/js/avatar.js 헤어 컬러 필터와 같은 식)."""
+    hex_rgb = lambda h: np.array([int(h[i : i + 2], 16) for i in (1, 3, 5)], dtype=np.float32)
+    base, target = hex_rgb(base_hex), hex_rgb(target_hex)
+    lb = (0.299 * base[0] + 0.587 * base[1] + 0.114 * base[2]) / 255
+    arr = np.asarray(img, dtype=np.float32).copy()
+    lum = 0.299 * arr[..., 0] + 0.587 * arr[..., 1] + 0.114 * arr[..., 2]
+    arr[..., :3] = np.clip(lum[..., None] * (target / 255 / lb), 0, 255)
+    return Image.fromarray(arr.astype(np.uint8), "RGBA")
+
+
+def save_tinted(img: Image.Image, path: Path, base_hex: str) -> None:
+    """<이름>.<컬러id>.png 로 컬러별 사본 저장 (img는 알파 bbox로 잘린 상태)."""
+    for cid, hex_ in HAIR_COLORS.items():
+        tint_hair(img, base_hex, hex_).save(path.with_suffix(f".{cid}.png"), optimize=True)
+
+
 # ───────── 헤어 ─────────
 def hair_layer(name: str) -> tuple[np.ndarray, np.ndarray]:
     """예전 빌드가 얼굴 자리(타원)를 알파 0으로 지웠지만 RGB는 남아 있어 앞머리를 복구."""
@@ -294,6 +317,11 @@ def body_layer(name: str) -> tuple[np.ndarray, np.ndarray]:
     return rgb, alpha
 
 
+def cloth_mask(rgb: np.ndarray, alpha: np.ndarray) -> np.ndarray:
+    """몸 이미지에서 회색 나시·반바지 픽셀 (무채색이고 피부보다 어두움)."""
+    return (np.abs(rgb[..., 0] - rgb[..., 2]) < 9) & (rgb.mean(2) > 110) & (rgb.mean(2) < 228) & (alpha > 0.5)
+
+
 def body_marks(rgb: np.ndarray, alpha: np.ndarray) -> dict:
     """몸 실루엣에서 골격 좌표를 측정해 골격 단위로 변환 (발밑 그림자는 측정에서 제외)."""
     shadow = (rgb[..., 0] - rgb[..., 2] < 6) & (rgb.min(2) > 205)
@@ -306,7 +334,7 @@ def body_marks(rgb: np.ndarray, alpha: np.ndarray) -> dict:
     Y = lambda py: NECK_TOP + (py - top_px) * unit
     X = lambda px: (px - cx) * unit
 
-    cloth = (np.abs(rgb[..., 0] - rgb[..., 2]) < 9) & (rgb.mean(2) > 110) & (rgb.mean(2) < 228) & (alpha > 0.5)
+    cloth = cloth_mask(rgb, alpha)
 
     def center_run(y):
         return min(runs(m[y]), key=lambda r: 0 if r[0] <= cx <= r[1] else min(abs(r[0] - cx), abs(r[1] - cx)))
@@ -428,12 +456,12 @@ def build() -> dict:
         "halfW": round(ref["cheek"] / 2 * face_unit * 1.08, 2), "cx": 0,
         "eyeDx": round(eye_offset(faces[REF_FACE], ref) * face_unit, 2),
     }
+    hair_layers = {n: hair_layer(n) for n in HAIRS}
+    base = layout["head"]["hairBase"] = hair_base_color(list(hair_layers.values()))
+    layout["hairColors"] = list(HAIR_COLORS)
     for n, img in faces.items():
         layout["faces"][n] = crop_save(img, OUT / "faces" / f"{n}.png", face_origin, face_unit)
-        layout["faceHair"][n] = crop_save(own_hair_layer(img, fmarks[n]), OUT / "faces" / f"{n}-hair.png", face_origin, face_unit)
-
-    hair_layers = {n: hair_layer(n) for n in HAIRS}
-    layout["head"]["hairBase"] = hair_base_color(list(hair_layers.values()))
+        layout["faceHair"][n] = crop_save(own_hair_layer(img, fmarks[n]), OUT / "faces" / f"{n}-hair.png", face_origin, face_unit, tinted=base)
     for n in HAIRS:
         rgb, alpha = hair_layers[n]
         s, dx, dy = fit_hair(n, alpha, ref)
@@ -441,16 +469,20 @@ def build() -> dict:
         origin = F(dx, dy)
         if n == "ponytail":
             alpha, back = split_ponytail(alpha)
-            layout["hairBack"][n] = crop_save(to_image(rgb, back), OUT / "hair" / f"{n}-back.png", origin, face_unit * s)
-        layout["hair"][n] = crop_save(to_image(rgb, alpha), OUT / "hair" / f"{n}.png", origin, face_unit * s)
+            layout["hairBack"][n] = crop_save(to_image(rgb, back), OUT / "hair" / f"{n}-back.png", origin, face_unit * s, tinted=base)
+        layout["hair"][n] = crop_save(to_image(rgb, alpha), OUT / "hair" / f"{n}.png", origin, face_unit * s, tinted=base)
         layout["hair"][n]["fit"] = [round(s, 3), round(dx, 1), round(dy, 1)]
         print(f"  hair {n}: scale {s:.3f}, dy {dy:.0f}")
 
     for n, (rgb, alpha) in bodies.items():
         b = bmarks[n]
         origin = (-b["cx"] * b["unit"], NECK_TOP - b["top_px"] * b["unit"])
-        entry = crop_save(to_image(rgb, alpha), OUT / "bodies" / f"{n}.png", origin, b["unit"])
+        body_img = to_image(rgb, alpha)
+        entry = crop_save(body_img, OUT / "bodies" / f"{n}.png", origin, b["unit"])
         entry["S"] = b["S"]
+        # 회색 나시·반바지만 따로 (피부톤 필터가 옷 색까지 어둡게 하지 않도록 필터 없이 위에 덮음). 몸과 같은 사각형에 저장
+        cloth = to_image(rgb, alpha * soften(cloth_mask(rgb, alpha), erode=0, blur=0.8))
+        cloth.crop(body_img.getchannel("A").point(lambda a: 255 if a > 3 else 0).getbbox()).save(OUT / "bodies" / f"{n}-cloth.png", optimize=True)
         layout["bodies"][n] = entry
 
     (OUT / "layout.json").write_text(json.dumps(layout, ensure_ascii=False, indent=1), encoding="utf-8")

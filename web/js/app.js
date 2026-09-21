@@ -28,6 +28,7 @@
   };
   // 성별에 없는 헤어·얼굴이 남아 있으면 (예전 저장값·성별 변경) 첫 선택지로
   function normalizeProfile(p) {
+    if (GENDERS.find((g) => g.id === p.gender)?.soon) p.gender = "female"; // 남성은 개발 중
     const hairs = forGender(HAIR_STYLES, p.gender), faces = forGender(FACE_TYPES, p.gender);
     if (!hairs.some((h) => h.id === p.hair)) p.hair = hairs[0].id;
     if (!faces.some((f) => f.id === p.face)) p.face = faces[0].id;
@@ -149,8 +150,8 @@
     const faces = FACE_TYPES.map((f, i) => {
       const hairs = ["long_straight", "bob", "hush", "ponytail", "long_wave", "bun", "short"];
       const male = f.genders && !f.genders.includes("female");
-      const prof = male ? { gender: "male", face: f.id, hair: "dandy" } : { face: f.id, hair: hairs[i], hairColor: HAIR_COLORS[i % 4].hex };
-      return `<figure><div class="card bg-studio">${av(prof, {}, "face")}</div><figcaption>${f.ko}</figcaption></figure>`;
+      if (male) return `<figure><div class="card bg-studio soon-card"><span>MEN<br><small>개발 중</small></span></div><figcaption>${f.ko} · 준비 중</figcaption></figure>`;
+      return `<figure><div class="card bg-studio">${av({ face: f.id, hair: hairs[i], hairColor: HAIR_COLORS[i % 4].hex }, {}, "face")}</div><figcaption>${f.ko}</figcaption></figure>`;
     }).join("");
 
     return `
@@ -190,7 +191,7 @@
           <div class="collage">
             <div class="card bg-studio" style="left:0;top:70px;width:34%;height:56%">${av({ face: "rabbit", hair: "hush", hairColor: "#5b3a28" }, "ballet", "upper")}</div>
             <div class="card bg-ribbon" style="left:28%;top:230px;width:30%;height:44%;z-index:2">${av({ face: "hamster", hair: "bob", hairColor: "#a07a5c", height: 156 }, "preppy", "face")}</div>
-            <div class="card bg-stone" style="right:0;top:0;width:44%;height:100%">${av({ gender: "male", face: "bear", hair: "dandy", height: 181, weight: 74, body: "rect" }, "street")}</div>
+            <div class="card bg-stone" style="right:0;top:0;width:44%;height:100%">${av({ face: "cat", hair: "short", hairColor: "#1f1b1a", height: 170, body: "rect" }, "street")}</div>
           </div>
         </div>
         <div class="face-row">${faces}</div>
@@ -203,7 +204,7 @@
         <div class="trio-grid">
           <div class="collage">
             <div class="card bg-garden" style="left:0;top:60px;width:52%;height:82%">${av({ face: "deer", hair: "long_wave", hairColor: "#3a2a22", height: 168 }, "boho")}</div>
-            <div class="card bg-stone" style="right:0;top:0;width:50%;height:66%;z-index:2">${av({ gender: "male", face: "fox", hair: "partperm", height: 178, weight: 66 }, "classic", "upper")}</div>
+            <div class="card bg-stone" style="right:0;top:0;width:50%;height:66%;z-index:2">${av({ face: "fox", hair: "bob", hairColor: "#5b3a28", height: 168 }, "classic", "upper")}</div>
           </div>
           <div class="stand">${av({ face: "fox", hair: "ponytail", hairColor: "#1f1b1a", height: 170 }, "y2k")}</div>
           <div>
@@ -230,7 +231,7 @@
           </div>
           <div class="collage">
             <div class="card bg-sky" style="left:4%;top:0;width:46%;height:100%">${av({ face: "deer", hair: "long_straight", hairColor: "#5b3a28" }, "classic")}</div>
-            <div class="card bg-blush" style="right:0;top:90px;width:42%;height:70%;z-index:2">${av({ gender: "male", face: "puppy", hair: "twoblock", height: 175, weight: 68 }, "gorp", "upper")}</div>
+            <div class="card bg-blush" style="right:0;top:90px;width:42%;height:70%;z-index:2">${av({ face: "puppy", hair: "short", hairColor: "#a07a5c", height: 166 }, "gorp", "upper")}</div>
           </div>
         </div>
       </div>
@@ -286,7 +287,7 @@
     const p = state.profile;
     return `
       <div class="field-label">Gender</div>
-      <div class="seg" role="group" aria-label="성별">${GENDERS.map((g) => `<button data-k="g-${g.id}" data-act="gender" data-v="${g.id}" aria-pressed="${p.gender === g.id}">${g.en} · ${g.ko}</button>`).join("")}</div>
+      <div class="seg" role="group" aria-label="성별">${GENDERS.map((g) => `<button data-k="g-${g.id}" data-act="gender" data-v="${g.id}" aria-pressed="${p.gender === g.id}" ${g.soon ? 'aria-disabled="true" class="soon" title="남성 아바타는 준비 중이에요"' : ""}>${g.en} · ${g.ko}${g.soon ? " <small>개발 중</small>" : ""}</button>`).join("")}</div>
       <div class="field-label">Skin tone</div>
       <div class="swatches">${SKIN_TONES.map((s) => `<button class="swatch" data-k="sk-${s.id}" data-act="skin" data-v="${s.hex}" style="background:${s.hex}" aria-pressed="${p.skin === s.hex}" aria-label="${s.ko}" title="${s.ko}"></button>`).join("")}</div>
       <div class="field-label">Body shape</div>
@@ -703,6 +704,7 @@
     const p = state.profile;
     switch (act) {
       case "gender":
+        if (GENDERS.find((g) => g.id === v)?.soon) { toast("남성 아바타는 개발 중이에요. 조금만 기다려 주세요!"); return; }
         p.gender = v;
         normalizeProfile(p);
         break;

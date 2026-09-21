@@ -8,6 +8,7 @@
   --only  일부 항목만
   --force 캐시된 검색 결과를 무시하고 다시 검색
   --pick  후보 번호를 직접 지정 (자동 선택이 마음에 안 들 때)
+  --remeasure 검색·누끼 없이 저장된 사진의 기준폭(어깨선·허리선 폭)만 다시 잼
 """
 
 import argparse
@@ -24,7 +25,7 @@ import requests  # noqa: E402
 from PIL import Image  # noqa: E402
 
 from fitcast import config  # noqa: E402
-from fitcast.cutout import CutoutError, download, garment_score, product_only_flags, remove_background, trim  # noqa: E402
+from fitcast.cutout import CutoutError, download, garment_score, photo_anchors, product_only_flags, remove_background, trim  # noqa: E402
 from fitcast.tools import products  # noqa: E402
 
 SEARCH_CACHE = config.DATA_DIR / "catalog_search"
@@ -115,6 +116,7 @@ def main() -> None:
     ap.add_argument("--only", default="")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--pick", nargs="*", default=[])
+    ap.add_argument("--remeasure", action="store_true", help="검색 없이 저장된 사진의 기준폭만 다시 잼")
     args = ap.parse_args()
     picks = {k: int(v) for k, v in (s.split("=") for s in args.pick)}
     only = set(filter(None, args.only.split(",")))
@@ -123,6 +125,13 @@ def main() -> None:
         sys.exit("SERPAPI_KEY(또는 네이버 키)가 필요해요.")
     config.CATALOG_DIR.mkdir(parents=True, exist_ok=True)
     photos = json.loads(OUT_JS.read_text(encoding="utf-8").split("=", 1)[1].rstrip().rstrip(";")) if OUT_JS.exists() else {}
+    if args.remeasure:
+        for pid, ph in photos.items():
+            with Image.open(config.CATALOG_DIR / f"{pid}.png") as im:
+                ph.update(photo_anchors(im.convert("RGBA")))
+        save_photos(photos)
+        print(f"기준폭 갱신: {len(photos)}개")
+        return
 
     for item in load_catalog():
         if only and item["id"] not in only:
@@ -140,7 +149,7 @@ def main() -> None:
         path = config.CATALOG_DIR / f"{item['id']}.png"
         img.save(path, optimize=True)
         photos[item["id"]] = {
-            "image": f"/static/catalog/{path.name}", "w": img.width, "h": img.height,
+            "image": f"/static/catalog/{path.name}", "w": img.width, "h": img.height, **photo_anchors(img),
             "name": p["name"], "brand": p["brand"], "mall": p["mall"], "price": p["price"], "link": p["link"], "src": p["image"],
         }
         save_photos(photos)
