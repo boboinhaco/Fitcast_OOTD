@@ -25,6 +25,25 @@ DEFAULT_CITY = os.getenv("FITCAST_DEFAULT_CITY", "서울")
 # 외부 API 타임아웃(초)
 HTTP_TIMEOUT = 10
 
+# 실제 상품 검색: SerpApi(구글 쇼핑) 우선, 없으면 네이버 쇼핑 검색 API. 둘 다 비면 기본 썸네일 사용
+SERPAPI_KEY = os.getenv("SERPAPI_KEY", "").strip()
+SERPAPI_URL = "https://serpapi.com/search.json"
+SERPAPI_TIMEOUT = 60  # 구글 쇼핑은 캐시가 없으면 20~30초 걸림
+NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", "").strip()
+NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "").strip()
+NAVER_SHOP_URL = "https://openapi.naver.com/v1/search/shop.json"
+
+# AI 피팅(이미지 편집) 설정
+IMAGE_MODEL = os.getenv("FITCAST_IMAGE_MODEL", "gpt-image-1").strip()
+VISION_MODEL = os.getenv("FITCAST_VISION_MODEL", "gpt-4o").strip()  # 상품 사진에서 착용컷 걸러내는 판정용 (mini는 타일 번호를 자주 틀림)
+TRYON_CACHE_DIR = DATA_DIR / "tryon_cache"  # 같은 입력이면 저장된 결과를 재사용 (시연용)
+# 서버가 내려받아도 되는 상품 이미지 호스트 (구글 쇼핑·SerpApi·네이버 쇼핑 이미지)
+TRYON_IMAGE_HOSTS = ("gstatic.com", "serpapi.com", "pstatic.net", "naver.net")
+
+# 실제 상품 사진 누끼
+CUTOUT_CACHE_DIR = DATA_DIR / "cutout_cache"  # 검색 결과 이미지의 누끼 (화면은 /cutouts/ 경로로 읽음)
+CATALOG_DIR = WEB_DIR / "catalog"  # 옷장 카탈로그 상품 사진 (tools/build_catalog.py 결과물)
+
 # UI 선택지: 선호 스타일
 STYLE_OPTIONS = [
     "캐주얼", "미니멀", "스트릿", "모리걸", "걸리시", "페미닌",

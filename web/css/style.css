@@ -272,6 +272,31 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
   border: 1px solid var(--soft); background: #fff; font-size: 13px; line-height: 1; opacity: 0; transition: opacity 0.15s;
 }
 .worn-item:hover .x, .worn-item:focus-within .x { opacity: 1; }
+/* 실제 상품 카드 (네이버 쇼핑 이미지는 흰 배경이라 multiply로 누끼처럼) */
+.worn-item.product .pic { display: flex; align-items: center; justify-content: center; }
+.worn-item.product img { max-width: 100%; max-height: 118px; object-fit: contain; mix-blend-mode: multiply; }
+.worn-item.product .nm { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.worn-item.product img { border-radius: 10px; }
+.worn-item .price { font: 600 11.5px/1 var(--latin); color: var(--muted); margin-top: 5px; }
+.worn-item .alt { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font: 600 10.5px/1 var(--latin); color: var(--muted); }
+.worn-item .alt button { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--soft); background: #fff; font-size: 13px; line-height: 1; padding: 0; }
+.worn-item.loading .pic { animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.45; } }
+.board-note { text-align: center; font-size: 12px; color: var(--muted); margin: -8px 0 14px; }
+.shoprow a.direct { color: var(--ink); font-weight: 700; }
+
+/* AI 피팅 모달 */
+.modal { position: fixed; inset: 0; z-index: 40; background: rgba(28, 27, 27, 0.45); display: grid; place-items: center; padding: 16px; }
+.modal-card { background: #fff; border-radius: 22px; padding: 22px; width: min(860px, 100%); max-height: calc(100vh - 32px); overflow: auto; }
+.tryon-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.tryon-grid figure { margin: 0; text-align: center; font-size: 12px; color: var(--muted); }
+.tryon-box { height: min(62vh, 560px); border-radius: 16px; background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 8px; }
+.tryon-box svg { width: 100%; height: 100%; }
+.tryon-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.tryon-wait { text-align: center; color: var(--muted); font-size: 13px; }
+.spinner.dark { display: inline-block; border-color: rgba(0, 0, 0, 0.15); border-top-color: var(--ink); width: 26px; height: 26px; }
+@media (max-width: 640px) { .tryon-grid { grid-template-columns: 1fr; } .tryon-box { height: 52vh; } }
+
 .worn-empty { grid-column: 1 / -1; color: var(--muted); font-size: 13px; text-align: center; padding: 60px 10px; border: 1.3px dashed var(--soft); border-radius: 18px; }
 .model { height: 640px; align-self: center; position: sticky; top: 20px; }
 .model svg { width: 100%; height: 100%; }
@@ -301,6 +326,9 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
 .item.on { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .item .pic { height: 96px; background: #f7f4f2; border-radius: 11px; display: flex; align-items: center; justify-content: center; padding: 6px; }
 .item .pic svg { max-width: 100%; max-height: 100%; width: auto; height: 100%; }
+.item .pic img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.item.photo .nm { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.item .price { font: 600 11px/1 var(--latin); color: var(--muted); }
 .item .nm { font-size: 12px; line-height: 1.35; font-weight: 600; }
 .item .st { font: 600 9.5px/1 var(--latin); letter-spacing: 0.08em; color: var(--muted); }
 .item .dots { display: flex; gap: 5px; flex-wrap: wrap; }

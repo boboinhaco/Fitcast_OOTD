@@ -8,7 +8,7 @@ from langchain.agents import create_agent
 from fitcast.llm import get_llm
 from fitcast.prompts import AGENT_SYSTEM_PROMPT
 from fitcast.rag.style_guide import search_style_guide
-from fitcast.tools import build_shop_links, get_weather
+from fitcast.tools import build_shop_links, get_weather, search_products
 
 # 에이전트에 넘길 최근 대화 턴 수
 MAX_HISTORY_MESSAGES = 12
@@ -19,7 +19,7 @@ def _build_agent(today: str):
     """날짜가 바뀌면 시스템 프롬프트를 갱신해 에이전트 재생성."""
     return create_agent(
         model=get_llm(),
-        tools=[get_weather, search_style_guide, build_shop_links],
+        tools=[get_weather, search_style_guide, build_shop_links, search_products],
         system_prompt=AGENT_SYSTEM_PROMPT.format(today=today),
     )
 

@@ -9,8 +9,11 @@ from pydantic import BaseModel, Field
 
 from fitcast import config
 from fitcast.chains.outfit import recommend_outfit
+from fitcast.cutout import CutoutError, cutout_for_url, rank_products
 from fitcast.schemas import OutfitItem
+from fitcast.tools.products import ProductSearchError, fetch_products, products_enabled
 from fitcast.tools.shop_links import make_links
+from fitcast.tryon import TryOnError, generate_tryon
 from fitcast.tools.weather import format_weather
 
 # 코디 슬롯 → 화면 라벨
@@ -37,6 +40,21 @@ class RecommendRequest(BaseModel):
     tpo: str = "일상"
     note: str = ""
     profile: Profile = Field(default_factory=Profile)
+
+
+class TryOnProduct(BaseModel):
+    """AI 피팅에 넣을 상품 한 개."""
+
+    image: str
+    name: str = ""
+    label: str = ""
+
+
+class TryOnRequest(BaseModel):
+    """아바타 PNG(data URL) + 입힐 실제 상품들."""
+
+    avatar: str = Field(min_length=32)
+    products: list[TryOnProduct] = Field(default_factory=list, max_length=6)
 
 
 def profile_to_text(p: Profile) -> str:
@@ -77,7 +95,35 @@ def create_app() -> FastAPI:
             "default_city": config.DEFAULT_CITY,
             "tpo_options": config.TPO_OPTIONS,
             "shop_urls": config.SHOP_SEARCH_URLS,
+            "products_enabled": products_enabled(),
         }
+
+    @app.get("/api/products")
+    def products(q: str, n: int = 5, cut: int = 0) -> dict:
+        """키워드로 실제 상품 검색 (SerpApi 구글 쇼핑 → 네이버). cut=1이면 누끼를 떠서 옷만 찍힌 사진 순으로 정렬."""
+        try:
+            items = fetch_products(q, n)
+        except ProductSearchError as e:
+            return {"enabled": products_enabled(), "items": [], "error": str(e)}
+        if cut:
+            items = rank_products(items, limit=n)
+        return {"enabled": True, "items": items, "error": None}
+
+    @app.get("/api/cutout")
+    def cutout(url: str) -> dict:
+        """상품 이미지 URL의 누끼 PNG 경로와 크기 (아바타에 종이인형처럼 올릴 때 사용)."""
+        try:
+            return cutout_for_url(url)
+        except CutoutError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    @app.post("/api/tryon")
+    def tryon(req: TryOnRequest) -> dict:
+        """AI 피팅 보기: 이미지 편집 모델로 아바타에 실제 상품을 입힌 이미지 생성."""
+        try:
+            return generate_tryon(req.avatar, [p.model_dump() for p in req.products])
+        except TryOnError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
     @app.post("/api/recommend")
     def recommend(req: RecommendRequest) -> dict:
@@ -100,15 +146,20 @@ def create_app() -> FastAPI:
             "top": outfit.top, "bottom": outfit.bottom, "outer": outfit.outer,
             "shoes": outfit.shoes, "accessory": outfit.accessory,
         }
+        # 실제 상품은 화면이 LLM 키워드(item.keyword)로 /api/products를 따로 불러 채움 (구글 쇼핑이 느려서 추천을 막지 않게)
+        items = [_item_json(slot, item) for slot, item in slots.items() if item]
         return {
             "weather": format_weather(result["weather_data"]),
             "summary": outfit.summary,
             "weather_tip": outfit.weather_tip,
-            "items": [_item_json(slot, item) for slot, item in slots.items() if item],
+            "items": items,
+            "products_enabled": products_enabled(),
         }
 
     app.mount("/static", StaticFiles(directory=config.WEB_DIR), name="static")
     app.mount("/avatar-kit", StaticFiles(directory=config.AVATAR_KIT_DIR), name="avatar-kit")
+    config.CUTOUT_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    app.mount("/cutouts", StaticFiles(directory=config.CUTOUT_CACHE_DIR), name="cutouts")
 
     @app.get("/", include_in_schema=False)
     def index() -> FileResponse:

@@ -34,8 +34,15 @@
     if (!BODY_TYPES.some((b) => b.id === p.body)) p.body = BODY_TYPES[0].id;
   }
   normalizeProfile(state.profile);
+  // 예전에 저장된 옷장 아이템은 현재 카탈로그 정보(실제 상품 사진 등)로 갱신
+  for (const [slot, e] of Object.entries(state.outfit)) {
+    if (e && e.id && CATALOG_BY_ID[e.id]) state.outfit[slot] = entryFrom(CATALOG_BY_ID[e.id], e.ci);
+  }
 
   const ui = {
+    // 실제 상품: 검색 키워드 → { status: loading|ok|none, items, idx }
+    products: {}, productsEnabled: false,
+    tryon: { open: false, loading: false, image: "", error: "", cached: false },
     tab: "wardrobe", cat: "top", onlyMine: true,
     ai: { city: "", day: 0, tpo: "일상", note: "", loading: false, result: null, error: "" },
   };
@@ -378,25 +385,155 @@
   }
 
   // ───────── 피팅룸 ─────────
+  const won = (n) => (n ? `${n.toLocaleString("ko-KR")}원` : "");
+  const wornEntries = () => SLOT_ORDER.filter((s) => state.outfit[s]).map((s) => [s, state.outfit[s]]);
+  // 아이템의 실제 상품: 옷장 아이템은 카탈로그 사진(빌드 때 찾아둔 상품), AI 아이템은 검색 결과
+  function productOf(e) {
+    if (e.photo) return { name: e.photo.name || e.name, brand: e.photo.brand || "", mall: e.photo.mall || "", price: e.photo.price || 0, image: e.photo.image, link: e.photo.link || "", cutout: e.photo };
+    const c = ui.products[keywordOf(e)];
+    return c && c.status === "ok" ? c.items[c.idx] : null;
+  }
+
+  // 아바타에 입힐 옷: 옷장 사진은 그대로, 검색된 상품은 누끼가 준비되면 사진으로 (그 전엔 벡터 옷)
+  function dressed(outfit = state.outfit) {
+    const out = {};
+    for (const [slot, e] of Object.entries(outfit)) {
+      const pr = e.photo ? null : productOf(e);
+      out[slot] = pr?.cutout ? { ...e, photo: pr.cutout } : e;
+    }
+    return out;
+  }
+
+  // 입은 아이템마다 실제 상품을 한 번씩 검색 (같은 키워드는 재사용, 옷장 아이템은 사진이 있어 검색 안 함)
+  function ensureProducts() {
+    if (!ui.productsEnabled || route() !== "fitting") return;
+    for (const [, e] of wornEntries()) {
+      if (e.photo) continue;
+      const k = keywordOf(e);
+      if (ui.products[k]) continue;
+      ui.products[k] = { status: "loading", items: [], idx: 0 };
+      fetch(`/api/products?q=${encodeURIComponent(k)}&n=6&cut=1`)
+        .then((r) => r.json())
+        .then((d) => { ui.products[k] = { status: d.items?.length ? "ok" : "none", items: d.items || [], idx: 0 }; })
+        .catch(() => { ui.products[k] = { status: "none", items: [], idx: 0 }; })
+        .finally(() => { if (route() === "fitting") render(); });
+    }
+  }
+
   function wornList() {
-    const entries = SLOT_ORDER.filter((s) => state.outfit[s]).map((s) => [s, state.outfit[s]]);
+    const entries = wornEntries();
     if (!entries.length) return `<div class="worn-empty">옷장에서 아이템을 골라<br>아바타에게 하나씩 입혀보세요.</div>`;
-    return entries.map(([slot, e]) => `
-      <div class="worn-item">
-        <div class="pic">${Avatar.thumb({ ...e, slot }, e.color)}</div>
-        <div class="lab">${esc(labelFor(e))}</div>
-        <div class="nm">${esc(e.name)}${e.colorName ? `<br>[${esc(e.colorName)}]` : ""}</div>
-        <button class="x" data-act="takeoff" data-v="${slot}" aria-label="${esc(e.name)} 벗기기">×</button>
-      </div>`).join("");
+    return entries.map(([slot, e]) => {
+      const pr = productOf(e), c = ui.products[keywordOf(e)];
+      const color = e.colorName ? `<br>[${esc(e.colorName)}]` : "";
+      const x = `<button class="x" data-act="takeoff" data-v="${slot}" aria-label="${esc(e.name)} 벗기기">×</button>`;
+      if (!pr) {
+        return `<div class="worn-item${c?.status === "loading" ? " loading" : ""}">
+          <div class="pic">${Avatar.thumb({ ...e, slot }, e.color)}</div>
+          <div class="lab">${esc(labelFor(e))}</div>
+          <div class="nm">${esc(e.name)}${color}</div>${x}
+        </div>`;
+      }
+      const nav = c?.items.length > 1
+        ? `<div class="alt"><button data-act="prodPrev" data-v="${slot}" aria-label="이전 상품">‹</button><span>${c.idx + 1}/${c.items.length}</span><button data-act="prodNext" data-v="${slot}" aria-label="다음 상품">›</button></div>`
+        : "";
+      return `<div class="worn-item product">
+        <a class="pic" href="${esc(pr.link)}" target="_blank" rel="noopener" title="${esc(pr.mall)}에서 보기"><img src="${esc(pr.image)}" alt="${esc(pr.name)}" loading="lazy" referrerpolicy="no-referrer" /></a>
+        <div class="lab">${esc(pr.brand || labelFor(e))}</div>
+        <div class="nm" title="${esc(pr.name)}">${esc(pr.name)}</div>
+        <div class="price">${won(pr.price)}</div>${nav}${x}
+      </div>`;
+    }).join("");
   }
 
   function shopList() {
-    const entries = SLOT_ORDER.filter((s) => state.outfit[s]).map((s) => state.outfit[s]);
+    const entries = wornEntries().map(([, e]) => e);
     if (!entries.length) return "";
-    return `<div class="shoplist"><h4>Shop the look</h4>${entries.map((e) => `
-      <div class="shoprow"><b>${esc(e.name)}${e.colorName ? ` · ${esc(e.colorName)}` : ""}</b>
+    return `<div class="shoplist"><h4>Shop the look</h4>${entries.map((e) => {
+      const pr = productOf(e);
+      const title = pr ? `${pr.brand ? `[${pr.brand}] ` : ""}${pr.name} · ${won(pr.price)}` : `${e.name}${e.colorName ? ` · ${e.colorName}` : ""}`;
+      return `<div class="shoprow"><b>${esc(title)}</b>
+        ${pr ? `<a class="direct" href="${esc(pr.link)}" target="_blank" rel="noopener">${esc(pr.mall || "상품")}에서 보기 ↗</a>` : ""}
         ${Object.entries(shopLinks(e)).map(([k, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(k)} ↗</a>`).join("")}
-      </div>`).join("")}</div>`;
+      </div>`;
+    }).join("")}</div>`;
+  }
+
+  // ───────── AI 피팅 보기 (이미지 편집 모델, 실패해도 나머지 기능은 그대로) ─────────
+  const toDataUrl = (blob) => new Promise((ok, fail) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = fail; r.readAsDataURL(blob); });
+
+  // SVG 아바타 → PNG. 키트 이미지는 data URL로 넣어야 캔버스에 그려짐
+  const dataUrlCache = new Map();
+  async function asDataUrl(url) {
+    if (!dataUrlCache.has(url)) dataUrlCache.set(url, toDataUrl(await (await fetch(url)).blob()));
+    return dataUrlCache.get(url);
+  }
+  async function svgToPng(svg, width = 640) {
+    const hrefs = [...new Set([...svg.matchAll(/href="(\/(?:avatar-kit|static\/catalog|cutouts)\/[^"]+)"/g)].map((m) => m[1]))];
+    for (const h of hrefs) svg = svg.split(`href="${h}"`).join(`href="${await asDataUrl(h)}"`);
+    const [, , vw, vh] = svg.match(/viewBox="([^"]+)"/)[1].split(" ").map(Number);
+    const height = Math.round((width * vh) / vw);
+    const url = URL.createObjectURL(new Blob([svg.replace("<svg ", `<svg width="${width}" height="${height}" `)], { type: "image/svg+xml" }));
+    try {
+      const img = new Image();
+      img.src = url;
+      await img.decode();
+      const canvas = Object.assign(document.createElement("canvas"), { width, height });
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+      return canvas.toDataURL("image/png");
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  async function requestTryon() {
+    const t = ui.tryon;
+    Object.assign(t, { open: true, loading: true, image: "", error: "", cached: false });
+    render();
+    try {
+      const products = wornEntries()
+        .map(([slot, e]) => [slot, productOf(e)])
+        .filter(([, pr]) => pr)
+        .map(([slot, pr]) => ({ image: pr.image, name: `${pr.brand} ${pr.name}`.trim(), label: tabOf(slot)?.ko || slot }));
+      if (!products.length) throw new Error("실제 상품 사진이 있는 아이템을 하나 이상 입혀 주세요.");
+      // 옷을 벗은 기본 아바타를 보내고, 상품 이미지를 입히게 함
+      const avatar = await svgToPng(Avatar.render(state.profile, {}, { view: "body" }), 720);
+      const res = await fetch("/api/tryon", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ avatar, products }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "AI 피팅을 만들지 못했어요.");
+      Object.assign(t, { image: data.image, cached: !!data.cached });
+    } catch (e) {
+      t.error = e.message || "AI 피팅을 만들지 못했어요.";
+    } finally {
+      t.loading = false;
+      render();
+    }
+  }
+
+  function tryonModal() {
+    const t = ui.tryon;
+    if (!t.open) return "";
+    const body = t.loading
+      ? `<div class="tryon-wait"><span class="spinner dark"></span><p>AI가 실제 상품을 입혀보는 중이에요<br><small>보통 20~60초 걸려요</small></p></div>`
+      : t.error
+        ? `<p class="error" role="alert">${esc(t.error)}</p>`
+        : `<img src="${t.image}" alt="AI가 실제 상품을 입힌 모습" />`;
+    return `<div class="modal" role="dialog" aria-modal="true" aria-label="AI 피팅 보기">
+      <div class="modal-card">
+        <div class="board-title">AI FITTING · 실험 기능</div>
+        <div class="tryon-grid">
+          <figure><div class="tryon-box">${Avatar.render(state.profile, dressed(), { view: "body" })}</div><figcaption>내 아바타</figcaption></figure>
+          <figure><div class="tryon-box">${body}</div><figcaption>AI 피팅${t.cached ? " · 저장된 결과" : ""}</figcaption></figure>
+        </div>
+        <div class="board-actions">
+          ${t.image ? `<a class="btn" href="${t.image}" download="fitcast-ai-fitting.png">이미지 저장</a>` : ""}
+          <button class="btn dark" data-act="tryonClose" data-k="tryonClose">닫기</button>
+        </div>
+      </div>
+    </div>`;
   }
 
   function wardrobe() {
@@ -415,12 +552,14 @@
       <div class="items">${note}${list.map((i) => {
         const on = cur && cur.id === i.id;
         const tagStyle = i.styles.find((s) => styles.includes(s)) || i.styles[0];
-        return `<div class="item ${on ? "on" : ""}">
+        const ph = i.photo;
+        const pic = ph ? `<img src="${esc(ph.image)}" alt="" loading="lazy" />` : Avatar.thumb({ ...i, slot }, on ? cur.color : i.colors[0].hex);
+        return `<div class="item ${on ? "on" : ""}${ph ? " photo" : ""}">
           ${on ? `<span class="badge">WEARING</span>` : ""}
-          <button class="pic" data-act="wear" data-v="${i.id}" data-k="w-${i.id}" aria-label="${esc(i.name)} ${on ? "벗기" : "입히기"}" style="border:0">${Avatar.thumb({ ...i, slot }, on ? cur.color : i.colors[0].hex)}</button>
-          <span class="st">${STYLE_BY_ID[tagStyle]?.en || ""}</span>
-          <span class="nm">${esc(i.name)}</span>
-          <div class="dots">${i.colors.map((c, ci) => `<button data-act="wearColor" data-v="${i.id}" data-ci="${ci}" data-k="d-${i.id}-${ci}" style="background:${c.hex}" aria-pressed="${!!(on && cur.ci === ci)}" aria-label="${esc(c.ko)}" title="${esc(c.ko)}"></button>`).join("")}</div>
+          <button class="pic" data-act="wear" data-v="${i.id}" data-k="w-${i.id}" aria-label="${esc(i.name)} ${on ? "벗기" : "입히기"}" style="border:0">${pic}</button>
+          <span class="st">${esc(ph ? ph.brand || ph.mall || STYLE_BY_ID[tagStyle]?.en || "" : STYLE_BY_ID[tagStyle]?.en || "")}</span>
+          <span class="nm" title="${esc(ph ? ph.name : i.name)}">${esc(ph ? ph.name : i.name)}</span>
+          ${ph ? (ph.price ? `<span class="price">${won(ph.price)}</span>` : "") : `<div class="dots">${i.colors.map((c, ci) => `<button data-act="wearColor" data-v="${i.id}" data-ci="${ci}" data-k="d-${i.id}-${ci}" style="background:${c.hex}" aria-pressed="${!!(on && cur.ci === ci)}" aria-label="${esc(c.ko)}" title="${esc(c.ko)}"></button>`).join("")}</div>`}
         </div>`;
       }).join("")}</div>`;
   }
@@ -458,14 +597,16 @@
           <div>
             <article class="board fade-in" aria-label="룩북">
               <div class="board-title">FITCAST.MAGAZINE</div>
+              ${ui.productsEnabled ? "" : `<p class="board-note">SERPAPI_KEY(또는 네이버 쇼핑 키)를 넣으면 AI 코디 아이템도 실제 상품 사진으로 표시돼요.</p>`}
               <div class="board-body">
                 <div class="worn">${wornList()}</div>
-                <div class="model">${Avatar.render(state.profile, state.outfit, { label: "내 아바타 착용 모습" })}</div>
+                <div class="model">${Avatar.render(state.profile, dressed(), { label: "내 아바타 착용 모습" })}</div>
               </div>
               <div class="board-actions">
                 <button class="btn" data-act="random" data-k="random">랜덤 코디</button>
                 <button class="btn" data-act="styleLook" data-k="styleLook">내 스타일 추천 코디</button>
                 <button class="btn" data-act="clear" data-k="clear">모두 벗기</button>
+                <button class="btn dark" data-act="tryon" data-k="tryon" ${ui.tryon.loading ? "disabled" : ""}>AI 피팅 보기 ✦</button>
               </div>
             </article>
             ${shopList()}
@@ -479,6 +620,7 @@
           </aside>
         </div>
       </div>
+      ${tryonModal()}
     </section>`;
   }
 
@@ -494,6 +636,7 @@
     if (r !== lastRoute) window.scrollTo(0, 0);
     lastRoute = r;
     if (focusKey) $(`[data-k="${focusKey}"]`)?.focus({ preventScroll: true });
+    ensureProducts();
   }
 
   function aiProfile() {
@@ -520,6 +663,7 @@
         ai: true, shape, name: it.name, keyword: it.keyword, reason: it.reason, links: it.links,
         color: HEX.test(it.color) ? it.color : "#8a8a8a", colorName: "",
       };
+      if (it.products) ui.products[it.keyword] = { status: it.products.length ? "ok" : "none", items: it.products, idx: 0 };
     }
     state.outfit = outfit;
     save();
@@ -603,6 +747,14 @@
       case "random": state.outfit = autoLook(p.styles, true); break;
       case "styleLook": state.outfit = autoLook(p.styles); break;
       case "clear": state.outfit = {}; break;
+      case "prodPrev":
+      case "prodNext": {
+        const c = ui.products[keywordOf(state.outfit[v])];
+        if (c?.items.length) c.idx = (c.idx + (act === "prodNext" ? 1 : c.items.length - 1)) % c.items.length;
+        break;
+      }
+      case "tryon": requestTryon(); return;
+      case "tryonClose": ui.tryon.open = false; break;
       case "day": ui.ai.day = +v; break;
       default: return;
     }
@@ -635,6 +787,14 @@
 
   window.addEventListener("hashchange", render);
 
-  fetch("/api/config").then((r) => (r.ok ? r.json() : null)).then((c) => { if (c) CONFIG = { ...CONFIG, ...c }; }).catch(() => {});
+  fetch("/api/config")
+    .then((r) => (r.ok ? r.json() : null))
+    .then((c) => {
+      if (!c) return;
+      CONFIG = { ...CONFIG, ...c };
+      ui.productsEnabled = !!c.products_enabled;
+      if (route() === "fitting") render();
+    })
+    .catch(() => {});
   render();
 })();

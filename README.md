@@ -42,10 +42,13 @@ pinned: false
 |---|---|
 | 랜딩 | 매거진 룩북 스타일의 소개 페이지 |
 | 아바타 만들기 (5단계) | ① 체형(모래시계·삼각·역삼각·일자·사과·탄탄한 체형 + 성별·피부톤) ② 옷 스타일 48종 중 최대 5개 ③ 헤어(여성 7종·남성 6종) + 컬러 ④ 얼굴상(강아지·고양이·햄스터·토끼·여우·사슴 + 남성 곰상) ⑤ 키·몸무게. 고를 때마다 오른쪽 아바타가 바로 바뀌어요. 여성은 `avatar_kit` 실사풍 에셋, 남성은 SVG 일러스트로 그려요 |
-| 피팅룸 | 옷장에서 아이템을 골라 아바타에 하나씩 입혀보는 룩북. 입은 아이템이 매거진처럼 정리되고 쇼핑 검색 링크가 붙어요 |
-| AI 날씨 코디 | 도시·날짜·TPO를 넣으면 체형·스타일을 반영한 코디를 추천받아 아바타에 바로 입혀요 (`POST /api/recommend`) |
+| 피팅룸 | 옷장에서 아이템을 골라 아바타에 하나씩 입혀보는 룩북. 옷장의 아이템은 **실제 판매 상품의 누끼 사진**이에요 (`tools/build_catalog.py`가 구글 쇼핑에서 찾아 배경을 지운 사진 + 판매처·상품명·가격·링크). 입히면 그 사진이 아바타 위에 종이인형처럼 올라가요. 왼쪽 패널에는 입은 상품이 매거진처럼 배치되고, AI 코디 아이템은 ‹ › 로 다른 상품을 넘겨볼 수 있어요. 사진이 없는 아이템은 SVG 옷 그림으로 대신 그려요 |
+| AI 날씨 코디 | 도시·날짜·TPO를 넣으면 체형·스타일을 반영한 코디를 추천받아 아바타에 바로 입혀요. 추천이 뜨면 LLM이 뽑은 아이템별 키워드로 화면이 실제 상품을 이어서 검색하고(`POST /api/recommend` → `GET /api/products?cut=1`), 서버가 후보 사진 중 **사람 없이 상품만 찍힌 사진**을 비전 모델로 골라 누끼를 떠서 아바타에 입혀요. 누끼가 준비되기 전이나 착용컷뿐일 때는 SVG 옷 그림으로 보여줘요 |
+| AI 피팅 보기 (실험) | 아바타와 실제 상품 이미지를 이미지 편집 모델(`FITCAST_IMAGE_MODEL`)에 보내 입힌 모습을 생성해요 (`POST /api/tryon`). 별도 버튼이라 느리거나 실패해도 코디 추천은 그대로 동작해요. 같은 입력의 결과는 `data/tryon_cache/`에 저장돼 다시 누르면 바로 나와요 (시연용 결과를 미리 뽑아두세요) |
 
 프로필과 착용 상태는 브라우저 `localStorage`에만 저장돼요.
+
+**옷장 카탈로그 사진 빌드**: `python tools/build_catalog.py`를 실행하면 `web/js/data.js`의 카탈로그 항목마다 검색어(`q`)로 구글 쇼핑을 검색해(항목당 SerpApi 1~2회) 후보 썸네일을 받고, 비전 모델(`FITCAST_VISION_MODEL`)로 착용컷을 걸러낸 뒤 rembg로 배경을 지워 `web/catalog/<id>.png`와 `web/js/catalog_photos.js`에 저장해요. 검색 응답은 `data/catalog_search/`에 캐시돼 다시 실행해도 검색 횟수를 더 쓰지 않아요. 자동 선택이 마음에 안 들면 `--pick t01=3`처럼 후보 번호를 직접 고를 수 있어요.
 
 **아바타 에셋 (`avatar_kit/`)**: 실사풍 얼굴·헤어·체형 이미지를 정리·정렬하는 빌드 스크립트와 결과물(`avatar_kit/dist`)이 있어요. 웹은 `/avatar-kit`으로 결과물을 서빙하고, 체형별로 측정한 골격 좌표에 맞춰 옷 레이어를 입혀요. 자세한 내용은 [avatar_kit/README.md](avatar_kit/README.md)를 참고하세요.
 
@@ -61,7 +64,7 @@ pinned: false
 
 | # | 개념 | 어디에 | 파일 |
 |---|---|---|---|
-| 1 | **Tool** (`@tool`) | 날씨 조회, 쇼핑 링크 생성, 스타일 가이드 검색 | `fitcast/tools/`, `fitcast/rag/style_guide.py` |
+| 1 | **Tool** (`@tool`) | 날씨 조회, 쇼핑 링크 생성, 스타일 가이드 검색, **실제 상품 검색(`search_products`, 구글 쇼핑·네이버 쇼핑)** | `fitcast/tools/`, `fitcast/rag/style_guide.py` |
 | 2 | **Tool calling Agent** (`create_agent`) | 챗봇이 스스로 어떤 Tool을 언제 부를지 결정 | `fitcast/agent.py` |
 | 3 | **PromptTemplate** (`ChatPromptTemplate`) | 날씨·가이드·취향을 변수로 받는 추천 프롬프트 | `fitcast/prompts.py` |
 | 4 | **구조화 출력** (`with_structured_output` + Pydantic) | 코디 세트와 사진 분석 결과를 정해진 스키마로 받기 | `fitcast/schemas.py`, `fitcast/chains/` |
@@ -88,6 +91,8 @@ flowchart LR
     AG -.-> T1[get_weather]
     AG -.-> T2[search_style_guide]
     AG -.-> T3[build_shop_links]
+    AG -.-> T4[search_products]
+    T4 --> NV[SerpApi 구글 쇼핑 / 네이버 쇼핑]
     T1 --> W
     T2 --> VS
 
@@ -111,38 +116,46 @@ flowchart LR
 Fitcast_OOTD/
 ├── app.py                    # 실행 진입점: FastAPI(/) + Gradio(/lab) (Spaces도 이 파일 실행)
 ├── avatar_kit/               # 실사풍 아바타 에셋 키트 (원본 assets/ → 빌드 결과 dist/)
-│   ├── tools/build_assets.py # 누끼 복구·정렬·골격 측정
+│   ├── tools/build_assets.py # 누끼 복구·정렬·골격 측정·헤어 맞춤
 │   └── dist/                 # 웹이 /avatar-kit 으로 쓰는 레이어 PNG + layout.js
+├── tools/build_catalog.py    # 옷장 카탈로그를 실제 상품 누끼 사진으로 채우는 빌드
 ├── web/                      # 메인 웹 프론트 (빌드 없이 정적 파일)
 │   ├── index.html
 │   ├── css/style.css         # 에디토리얼 룩북 스타일
+│   ├── catalog/              # 카탈로그 상품 누끼 PNG (build_catalog.py 결과물)
 │   └── js/
-│       ├── data.js           # 체형·스타일 48종·헤어·얼굴상·옷장 카탈로그
-│       ├── avatar.js         # 아바타 렌더러 (실사 키트 레이어 또는 SVG 몸 + 옷 레이어)
+│       ├── data.js           # 체형·스타일 48종·헤어·얼굴상·옷장 카탈로그(검색어 q 포함)
+│       ├── catalog_photos.js # 카탈로그 상품 사진 목록 (build_catalog.py 결과물)
+│       ├── avatar.js         # 아바타 렌더러 (실사 키트 레이어 또는 SVG 몸 + 옷 레이어 / 상품 사진 레이어)
 │       └── app.js            # 랜딩 → 5단계 온보딩 → 피팅룸 화면 로직
 ├── requirements.txt
 ├── .env.example              # 환경변수 견본 (.env로 복사해서 사용)
 ├── data/
 │   ├── temp_guide.json       # 기온 구간별 대표 아이템 (규칙 기반)
-│   └── style_guide.md        # 스타일·TPO·날씨 보정 가이드 (RAG 원본)
+│   ├── style_guide.md        # 스타일·TPO·날씨 보정 가이드 (RAG 원본)
+│   ├── catalog_search/       # build_catalog.py 검색 응답 캐시
+│   ├── cutout_cache/         # AI 코디 상품 사진 누끼 캐시 (/cutouts 로 서빙)
+│   └── tryon_cache/          # AI 피팅 결과 캐시
 ├── fitcast/
 │   ├── config.py             # 환경변수, UI 선택지, 쇼핑몰 URL 패턴
 │   ├── llm.py                # 챗 모델·임베딩 모델 생성
 │   ├── schemas.py            # Pydantic 출력 스키마
 │   ├── prompts.py            # 모든 프롬프트
 │   ├── agent.py              # 챗봇 에이전트
-│   ├── web.py                # 웹 프론트 서빙 + /api/config, /api/recommend
+│   ├── web.py                # 웹 프론트 서빙 + /api/config, /api/recommend, /api/products, /api/cutout, /api/tryon
+│   ├── tryon.py              # AI 피팅 보기 (이미지 편집 모델 호출 + 결과 캐시)
+│   ├── cutout.py             # 상품 사진 누끼(rembg) + 착용컷 걸러내기(비전 모델)
 │   ├── ui.py                 # Gradio 화면
 │   ├── tools/
 │   │   ├── weather.py        # get_weather
-│   │   └── shop_links.py     # build_shop_links
+│   │   ├── shop_links.py     # build_shop_links
+│   │   └── products.py       # search_products (SerpApi 구글 쇼핑 → 네이버 쇼핑 순)
 │   ├── chains/
 │   │   ├── outfit.py         # 코디 세트 추천 체인
 │   │   └── vision.py         # 사진 분석 체인
 │   └── rag/
 │       └── style_guide.py    # 벡터스토어, search_style_guide
-└── tests/
-    └── test_tools.py         # API 키 없이 도는 단위 테스트
+└── tests/                    # API 키 없이 도는 단위 테스트 (test_tools · test_web · test_products · test_cutout)
 ```
 
 ## 시작하기
@@ -182,6 +195,10 @@ python app.py
 | `FITCAST_EMBEDDING_MODEL` | | `openai:text-embedding-3-small` | RAG 임베딩 모델 |
 | `FITCAST_TEMPERATURE` | | (비어 있음) | 비워두면 모델 기본값. 온도 조절을 지원하지 않는 모델이면 반드시 비워두기 |
 | `FITCAST_DEFAULT_CITY` | | `서울` | 화면에 처음 채워지는 도시 |
+| `SERPAPI_KEY` | | (비어 있음) | 실제 상품 검색(구글 쇼핑, [SerpApi](https://serpapi.com/manage-api-key)). 있으면 우선 사용. 첫 검색은 20~30초 걸리고 같은 키워드는 캐시돼요 |
+| `NAVER_CLIENT_ID` · `NAVER_CLIENT_SECRET` | | (비어 있음) | [네이버 개발자센터](https://developers.naver.com/apps/#/register)에서 '검색' API로 등록해 발급. `SERPAPI_KEY`가 없을 때 사용하고, 둘 다 비우면 일러스트 썸네일 |
+| `FITCAST_IMAGE_MODEL` | | `gpt-image-1` | AI 피팅 보기에 쓰는 이미지 편집 모델 (`OPENAI_API_KEY` 사용, 다중 이미지 입력 지원 모델) |
+| `FITCAST_VISION_MODEL` | | `gpt-4o` | 상품 검색 결과에서 '사람 없이 상품만 찍힌 사진'을 고르는 비전 모델. `gpt-4o-mini`는 타일 번호를 자주 틀려요 |
 
 날씨는 [Open-Meteo](https://open-meteo.com/)를 써서 별도 키가 필요 없어요.
 
@@ -266,7 +283,9 @@ python app.py
 
 **Tool 추가**: ① `fitcast/tools/새파일.py`에 순수 함수 + `@tool` 작성 → ② `tools/__init__.py`에 export → ③ `agent.py`의 `tools=[...]`에 등록 → ④ `AGENT_SYSTEM_PROMPT`에 "언제 쓰는지" 한 줄 추가.
 
-**실제 상품 카드 보여주기(2차 목표)**: [네이버 쇼핑 검색 API](https://developers.naver.com/docs/serviceapi/search/shopping/shopping.md)는 공식 무료 API라 상품명·가격·이미지를 받을 수 있어요. `search_products` Tool로 추가하면 돼요.
+**실제 상품 검색 튜닝**: `fitcast/tools/products.py`의 `FASHION_CATEGORIES`로 결과 카테고리를 거르고, 검색 키워드는 코디 추천 프롬프트의 `search_keyword` 규칙(색·소재 포함 2~4단어)을 따라요. 결과가 엉뚱하면 프롬프트 규칙부터 조정하세요.
+
+**AI 피팅 프롬프트**: `prompts.TRYON_PROMPT`를 고치면 캐시 키가 바뀌어 새로 생성돼요. 시연 전에 대표 코디 몇 개를 미리 생성해 `data/tryon_cache/`에 남겨두면 안전해요.
 
 **벡터스토어 교체**: 지금은 문서가 작아서 `InMemoryVectorStore`를 쓰고 앱 시작 후 첫 검색 때 임베딩해요. 문서가 커지면 `rag/style_guide.py`의 `get_vectorstore()`만 FAISS나 Chroma로 바꾸면 돼요.
 
@@ -317,7 +336,11 @@ git push space main
 
 ## 한계와 주의사항
 
-- **쇼핑 플랫폼과 직접 연동하지 않아요.** 대상 플랫폼들은 공개 상품 검색 API가 없고, 크롤링은 이용약관 위반 소지가 있어서 **검색 URL을 만들어 연결**하는 방식만 써요. 그래서 실제 재고·가격·상품 이미지는 보여주지 못해요.
+- **무신사 등 쇼핑 플랫폼과 직접 연동하지 않아요.** 공개 상품 API가 없고 크롤링은 이용약관 위반 소지가 있어서, 실제 상품은 **SerpApi(구글 쇼핑)·네이버 쇼핑 검색 API** 결과만 보여주고 나머지 플랫폼은 검색 URL로 연결해요.
+- **상품 사진은 판매처의 저작물이에요.** 옷장 카탈로그(`web/catalog/`)와 누끼 캐시(`data/cutout_cache/`)에 저장하는 사진은 시연·학습 목적으로만 쓰고, 화면에는 항상 원본 상품 링크를 함께 표시해요. 서비스로 배포하려면 판매처 허락이나 공식 API가 필요해요.
+- **상품 사진은 종이인형처럼 올라가요.** 아바타 체형·포즈에 맞게 변형하지 않고 골격 기준선에 사진을 놓기만 해서, 실제 착용 모습과는 달라요. 구글 쇼핑 썸네일(최대 368px)이라 크게 보면 흐릿할 수 있어요.
+- **rembg(u2net) 모델은 첫 실행 때 176MB를 내려받아요.** 설치되지 않았으면 흰 배경만 걷어내는 간단한 방식으로 대체돼요.
+- **AI 피팅은 실험 기능이에요.** 생성 품질이 들쭉날쭉하고 20~60초가 걸리며 이미지 생성 비용이 들어요. 결과는 실제 착용감과 다를 수 있어요.
 - **사진으로 브랜드를 맞추는 건 신뢰도가 낮아요.** 로고가 보이지 않으면 사실상 추측이라, 화면에 확신도를 함께 표시하고 "비슷한 옷 찾기"를 주 기능으로 삼았어요.
 - 패션 추천은 LLM의 일반 지식과 `data/style_guide.md`에 의존해요. 최신 트렌드를 반영하려면 문서를 직접 갱신해야 해요.
 - 업로드한 사진은 분석을 위해 LLM 제공사 API로 전송돼요. 얼굴이 나온 사진보다는 옷 위주로 찍은 사진을 권해요.
