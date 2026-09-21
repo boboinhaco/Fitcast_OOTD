@@ -107,7 +107,7 @@ const Avatar = (() => {
     const male = p.gender === "male";
     const H = p.height || 165, Wt = p.weight || 55;
     const bmi = Wt / (H / 100) ** 2;
-    const f = clamp(1 + (bmi - (male ? 22 : 20.5)) * 0.045, 0.8, 1.6);
+    const f = clamp(1 + (bmi - (male ? 22 : 20.5)) * 0.03, 0.86, 1.35); // 몸무게 반영은 완만하게 (과하게 뚱뚱해지지 않도록)
     const m = BODY_MULT[p.body] || (male ? BODY_MULT.rect : BODY_MULT.hourglass);
     const base = male ? { sw: 79, bw: 64, ww: 54, hw: 57, nw: 17 } : { sw: 67, bw: 55, ww: 42, hw: 61, nw: 13.5 };
     const S = {
@@ -1055,7 +1055,47 @@ const Avatar = (() => {
 
   const INNER = "#e7e1d8";
 
+  // ───────── 실제 상품 사진(누끼) 레이어 ─────────
+  // 사진은 슬롯별 기준선에 종이인형처럼 올린다. 폭·길이는 골격 치수와 사진 비율로, 하의·원피스 길이는 모양 코드로 정함
+  const PHOTO_LEN = { shorts: 0.38, mini: 0.34, pleats: 0.44, midi: 0.74, long_skirt: 1, leggings: 0.98, jogger: 0.97, slip_dress: 0.8, knit_dress: 0.72, long_dress: 1 };
+  function headGeom(S, p) {
+    if (S.kit) { const H = kit().head; return { top: H.top, eye: H.eye, chin: H.chin, half: H.halfW }; }
+    const F = FACE[p.face] || FACE.puppy;
+    return { top: -30, eye: F.ey, chin: F.chin, half: F.cw + 2 };
+  }
+  function photoSlot(S, p, slot, it) {
+    const ph = it.photo, a = (ph.w || 1) / (ph.h || 1), H = headGeom(S, p);
+    let w = 0, h = 0, x = 0, y = 0;
+    const byW = (W, maxH) => { w = W; h = W / a; if (h > maxH) { h = maxH; w = h * a; } };
+    const byH = (Hh, maxW) => { h = Hh; w = Hh * a; if (w > maxW) { w = maxW; h = w / a; } };
+    const href = String(ph.image).replace(/"/g, "&quot;");
+    const img = (px) => `<image href="${href}" x="${f1(px)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" preserveAspectRatio="xMidYMid meet"/>`;
+    const isDress = DRESS_SET.has(it.shape);
+    switch (slot) {
+      case "top": byW(S.sw * 2.6, (SHORT_TOPS.has(it.shape) ? S.waistY + 10 : S.hipY + 16) - S.shoulderY); x = -w / 2; y = S.shoulderY - 12; break;
+      case "outer": byW(S.sw * 2.9, S.kneeY - S.shoulderY); x = -w / 2; y = S.shoulderY - 14; break;
+      case "bottom":
+        if (isDress) { byH((S.ankleY - S.shoulderY) * (PHOTO_LEN[it.shape] || 0.8), S.sw * 3); x = -w / 2; y = S.shoulderY - 10; }
+        else { byH((S.ankleY + 6 - S.waistY) * (PHOTO_LEN[it.shape] || 1), S.hw * 3.2); x = -w / 2; y = S.waistY - 6; }
+        break;
+      case "shoes": // 옆모습 한 짝 사진(가로로 긴 경우)은 양발에 한 짝씩
+        if (a > 1.25) { byW((S.ax + S.foot) * 1.25, S.soleY - S.kneeY); y = S.soleY + 6 - h; return [-S.ax - 4, S.ax + 4].map((cx) => img(cx - w / 2)).join(""); }
+        byW((S.ax + S.foot) * 2 * 1.15, S.soleY - S.kneeY); x = -w / 2; y = S.soleY + 6 - h; break;
+      case "bag": byW(S.hw * 1.1, 170); x = -(S.hw + 10) - w * 0.6; y = S.waistY + 24; break;
+      case "hat": byH((H.eye - H.top) * 1.15, H.half * 2.6); x = -w / 2; y = H.eye - 26 - h; break;
+      case "eyewear": byW(H.half * 2 * 0.98, 60); x = -w / 2; y = H.eye - h / 2; break;
+      case "neck":
+        if (it.shape === "scarf") { byW(S.sw * 1.7, S.waistY + 20 - S.neckY); x = -w / 2; y = S.neckY - 16; }
+        else { byW(S.nw * 2 * 1.9, 96); x = -w / 2; y = S.neckY - 4; }
+        break;
+      case "belt": byW(S.ww * 2 * 1.3, 34); x = -w / 2; y = S.waistY + 2 - h / 2; break;
+      default: return "";
+    }
+    return img(x);
+  }
+
   function drawSlot(S, p, slot, it, ctx = {}) {
+    if (it.photo && it.photo.image) return photoSlot(S, p, slot, it);
     const c = it.color, o = { ...it, tucked: ctx.tucked };
     switch (slot) {
       case "top": return (TOPS[it.shape] || TOPS.tee)(S, c, o);
@@ -1093,7 +1133,7 @@ const Avatar = (() => {
     S.shoeS = { ...S, ankle: S.ankle / fx, knee: S.knee / fx, calf: S.calf / fx, kx: S.ax + (S.kx - S.ax) / fx };
     // 몸무게는 몸·옷 레이어의 가로 배율로 (얼굴 목과 이음새가 벌어지지 않게 범위 제한)
     const bmi = (p.weight || 52) / ((p.height || 165) / 100) ** 2;
-    S.wx = clamp(1 + (bmi - 20.5) * 0.03, 0.9, 1.18);
+    S.wx = clamp(1 + (bmi - 21) * 0.015, 0.94, 1.1);
     return S;
   }
 
@@ -1126,6 +1166,7 @@ const Avatar = (() => {
       body: kitImage(`bodies/${S.body}.png`, K.bodies[S.body], skinF),
       head: kitImage(`faces/${p.face}.png`, K.faces[p.face], skinF) + kitImage(`faces/${p.face}-hair.png`, K.faceHair[p.face], hairF),
       hair: hairId ? kitImage(`hair/${hairId}.png`, K.hair[hairId], hairF) : "",
+      hairBack: hairId && K.hairBack?.[hairId] ? kitImage(`hair/${hairId}-back.png`, K.hairBack[hairId], hairF) : "",
     };
   }
 
@@ -1160,6 +1201,7 @@ const Avatar = (() => {
     };
 
     if (K) {
+      L.push(K.hairBack); // 묶은 머리 꼬리 등은 몸·얼굴 뒤에
       bodyGroup(() => L.push(K.body));
     } else {
       L.push(hair(S, p, "back"));
@@ -1185,7 +1227,9 @@ const Avatar = (() => {
     if (K) {
       L.push(K.head, K.hair);
       for (const slot of ["eyewear", "hat"]) {
-        if (o[slot]) L.push(`<g transform="${kitHeadTransform(slot)}">${drawSlot(S, p, slot, o[slot])}</g>`);
+        if (!o[slot]) continue;
+        // 실제 상품 사진은 실사 머리 좌표로 바로 놓고, 벡터 모자·안경만 일러스트 머리 좌표에서 옮김
+        L.push(o[slot].photo ? drawSlot(S, p, slot, o[slot]) : `<g transform="${kitHeadTransform(slot)}">${drawSlot(S, p, slot, o[slot])}</g>`);
       }
     } else {
       L.push(head(S, p));
@@ -1216,6 +1260,7 @@ const Avatar = (() => {
     let vb = "0 0 400 980";
     if (opts.view === "face") vb = `${f1(200 - 80 * s)} ${f1(oy - 30 * s)} ${f1(160 * s)} ${f1(190 * s)}`;
     if (opts.view === "upper") vb = `${f1(200 - 150 * s)} ${f1(oy - 40 * s)} ${f1(300 * s)} ${f1(520 * s)}`;
+    if (opts.view === "body") vb = `${f1(200 - 190 * s)} ${f1(oy - 50 * s)} ${f1(380 * s)} ${f1(975 * s)}`; // AI 피팅용 전신 크롭
     const defs = baseDefs(S) + (S.kit ? kitDefs(S, p) : "") + S.defs.join("");
     const svg = `<svg xmlns="${NS}" viewBox="${vb}" preserveAspectRatio="xMidYMax meet" role="img" aria-label="아바타"><defs>${defs}</defs><g transform="translate(200,${f1(oy)}) scale(${f1(s * 1000) / 1000})">${inner}</g></svg>`;
     if (renderCache.size >= RENDER_CACHE_MAX) renderCache.delete(renderCache.keys().next().value);

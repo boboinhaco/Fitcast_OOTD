@@ -11,7 +11,7 @@ OUTFIT_PROMPT = ChatPromptTemplate.from_messages([
         "1. 날씨(기온·체감·강수·바람·자외선)를 최우선으로 지킨다. 스타일은 그 안에서 살린다.\n"
         "2. 선호 스타일의 분위기를 유지하되, 덥거나 추우면 소재·기장·레이어드 수로 조절한다.\n"
         "3. TPO(드레스코드)에 어긋나는 아이템은 추천하지 않는다.\n"
-        "4. search_keyword는 한국 쇼핑몰에서 바로 검색되는 2~4단어로, 색이나 소재를 포함한다.\n"
+        "4. search_keyword는 쇼핑 검색에 바로 쓰이는 짧은 2~3단어 한국어로 쓴다 (예: 아이보리 니트 볼레로). 브랜드명은 넣지 않는다.\n"
         "5. 특정 브랜드명·가격은 지어내지 않는다.\n"
         "6. 모든 문장은 친근한 한국어 존댓말로 쓴다.\n"
         "7. 체형 정보가 있으면 체형을 보완하는 핏·기장을 고르고, 이유에 한 번씩 언급한다.\n"
@@ -43,8 +43,22 @@ AGENT_SYSTEM_PROMPT = (
     "3. 아이템을 추천할 때는 build_shop_links로 검색 링크를 만들어 아이템 옆에 붙인다.\n"
     "4. 특정 브랜드를 물으면 그 브랜드의 일반적인 이미지 수준에서만 답하고, "
     "구체적인 상품명·가격·재고는 지어내지 않는다. 대신 '브랜드명 + 아이템'으로 검색 링크를 만든다.\n"
-    "5. 패션·날씨와 무관한 요청은 정중히 거절한다.\n"
-    "6. 답변은 친근한 한국어 존댓말, 마크다운으로 간결하게."
+    "5. 사용자가 실제 상품·브랜드·가격을 원하면 search_products로 찾아 브랜드·상품명·가격·링크를 보여준다. "
+    "검색 결과에 없는 상품은 지어내지 않는다.\n"
+    "6. 패션·날씨와 무관한 요청은 정중히 거절한다.\n"
+    "7. 답변은 친근한 한국어 존댓말, 마크다운으로 간결하게."
+)
+
+# AI 피팅 (이미지 편집 모델) 프롬프트. {items}에 입힐 상품 목록이 들어감
+TRYON_PROMPT = (
+    "Image 1 is a full-body virtual fitting model standing on a plain background. "
+    "The other images are product photos of clothing and accessories. "
+    "Dress the model from image 1 in exactly these products: {items}. "
+    "Keep the model's face, hairstyle, skin tone, body shape, pose and framing identical to image 1. "
+    "Reproduce each product's color, material, pattern, silhouette and details faithfully; do not invent logos or text. "
+    "Replace any clothing the model is already wearing in the same body area. "
+    "Keep exactly the same canvas framing as image 1: the whole body from the top of the hair to the feet stays visible "
+    "with the same margins, nothing cropped. Soft studio lighting, clean light background, fashion lookbook style."
 )
 
 # 사진 분석 프롬프트

@@ -40,11 +40,13 @@ def _paste(canvas: Image.Image, path: str, box: dict, scale: float) -> None:
 
 
 def render_avatar(face_label: str, hair_label: str, body_label: str, height: int = 760) -> Image.Image:
-    """합성 순서: 체형 → 얼굴(목 포함) → 얼굴 자체 머리 → 헤어."""
+    """합성 순서: 뒷머리 → 체형 → 얼굴(목 포함) → 얼굴 자체 머리 → 헤어."""
     L = layout()
     face, hair, body = FACES[face_label], HAIR[hair_label], BODIES[body_label]
     scale = height / VIEW[3]
     canvas = Image.new("RGBA", (round(VIEW[2] * scale), height), (248, 246, 241, 255))
+    if hair and hair in L.get("hairBack", {}):
+        _paste(canvas, f"hair/{hair}-back.png", L["hairBack"][hair], scale)
     _paste(canvas, f"bodies/{body}.png", L["bodies"][body], scale)
     _paste(canvas, f"faces/{face}.png", L["faces"][face], scale)
     _paste(canvas, f"faces/{face}-hair.png", L["faceHair"][face], scale)

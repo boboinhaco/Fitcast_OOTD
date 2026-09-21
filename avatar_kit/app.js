@@ -30,6 +30,8 @@ function layers() {
     [`faces/${state.face}-hair.png`, KIT.faceHair[state.face]],
   ];
   if (state.hair !== "bun") list.push([`hair/${state.hair}.png`, KIT.hair[state.hair]]);
+  // 포니테일 꼬리 등 뒷머리는 몸·얼굴 뒤에
+  if (KIT.hairBack?.[state.hair]) list.unshift([`hair/${state.hair}-back.png`, KIT.hairBack[state.hair]]);
   return list;
 }
 

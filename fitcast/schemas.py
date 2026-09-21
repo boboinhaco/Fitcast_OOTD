@@ -10,7 +10,7 @@ class OutfitItem(BaseModel):
 
     name: str = Field(description="아이템 이름 (예: 린넨 롱 원피스)")
     reason: str = Field(description="이 날씨·스타일에 이 아이템을 고른 이유 한 문장")
-    search_keyword: str = Field(description="쇼핑몰 검색창에 넣을 2~4단어 한국어 키워드")
+    search_keyword: str = Field(description="쇼핑 검색에 쓸 짧은 2~3단어 한국어 키워드 (색 + 아이템)")
     shape: str = Field(default="", description="아바타에 입힐 모양 코드. 프롬프트의 부위별 목록에서만 고른다")
     color_hex: str = Field(default="#8a8a8a", description="아이템 대표 색상 HEX 코드 (예: #1f2a44)")
 
