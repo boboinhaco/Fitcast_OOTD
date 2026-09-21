@@ -1068,22 +1068,24 @@ const Avatar = (() => {
     let w = 0, h = 0, x = 0, y = 0;
     const byW = (W, maxH) => { w = W; h = W / a; if (h > maxH) { h = maxH; w = h * a; } };
     const byH = (Hh, maxW) => { h = Hh; w = Hh * a; if (w > maxW) { w = maxW; h = w / a; } };
+    // 사진 속 기준 폭(어깨선·허리선, 이미지 폭 대비 비율)이 target 단위가 되도록 전체 폭을 정함
+    const byAnchor = (ratio, target, maxH) => byW(target / clamp(ratio || 1, 0.3, 1), maxH);
     const href = String(ph.image).replace(/"/g, "&quot;");
     const img = (px) => `<image href="${href}" x="${f1(px)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" preserveAspectRatio="xMidYMid meet"/>`;
     const isDress = DRESS_SET.has(it.shape);
     switch (slot) {
-      case "top": byW(S.sw * 2.6, (SHORT_TOPS.has(it.shape) ? S.waistY + 10 : S.hipY + 16) - S.shoulderY); x = -w / 2; y = S.shoulderY - 12; break;
-      case "outer": byW(S.sw * 2.9, S.kneeY - S.shoulderY); x = -w / 2; y = S.shoulderY - 14; break;
+      case "top": byAnchor(ph.top, S.sw * 2 * 1.08, (SHORT_TOPS.has(it.shape) ? S.waistY + 10 : S.crotchY + 20) - S.shoulderY); x = -w / 2; y = S.shoulderY - 8; break;
+      case "outer": byAnchor(ph.top, S.sw * 2 * 1.14, S.kneeY + 30 - S.shoulderY); x = -w / 2; y = S.shoulderY - 10; break;
       case "bottom":
-        if (isDress) { byH((S.ankleY - S.shoulderY) * (PHOTO_LEN[it.shape] || 0.8), S.sw * 3); x = -w / 2; y = S.shoulderY - 10; }
-        else { byH((S.ankleY + 6 - S.waistY) * (PHOTO_LEN[it.shape] || 1), S.hw * 3.2); x = -w / 2; y = S.waistY - 6; }
+        if (isDress) { byAnchor(ph.top, S.sw * 2 * 1.02, S.ankleY + 10 - S.shoulderY); x = -w / 2; y = S.shoulderY - 6; }
+        else { byAnchor(ph.waist, S.hw * 2 * 1.02, S.soleY - 4 - S.waistY); x = -w / 2; y = S.waistY - 4; }
         break;
       case "shoes": // 옆모습 한 짝 사진(가로로 긴 경우)은 양발에 한 짝씩
         if (a > 1.25) { byW((S.ax + S.foot) * 1.25, S.soleY - S.kneeY); y = S.soleY + 6 - h; return [-S.ax - 4, S.ax + 4].map((cx) => img(cx - w / 2)).join(""); }
         byW((S.ax + S.foot) * 2 * 1.15, S.soleY - S.kneeY); x = -w / 2; y = S.soleY + 6 - h; break;
       case "bag": byW(S.hw * 1.1, 170); x = -(S.hw + 10) - w * 0.6; y = S.waistY + 24; break;
-      case "hat": byH((H.eye - H.top) * 1.15, H.half * 2.6); x = -w / 2; y = H.eye - 26 - h; break;
-      case "eyewear": byW(H.half * 2 * 0.98, 60); x = -w / 2; y = H.eye - h / 2; break;
+      case "hat": byAnchor(ph.max, H.half * 2 * 1.2, (H.eye - H.top) * 1.3); x = -w / 2; y = H.eye - 26 - h; break;
+      case "eyewear": byAnchor(ph.max, H.half * 2 * 0.98, 60); x = -w / 2; y = H.eye - h / 2; break;
       case "neck":
         if (it.shape === "scarf") { byW(S.sw * 1.7, S.waistY + 20 - S.neckY); x = -w / 2; y = S.neckY - 16; }
         else { byW(S.nw * 2 * 1.9, 96); x = -w / 2; y = S.neckY - 4; }
@@ -1133,7 +1135,7 @@ const Avatar = (() => {
     S.shoeS = { ...S, ankle: S.ankle / fx, knee: S.knee / fx, calf: S.calf / fx, kx: S.ax + (S.kx - S.ax) / fx };
     // 몸무게는 몸·옷 레이어의 가로 배율로 (얼굴 목과 이음새가 벌어지지 않게 범위 제한)
     const bmi = (p.weight || 52) / ((p.height || 165) / 100) ** 2;
-    S.wx = clamp(1 + (bmi - 21) * 0.015, 0.94, 1.1);
+    S.wx = clamp(1 + (bmi - 21) * 0.006, 0.97, 1.05); // 원본 비율을 거의 유지하고 아주 조금만
     return S;
   }
 
@@ -1145,6 +1147,7 @@ const Avatar = (() => {
       const f = (i) => f1((t[i] / b[i]) * 100) / 100;
       d += `<filter id="${u}-skin" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="linear" slope="${f(0)}"/><feFuncG type="linear" slope="${f(1)}"/><feFuncB type="linear" slope="${f(2)}"/></feComponentTransfer></filter>`;
     }
+    if (hairFile(p, "x")) return d; // 미리 물들인 PNG를 쓰면 헤어 필터 불필요
     // 헤어 컬러: 원본 갈색의 명암을 유지한 채 목표 색으로 (luminance × 목표/기준)
     const base = rgb(kit().head.hairBase), lb = (0.299 * base[0] + 0.587 * base[1] + 0.114 * base[2]) / 255;
     const tc = rgb(p.hairColor || kit().head.hairBase).map((v) => v / 255 / lb);
@@ -1157,16 +1160,23 @@ const Avatar = (() => {
     return `<image href="${KIT_URL}${file}" x="${box.x}" y="${box.y}" width="${box.w}" height="${box.h}" preserveAspectRatio="none"${attrs}/>`;
   }
 
+  // 헤어 컬러: 빌드 때 미리 물들인 PNG(<이름>.<컬러id>.png)가 있으면 그걸 쓰고, 없는 색만 SVG 필터 (브라우저별 필터 네모 자국 회피)
+  function hairFile(p, name) {
+    const id = (typeof HAIR_COLORS !== "undefined" ? HAIR_COLORS : []).find((c) => c.hex.toLowerCase() === String(p.hairColor || "").toLowerCase())?.id;
+    return id && (kit().hairColors || []).includes(id) ? `${name}.${id}.png` : null;
+  }
+
   // 실사 레이어 묶음: body(목까지 포함한 몸) · head(턱선까지 자른 얼굴 + 얼굴 자체 머리) · hair
   function kitLayers(S, p) {
     const K = kit(), skinF = S.skin !== KIT_SKIN_BASE ? ` filter="url(#${S.uid}-skin)"` : "";
     const hairF = ` filter="url(#${S.uid}-hair)"`;
     const hairId = KIT_HAIR[p.hair];
+    const hairImg = (name, box) => { const f = hairFile(p, name); return f ? kitImage(f, box) : kitImage(`${name}.png`, box, hairF); };
     return {
-      body: kitImage(`bodies/${S.body}.png`, K.bodies[S.body], skinF),
-      head: kitImage(`faces/${p.face}.png`, K.faces[p.face], skinF) + kitImage(`faces/${p.face}-hair.png`, K.faceHair[p.face], hairF),
-      hair: hairId ? kitImage(`hair/${hairId}.png`, K.hair[hairId], hairF) : "",
-      hairBack: hairId && K.hairBack?.[hairId] ? kitImage(`hair/${hairId}-back.png`, K.hairBack[hairId], hairF) : "",
+      body: kitImage(`bodies/${S.body}.png`, K.bodies[S.body], skinF) + kitImage(`bodies/${S.body}-cloth.png`, K.bodies[S.body]), // 옷은 피부톤 필터 제외
+      head: kitImage(`faces/${p.face}.png`, K.faces[p.face], skinF) + hairImg(`faces/${p.face}-hair`, K.faceHair[p.face]),
+      hair: hairId ? hairImg(`hair/${hairId}`, K.hair[hairId]) : "",
+      hairBack: hairId && K.hairBack?.[hairId] ? hairImg(`hair/${hairId}-back`, K.hairBack[hairId]) : "",
     };
   }
 

@@ -1,8 +1,9 @@
 /* 온보딩 선택지와 옷장 카탈로그 (브랜드명은 지어내지 않고 스타일 태그로 표기) */
 
+// 남성 아바타 에셋은 아직 준비 중이라 선택 막음 (soon: true)
 const GENDERS = [
   { id: "female", ko: "여성", en: "WOMAN" },
-  { id: "male", ko: "남성", en: "MAN" },
+  { id: "male", ko: "남성", en: "MAN", soon: true },
 ];
 
 const SKIN_TONES = [

@@ -1651,5 +1651,14 @@
   "cx": 0,
   "eyeDx": 21.02,
   "hairBase": "#3b2c25"
- }
+ },
+ "hairColors": [
+  "black",
+  "darkbrown",
+  "choco",
+  "ash",
+  "milk",
+  "blonde",
+  "wine"
+ ]
 }
