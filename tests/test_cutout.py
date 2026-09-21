@@ -91,12 +91,28 @@ def test_catalog_items_have_search_keyword_and_photos_match():
             assert (config.CATALOG_DIR / ph["image"].rsplit("/", 1)[1]).exists()
 
 
-def test_avatar_js_places_photo_for_every_slot():
-    # 실제 상품 사진을 모든 착용 슬롯에 놓을 수 있는지 (종이인형 방식)
+def test_avatar_js_wears_fitted_garment_in_photo_color():
+    # 상품 사진이 있어도 아바타에는 체형에 맞춰 그린 옷을 사진 대표색으로 입힘 (사진을 몸 위에 얹는 종이인형 방식 금지)
     js = (config.WEB_DIR / "js" / "avatar.js").read_text(encoding="utf-8")
-    body = js[js.index("function photoSlot(") : js.index("function drawSlot(")]
+    assert "function photoSlot(" not in js
+    body = js[js.index("function drawSlot(") : js.index("// ───────── avatar_kit")]
+    assert "wornColor(it)" in body
     for slot in ("top", "outer", "bottom", "shoes", "bag", "hat", "eyewear", "neck", "belt"):
         assert f'case "{slot}"' in body
+
+
+def test_catalog_photos_have_main_color():
+    text = (config.WEB_DIR / "js" / "catalog_photos.js").read_text(encoding="utf-8")
+    photos = json.loads(text.split("=", 1)[1].rstrip().rstrip(";"))
+    assert photos and all(re.fullmatch(r"#[0-9a-f]{6}", ph.get("color", "")) for ph in photos.values())
+
+
+def test_main_color_picks_dominant_area():
+    img = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+    img.paste((40, 60, 200, 255), (10, 10, 90, 90))
+    img.paste((250, 250, 250, 255), (40, 40, 55, 55))  # 작은 로고
+    r, g, b = (int(cutout.main_color(img)[i : i + 2], 16) for i in (1, 3, 5))
+    assert b > 150 and r < 90
 
 
 def test_kit_layout_has_ponytail_back_layer():

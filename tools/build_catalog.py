@@ -116,22 +116,22 @@ def main() -> None:
     ap.add_argument("--only", default="")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--pick", nargs="*", default=[])
-    ap.add_argument("--remeasure", action="store_true", help="검색 없이 저장된 사진의 기준폭만 다시 잼")
+    ap.add_argument("--remeasure", action="store_true", help="검색 없이 저장된 사진의 기준폭·대표색만 다시 잼")
     args = ap.parse_args()
     picks = {k: int(v) for k, v in (s.split("=") for s in args.pick)}
     only = set(filter(None, args.only.split(",")))
 
-    if not products.products_enabled():
-        sys.exit("SERPAPI_KEY(또는 네이버 키)가 필요해요.")
     config.CATALOG_DIR.mkdir(parents=True, exist_ok=True)
     photos = json.loads(OUT_JS.read_text(encoding="utf-8").split("=", 1)[1].rstrip().rstrip(";")) if OUT_JS.exists() else {}
-    if args.remeasure:
+    if args.remeasure:  # 검색을 안 하므로 키 없이도 가능
         for pid, ph in photos.items():
             with Image.open(config.CATALOG_DIR / f"{pid}.png") as im:
                 ph.update(photo_anchors(im.convert("RGBA")))
         save_photos(photos)
         print(f"기준폭 갱신: {len(photos)}개")
         return
+    if not products.products_enabled():
+        sys.exit("SERPAPI_KEY(또는 네이버 키)가 필요해요.")
 
     for item in load_catalog():
         if only and item["id"] not in only:

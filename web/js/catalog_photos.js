@@ -11,7 +11,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRQNv283GVTJsGBjnGtoFwwoHLAbXzZVHRtElaIUOOsbQNM7KU3gtyk-K7LPnW7HTkZovROmlaFMGdcogEYM036Cy3SGQ7tgiAQqxPWr-DTeCVD7r1VVhz5Ng",
   "top": 0.921,
   "waist": 0.625,
-  "max": 0.978
+  "max": 0.978,
+  "color": "#706f4e"
  },
  "b04": {
   "image": "/static/catalog/b04.png",
@@ -25,7 +26,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSrfhQ7Dm_f2Ad4wtMskrWJhuNcScy5rU6Mz9nC0YK6JhiCrNqE8j3au5tO_mdr8L6j0n4TssJ0",
   "top": 0.722,
   "waist": 0.665,
-  "max": 0.907
+  "max": 0.907,
+  "color": "#232524"
  },
  "s01": {
   "image": "/static/catalog/s01.png",
@@ -39,7 +41,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRxkE-ZNrMg6gOQQeDWkdSuNdpWd1Dd7RXOSSWzyrTcb8cBA6Yfwx6-lmZ1Yfs8M8eCD0AgU26NxQCxFjyhk2JgdEH6W9FXGkKOaR7xe2hRtUSlGLF7QAB0",
   "top": 0.506,
   "waist": 0.378,
-  "max": 0.977
+  "max": 0.977,
+  "color": "#cecdc8"
  },
  "g01": {
   "image": "/static/catalog/g01.png",
@@ -53,7 +56,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ2MR_TsYuBxCSUNB_g34SVz09jV2uwMeG-bTLqd-k3ucWupvEL7CmJrzG6dWlpY_C34DP0qNokQSLezyAgGY7d4TcNS7oHAG54_h3Op7zVLjwpJEfO3Q9L",
   "top": 0.929,
   "waist": 0.886,
-  "max": 0.946
+  "max": 0.946,
+  "color": "#2d2d2d"
  },
  "h01": {
   "image": "/static/catalog/h01.png",
@@ -67,7 +71,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSiD2lM-4ngCkoHnqKH5MFJt3Gmn7sVh3PafSFW_myviv7Q15zC3G6K7lkKezoxknGvzf8Yi7zyrNg0J1YzXMhZtChPBCfavjFCccZs5qb4MevAwk8wkVbj",
   "top": 0.615,
   "waist": 0.434,
-  "max": 0.946
+  "max": 0.946,
+  "color": "#141414"
  },
  "o02": {
   "image": "/static/catalog/o02.png",
@@ -81,7 +86,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRUjgerZUxN8Q8j1a_LNbCuqcR4_cukTHoe4MVaSwOCO8US3cBArX9S5-i_pLAfo1qgcqWESbND8Yvp0Ve1wIPfIlQn4a_kA34RGi47dPFtyTdenExpb8OABxE",
   "top": 0.849,
   "waist": 0.704,
-  "max": 0.942
+  "max": 0.942,
+  "color": "#181616"
  },
  "t03": {
   "image": "/static/catalog/t03.png",
@@ -95,7 +101,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT1b8W0vGU1D-N9Xtg0S0txDAZmkmB7Lmql5DFPOF5f1CMmzwW0viN0jTej5p2WBRkG8N-mFYEO5_UsEkgPzrVst8FTwmUbCWHdl8VoUbRN60wIZ3rKcjnE",
   "top": 0.59,
   "waist": 0.416,
-  "max": 0.995
+  "max": 0.995,
+  "color": "#dde1e5"
  },
  "t05": {
   "image": "/static/catalog/t05.png",
@@ -109,7 +116,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRYiqVwWwa-eu84gmWKhQJhLRYKhIi6Ib8hK_UW9m1gcUEMGK8_MkaqeRccJTV7idN27aA35rY",
   "top": 0.772,
   "waist": 0.538,
-  "max": 0.881
+  "max": 0.881,
+  "color": "#aa9274"
  },
  "t06": {
   "image": "/static/catalog/t06.png",
@@ -123,7 +131,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRhai1ieg7kY2wW5OOBdejruPGgubiuRs7_qrdCWVb2XemKQn7ZPsRAEXhZl2v83vkBiYPybZTW4p0I6IRLa03o1wF7CKMwY9MxXz0PlNU65_rKdePUjgUM",
   "top": 0.689,
   "waist": 0.551,
-  "max": 0.942
+  "max": 0.942,
+  "color": "#8d2734"
  },
  "t07": {
   "image": "/static/catalog/t07.png",
@@ -137,7 +146,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTz4xhL0cer43rh_H5-YiLeQLWjgOhMwt5iq9TxZ044Lx0ZEXmyDWyoC6b8jIQE0hI0cS7w4A8ufw",
   "top": 0.749,
   "waist": 0.749,
-  "max": 0.905
+  "max": 0.905,
+  "color": "#4c3830"
  },
  "t08": {
   "image": "/static/catalog/t08.png",
@@ -151,7 +161,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSR-65WQsKkqV-8zc-mIeGhc9QydbgUhF0Uh7dKzU2pNL9JYHIAs7vx7LCbI7Nk9-4FIhO853k",
   "top": 0.377,
   "waist": 0.31,
-  "max": 0.94
+  "max": 0.94,
+  "color": "#6c7999"
  },
  "t09": {
   "image": "/static/catalog/t09.png",
@@ -165,7 +176,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRR-wsnSqbc6ErPwU5LItyG8VEOH1KRpvEVJ2GcN3dOskZIL4OunHVSwWWHobztv33pBq-KQQbH8p_Dq13XADFLbxAYHeaUNkvRYfHscSTCrehG7Fhm6f5t",
   "top": 0.783,
   "waist": 0.554,
-  "max": 1.0
+  "max": 1.0,
+  "color": "#262624"
  },
  "t10": {
   "image": "/static/catalog/t10.png",
@@ -179,7 +191,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSxRtNkD2mq9KpOVZM1cjF7fyl0odUhzQaqJdCZZCEidFCL4xDaGVloXadSgchAInpTKGs-YFMzrrKKZEDq9-bomq8ZBsquPAodq9CDDeMODBO1rQg80LMV",
   "top": 0.799,
   "waist": 0.653,
-  "max": 0.935
+  "max": 0.935,
+  "color": "#ecebf1"
  },
  "t11": {
   "image": "/static/catalog/t11.png",
@@ -193,7 +206,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTuPtNaXEkttG6WoyP_jcFd3_tm3ZspSJ026ClHzC4JUoAqCfpHrmTVJkAcwWNbS9usJBzXJ06ngOuadUyBkN-Wg0f5Ym-Hc9MwD2FHhQjWK51H4z1Q5UZT",
   "top": 0.832,
   "waist": 0.484,
-  "max": 0.928
+  "max": 0.928,
+  "color": "#ce2237"
  },
  "t12": {
   "image": "/static/catalog/t12.png",
@@ -207,7 +221,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTEkn-fRAKZfvRfo0kFzZlIEpL2V6KeyEf28c7-1_T5T_CB5crbpoiRYMuugrCLSsNfVrIzpi5k-m8AYEMMI910RBo3zhVNHgBVfrPBrryypQ8U2gwoLEpq_A",
   "top": 0.775,
   "waist": 0.638,
-  "max": 0.925
+  "max": 0.925,
+  "color": "#444446"
  },
  "t13": {
   "image": "/static/catalog/t13.png",
@@ -221,7 +236,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQieOi-kNPLtDd6Wbe3lJwM7Q7C5fLTfZaFfxf9_NEl7AJzMWVrbJlHUcf1hJqE8SBI5vdgZzIeS0-6vM9nqsMW2J0G-VlrFvMAsC3KYeYbQpnafzAB6Pa6",
   "top": 0.704,
   "waist": 0.394,
-  "max": 0.941
+  "max": 0.941,
+  "color": "#adb1b5"
  },
  "t14": {
   "image": "/static/catalog/t14.png",
@@ -235,7 +251,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ3pvUqAGl6bZW4HXUOygviC8RLbIYNFtFFfC3OWmt9z2JBXdwx1iSYKAfImPh-vtHabifIP7KUm0kfNT-oZBBdyP6ebkeNYQYKKSu0WbaIdPDXJNYoPygCasM",
   "top": 0.896,
   "waist": 0.888,
-  "max": 0.92
+  "max": 0.92,
+  "color": "#3a2d2a"
  },
  "t15": {
   "image": "/static/catalog/t15.png",
@@ -249,7 +266,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQljEbQ2XiF73gaEncVhESY2VG6UJ_y_8l3N_pThigXjpeUYwY3jOkdi6el_1NilgblaQoiuOqS8O80E5l4K4Xu6Ua7JfLCXE-ZVsFHwNBVX0p7qFQJskjbPA",
   "top": 0.853,
   "waist": 0.601,
-  "max": 0.939
+  "max": 0.939,
+  "color": "#e7e6eb"
  },
  "b01": {
   "image": "/static/catalog/b01.png",
@@ -263,7 +281,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQGH_ph25hDOqQCapxsikdAPtgNaXLIwdog7rti1yezq9ckG3kqIP9qMSnKJlKvMux2jWDAGuW3nj7JBDXSmTN6g_DOpAtTS2JAB__nwXZ60TH7NIarC4Iu",
   "top": 0.814,
   "waist": 0.709,
-  "max": 0.899
+  "max": 0.899,
+  "color": "#344763"
  },
  "b02": {
   "image": "/static/catalog/b02.png",
@@ -277,7 +296,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQUoz1k34NWDL9yeLUdAFnwOIRyTZ0eWPm3AxWxyhlFbi3tZf0WNevHU1GDEADg5rB3SwiboPZ6rpwvFNeBUmyRGtS87fKWmDmw-iOJMyTbrEDtQv8U6W363A",
   "top": 0.641,
   "waist": 0.562,
-  "max": 0.935
+  "max": 0.935,
+  "color": "#697892"
  },
  "b03": {
   "image": "/static/catalog/b03.png",
@@ -291,7 +311,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ23Un7rTUJD9E-ffILUMNBP66nk1DR4xX3EMr_u9JrcS3LV8AT28PpfnG8whuqiwBHaDBFn9k",
   "top": 0.8,
   "waist": 0.757,
-  "max": 0.871
+  "max": 0.871,
+  "color": "#c3bbab"
  },
  "b05": {
   "image": "/static/catalog/b05.png",
@@ -305,7 +326,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTwPZy1Xds_UG-epDDrR3vlin16hNfreULuNbobxiMV3vpnKS2Kwy94ME_WC5CD4qHXSuIi1FOiXSoEdnPObjcbDpjimYFSWUerLLzHCDE",
   "top": 0.924,
   "waist": 0.845,
-  "max": 1.0
+  "max": 1.0,
+  "color": "#444747"
  },
  "b06": {
   "image": "/static/catalog/b06.png",
@@ -319,7 +341,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSFyWL-emenzerqhllETHWdIS2c6VL0Is-_nuzEbOsnNmB3bCf5yj5ezhelSEiSgXMf3VZCjmE",
   "top": 0.715,
   "waist": 0.605,
-  "max": 0.91
+  "max": 0.91,
+  "color": "#171b33"
  },
  "b07": {
   "image": "/static/catalog/b07.png",
@@ -333,7 +356,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSucZ-9HjbqGc8sq537bAAAVjABnqIh5seS_6DLLLlYCphoD1TEXfnX60QYfD7bd2-ktgMxi4NVDW8Ur2u1jmfhyUfkxDWPGU9uDWqkG7iNWmZCw0yHpi2b2A",
   "top": 0.69,
   "waist": 0.598,
-  "max": 0.981
+  "max": 0.981,
+  "color": "#2756af"
  },
  "b08": {
   "image": "/static/catalog/b08.png",
@@ -347,7 +371,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR5N1XMqJMGJCDFnG-f44dul9E2QG68tDoy2sZRzZRVOEdRJxJIWyVJCeKpsUtFuwEcC3MrdrzPoDot2oufIX6Mgp3xXUAyxpycusG83UcLu5jiscG4aR9b",
   "top": 0.879,
   "waist": 0.772,
-  "max": 0.879
+  "max": 0.879,
+  "color": "#766456"
  },
  "b09": {
   "image": "/static/catalog/b09.png",
@@ -361,7 +386,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS7tSwyot8j25XhTEI9_2hhAFGg7kHgPVXi-ZoST3Zbc4s5En6uqvb7SnYo9DPz_qhYd8QfIvYORrp4VxHSXsZNiq-LJ701gdej5tKhYhNUyvbZPCAIHKPJt24",
   "top": 0.773,
   "waist": 0.661,
-  "max": 0.941
+  "max": 0.941,
+  "color": "#46433c"
  },
  "b10": {
   "image": "/static/catalog/b10.png",
@@ -375,7 +401,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTzIBXdXv3r5t8G1s_sf1WcdeCyPtSXztHK-sDUw726ESh3MSRD3h3jXalWcJgfBfE8xxN_2OCJaeJoGBFbleZfy3lV3kunSQ2Hf5YiqxdrQZfBgNZwykPc",
   "top": 0.66,
   "waist": 0.584,
-  "max": 0.985
+  "max": 0.985,
+  "color": "#cab2b5"
  },
  "b11": {
   "image": "/static/catalog/b11.png",
@@ -389,7 +416,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRryZFvSibXLn5Ur5GWjjmIm97g-sINpf-4jJQinlZ_z06t1yjJl2k6yE0WMo3mIsSOow2x2it3gzIIBOkmqVQ7GCaJZJugC6A2BJvzhu527lBZiRfyCcglaQ",
   "top": 0.84,
   "waist": 0.807,
-  "max": 0.997
+  "max": 0.997,
+  "color": "#b4c5da"
  },
  "b13": {
   "image": "/static/catalog/b13.png",
@@ -403,7 +431,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSC8-P1aiYFHrqEe9d8GMfgJqzrcWpzs32uqEb5jGf1Ve7kcROjEzm2KmkrXMNAcBr1kujUzrSn",
   "top": 0.737,
   "waist": 0.679,
-  "max": 0.911
+  "max": 0.911,
+  "color": "#c9b8a7"
  },
  "b14": {
   "image": "/static/catalog/b14.png",
@@ -417,7 +446,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcS25BNcIU0KMvyoPHbGHo03p8eAG4N10qyqgsiW4E-S2irkN9KNmcascyHKiWNNcZoqH6xU_oc",
   "top": 0.732,
   "waist": 0.651,
-  "max": 0.914
+  "max": 0.914,
+  "color": "#6b746e"
  },
  "b15": {
   "image": "/static/catalog/b15.png",
@@ -431,7 +461,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTtLzpq1VnRYcKO0npv1p14YmVZgBBcrDhpZ0I2BDZnW7PeZv2gIhI7QodyNANhpxU-QnotEXE3qU4D8-o4TgP2nsngpgwC3rp24lrA8UA",
   "top": 0.624,
   "waist": 0.516,
-  "max": 0.946
+  "max": 0.946,
+  "color": "#940a24"
  },
  "d01": {
   "image": "/static/catalog/d01.png",
@@ -445,7 +476,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ7aDk121N-0gEYxbxD_Aj8wVFsdk63LIpltaDLEQTv3XGLQHhtfrOWkqxCrVTTMpR8R9Z9HXSSIsw9Iubfofv9-iSVOyaSvTCLbaNeAKaB93tQW997vSLb",
   "top": 0.572,
   "waist": 0.377,
-  "max": 0.862
+  "max": 0.862,
+  "color": "#16161a"
  },
  "d02": {
   "image": "/static/catalog/d02.png",
@@ -459,7 +491,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRZKQmlCRUU86G395KoclaTSBxNjGEOxwZYpkbA3XxV-Lu9tx5JV9Z_rgpxk3gC2kdNcGaOg9_l0PV0qwJ5XORKEfHqbdJd_qA9-l5CQVnpDo0Mt8hxD_on2uw",
   "top": 0.878,
   "waist": 0.702,
-  "max": 0.946
+  "max": 0.946,
+  "color": "#eed2d1"
  },
  "d03": {
   "image": "/static/catalog/d03.png",
@@ -473,7 +506,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSLAGknsnHh0QUxyp9uMMrKbN1pt65EBkXekoeT9QOUjMZEOEtEk2Sc3uymJ2EtIk5TLcWuK5oAf3PMsb-PTvs4Z3GyQbIqL4WUa1bCaxQs9XjpsDBBSZwW5A",
   "top": 0.759,
   "waist": 0.572,
-  "max": 0.892
+  "max": 0.892,
+  "color": "#161616"
  },
  "d04": {
   "image": "/static/catalog/d04.png",
@@ -487,7 +521,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRwZfQmYQFiLN0eNIlKoMCb9hcu7FrHZNnANjAZiDXKR6Taj6d2YIbUY7LDF5MQwOL_y9UZ7-HEVhCLh78Zu6dgfFQM_62Q6MMPYA13P3zXPASj1UDu3YIwzw",
   "top": 0.569,
   "waist": 0.545,
-  "max": 0.891
+  "max": 0.891,
+  "color": "#eaeaea"
  },
  "o01": {
   "image": "/static/catalog/o01.png",
@@ -501,7 +536,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT8FQ7gDeTywMU5SO7WjenFfEs0_WDBkTMx2DLJSXUTmbe0Gk6QkqbhGc_jXpifLQlWcfHA_2FXcgX4lsfUTxZFx6Cesh3uWwsFRZlvHK4manZFBNggpOqxTg",
   "top": 0.766,
   "waist": 0.316,
-  "max": 0.922
+  "max": 0.922,
+  "color": "#d5c9b8"
  },
  "o03": {
   "image": "/static/catalog/o03.png",
@@ -515,7 +551,8 @@ window.CATALOG_PHOTOS = {
   "mall": "ssfshop.com",
   "price": 67620,
   "link": "https://www.google.com/search?ibp=oshop&q=오버핏 블레이저&prds=productid:17644489218144497575,headlineOfferDocid:17644489218144497575,imageDocid:2203364738112568609,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS2qDr2aBPzF4gm4hDxV4BQYFLQqXlBInvbzzIoEDlDKZ3B2ibgSdgxnzFdYhQYKRccdm2e6WVsP10_j5ZlcoTYmFSDnkyJZ1RhcooB99q1SOYCWnIusAU-"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS2qDr2aBPzF4gm4hDxV4BQYFLQqXlBInvbzzIoEDlDKZ3B2ibgSdgxnzFdYhQYKRccdm2e6WVsP10_j5ZlcoTYmFSDnkyJZ1RhcooB99q1SOYCWnIusAU-",
+  "color": "#26292f"
  },
  "o04": {
   "image": "/static/catalog/o04.png",
@@ -529,7 +566,8 @@ window.CATALOG_PHOTOS = {
   "mall": "Goodwearmall",
   "price": 118800,
   "link": "https://www.google.com/search?ibp=oshop&q=트렌치 코트&prds=productid:8239729690592034471,headlineOfferDocid:8239729690592034471,imageDocid:8730840541205653243,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQucQ_rWzf_9Tp2mFdhTLWAbC2STdtEww0-oK1dMCIiYXTkp7XDL3DlqbV8be66bG1t7B5RdWD3Ma00xa0TFw16uocjOjV-joGfRmA-4-jfnSFyszLKLmhN"
+  "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQucQ_rWzf_9Tp2mFdhTLWAbC2STdtEww0-oK1dMCIiYXTkp7XDL3DlqbV8be66bG1t7B5RdWD3Ma00xa0TFw16uocjOjV-joGfRmA-4-jfnSFyszLKLmhN",
+  "color": "#e0d1b7"
  },
  "o05": {
   "image": "/static/catalog/o05.png",
@@ -543,7 +581,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ4jzZO2hNBiUxmVzoCCdYfl7PHFH6gTgOGFtnysckF7J9sNRYLnm8l3XDkUlgHB4t_otmPcQTy7HZeHGHzlv5Kf3NC8Qagd5LtwXa4q7wDRUezIWn3OTrCZw",
   "top": 0.795,
   "waist": 0.595,
-  "max": 0.908
+  "max": 0.908,
+  "color": "#392a23"
  },
  "o06": {
   "image": "/static/catalog/o06.png",
@@ -557,7 +596,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRPan-GnbHXlJWc4IRydvtmnFLrXTG-QLUMcF2R_sN5Q5mc2SOO4RoGpoImmVLJb_ZJRpuHRNe-ZoH551ivZBxEQg4qqBNVZ66N1Xmgv_SFc6Kt0tkXTuV_",
   "top": 0.663,
   "waist": 0.277,
-  "max": 0.984
+  "max": 0.984,
+  "color": "#2d2f2e"
  },
  "o08": {
   "image": "/static/catalog/o08.png",
@@ -571,7 +611,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTNgGGr1Cz794yvHPVXwNtUrwzltl05YavQ6eQRmY-khNodWtlMIWfCRF4BHpc0Vqf1fLXCg47VcSoKHgM77Kv6ug3xd38g0kIZIVYo5F2DP3A3DiYwEfj9",
   "top": 0.708,
   "waist": 0.268,
-  "max": 0.939
+  "max": 0.939,
+  "color": "#2b2b2e"
  },
  "o09": {
   "image": "/static/catalog/o09.png",
@@ -585,7 +626,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSaW58XszNV-C_sm6ohlxVxsbbwwRlbm3B5-GdACH8Ipw7jvm97bT8CWLMIALFVu6Zs--yq-qwwLRVjpXjvnxR2K7kdBDguDaa5VwfNxy18eJGRUQ3lvRWqpA",
   "top": 0.733,
   "waist": 0.458,
-  "max": 0.939
+  "max": 0.939,
+  "color": "#2b2b2b"
  },
  "o10": {
   "image": "/static/catalog/o10.png",
@@ -599,7 +641,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcST3BM9WMkFlGj1zOqxEthzIIKQ11YG8yZdIAen07GpSVdTOcP4qXAo8UEmNCs_TvYu7Or9iz-S",
   "top": 0.678,
   "waist": 0.408,
-  "max": 0.945
+  "max": 0.945,
+  "color": "#181818"
  },
  "o11": {
   "image": "/static/catalog/o11.png",
@@ -613,7 +656,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT5EYDZfYnBUw397qmwwRVfrHSYo5nHEw80_NCX0RApzGXYSrPM8pbnF1V5SWvAvdvvRghuLgfQvLKvakIzxwlspKf5CrlM7cuLUN1fRUPoAuEDVK72YXO2eA",
   "top": 0.917,
   "waist": 0.917,
-  "max": 0.917
+  "max": 0.917,
+  "color": "#d2d1cb"
  },
  "s02": {
   "image": "/static/catalog/s02.png",
@@ -627,7 +671,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR_l0nJL5n93mJMSAoxAkXs6iIDqBLtJNKE2eVo_jj68htUCJC09aCSvucgWkKbWY1WfrQT3AXOYHZ8yvd1iZ_SpF93yADInKajuxKbZCmcKt_u5lAtkJN-",
   "top": 0.489,
   "waist": 0.361,
-  "max": 0.981
+  "max": 0.981,
+  "color": "#2c2b2f"
  },
  "s03": {
   "image": "/static/catalog/s03.png",
@@ -641,7 +686,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRRXCyayRkqocEM6zM8L4NJYcABd8kJK7VTA38Xb96cGD9hjedbPgiVwhJS8yKkOuBqIQsAlKhW9IbWdYGY5MV5-u35NF1hW5oAl4hdWrKf1pDEktCaXV6a7Q",
   "top": 0.66,
   "waist": 0.557,
-  "max": 0.989
+  "max": 0.989,
+  "color": "#4a4a4a"
  },
  "s04": {
   "image": "/static/catalog/s04.png",
@@ -655,7 +701,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcXuqb4v96PzLGyq7STJfzJ7_okB8uEdak3cJrRhqhjFRiLoH3PgJPF6FGDcB_zjD5KXjFAzsEwgVbXX8XZPK6mbsyeN7AmMVZvavTs6SL8kbs8p10-x_OTQ",
   "top": 0.486,
   "waist": 0.265,
-  "max": 0.696
+  "max": 0.696,
+  "color": "#0d0e11"
  },
  "s05": {
   "image": "/static/catalog/s05.png",
@@ -669,7 +716,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTBI3Ms5QFpXLQj09NSDTHhiztj_iDBcyQ0pz3nQJZQ8HprofmCdrgquimdmoCSoP1vd1aOwlvCAsg8s37hgNOHrE489xdACbHviSrNIZjVSNzJYsub479FSQ",
   "top": 0.703,
   "waist": 0.703,
-  "max": 0.861
+  "max": 0.861,
+  "color": "#2a2c30"
  },
  "s06": {
   "image": "/static/catalog/s06.png",
@@ -683,7 +731,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRmRYUSqt6UWrODZ8csvPcmG_fWKgA6Q95tuwVu9quFoyFL4sG-VkOGrlr4pi5MR1M8Zpfl6EFfOATZkOHE8lhl7DeCViTBhNeFiCQTW-U",
   "top": 0.489,
   "waist": 0.489,
-  "max": 0.787
+  "max": 0.787,
+  "color": "#0f1013"
  },
  "s07": {
   "image": "/static/catalog/s07.png",
@@ -697,7 +746,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR5CBsjJKZfQlhaCGWRdFkO5Xcr9Y54I22dXd8e6hDIKLzvc7QC09rA0nxCWUIIdOLkg_o9sbq651G2LWPnlvOHrP_hn1CgvQ",
   "top": 0.289,
   "waist": 0.249,
-  "max": 0.971
+  "max": 0.971,
+  "color": "#cbc5b7"
  },
  "s08": {
   "image": "/static/catalog/s08.png",
@@ -711,7 +761,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ1tvwGGl7Vdw98BpE9xNSpoh7oQvtreaxvR00pCXc2sO15Enc156fO9E4bfxGKDswJVXKi1yLLNnsPSC-ovypoAz3OebdJovnyJSxdyLsJHkYYv7bA12Bi",
   "top": 0.505,
   "waist": 0.122,
-  "max": 0.981
+  "max": 0.981,
+  "color": "#2e2d2d"
  },
  "s09": {
   "image": "/static/catalog/s09.png",
@@ -725,7 +776,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSHuYQUG_X6X2ZoN2CmTcTSmv4P5u_suhTzznGKkkEdZsoTCQRNMYWsFOD4FRU0EmVVWYpnwODA87vKRYDwxiRMneQigigJ9RLV8qaA2tK05fJD5DI-yX6TWvg",
   "top": 0.582,
   "waist": 0.402,
-  "max": 0.997
+  "max": 0.997,
+  "color": "#2c2c2c"
  },
  "s10": {
   "image": "/static/catalog/s10.png",
@@ -739,7 +791,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQd84_fyTCXMuByFi9Z1HarkiwjwCQPodi81Ui0JsLLs12E3D0hvsDLw_IuC0Wup2Behp7fGuh76S3Ivwb5wE-yIlF7Bi9BWNd2fuNKaQGDZvVEAoGlaAN_",
   "top": 0.523,
   "waist": 0.093,
-  "max": 0.997
+  "max": 0.997,
+  "color": "#181010"
  },
  "s11": {
   "image": "/static/catalog/s11.png",
@@ -753,7 +806,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQp0VBoahA57GrQvqDbxo58odtJL6UEJwJkCiV9HMQcqJTPsojVi6Jv9DCR2OwctRPEzNSd5UkRy-1FVXQFd2Hgkl36m8c-Rt5kwV332FX_GPiDXJ1zVMfi",
   "top": 0.554,
   "waist": 0.19,
-  "max": 0.923
+  "max": 0.923,
+  "color": "#2c282a"
  },
  "g02": {
   "image": "/static/catalog/g02.png",
@@ -767,7 +821,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTLpwZT3pFq8Me4aBkcjLHUw9WXNcIAQpVzd9v7z8DOgjiE4MMxh2lixaJFHJkUPQ9sfp_2NrknC-rP6Ut_vZXChcIfVkiWltehAO104Up3sUptSso-H8bHFiX6",
   "top": 0.451,
   "waist": 0.405,
-  "max": 0.986
+  "max": 0.986,
+  "color": "#4b4c4d"
  },
  "g03": {
   "image": "/static/catalog/g03.png",
@@ -781,7 +836,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTYmDZe_HaByGO4AWGeIAAZr9hFC2NTtHVe3CNqdWxEBgMbJqxLbtQMCP3h1ZYSzL2EP6iDmjBhR2bpNluzayYdKRNnLO1drWgIVmtXrfF5UKcxbhcJVzvj",
   "top": 0.915,
   "waist": 0.912,
-  "max": 0.939
+  "max": 0.939,
+  "color": "#484633"
  },
  "g04": {
   "image": "/static/catalog/g04.png",
@@ -795,7 +851,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTyiR3teRZNdUxXsFO1vpnxucDaY5-ip0phAithyMsoKK3y7mv_fMJ0EfgI3etM83adXg6YNzTaTh9zr96SQII9aZu9XH8gdMTt-YpZ_DFAv8biq2NOdwC5",
   "top": 0.876,
   "waist": 0.657,
-  "max": 0.918
+  "max": 0.918,
+  "color": "#2d2d2d"
  },
  "h02": {
   "image": "/static/catalog/h02.png",
@@ -809,7 +866,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR7LOmX5OJB3W5wCwJEUrZpfFDCAVKfhI0l5pbmq7I0zoYKyJMJWNXnWzaew6-VjjOvHMpbek0LAC9JEW0X8vhXcLDNkGRVCGVzFkg1CDzL4ass980gTSmbLnac",
   "top": 0.733,
   "waist": 0.508,
-  "max": 0.99
+  "max": 0.99,
+  "color": "#191919"
  },
  "h03": {
   "image": "/static/catalog/h03.png",
@@ -823,7 +881,8 @@ window.CATALOG_PHOTOS = {
   "mall": "베스트유니폼",
   "price": 9900,
   "link": "https://www.google.com/search?ibp=oshop&q=베레모&prds=catalogid:9834961203057881173,productid:6445066678690610491,headlineOfferDocid:5878860913477911227,imageDocid:11787327170669913681,gpcid:2273161210967833955,mid:576462525218853123,pvt:hg&hl=ko&gl=kr&udm=28",
-  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR4gWm2A_DqqQIq9rvKIKTOQjqbYSMd2cuL2a8Zdn0q9EIdBkdFWIbkmXTQao_tyBgEJq0lYhZ0Q5w-nhWMRHg-NdXoH2Qd0TtntYG8sZtAG7mrvH9fHCwcDqY"
+  "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcR4gWm2A_DqqQIq9rvKIKTOQjqbYSMd2cuL2a8Zdn0q9EIdBkdFWIbkmXTQao_tyBgEJq0lYhZ0Q5w-nhWMRHg-NdXoH2Qd0TtntYG8sZtAG7mrvH9fHCwcDqY",
+  "color": "#1c1c1c"
  },
  "h04": {
   "image": "/static/catalog/h04.png",
@@ -837,7 +896,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRCdV449Th4V8tj9EKh66O2qChXgSUClX8O4ll9Zh2P9hHM302DQuVm5tE8k7PW_EezwGVREAdIsEx_yF7lpDPiE9a1I5Mn2ysLypqx5O7YMfbF3z1OhVfNBQ",
   "top": 0.657,
   "waist": 0.608,
-  "max": 0.945
+  "max": 0.945,
+  "color": "#c9b5b9"
  },
  "e01": {
   "image": "/static/catalog/e01.png",
@@ -851,7 +911,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQYpOqnaHQYsPrtdkZmyifsaA0A2B1tqQwreXvtW51gyX3eTq53Iul9vHcX96M_8Cm3psk4Mn-yiju_o-6zcZamk8-2U9DE6ckPcnZom2dvdOyRXkypmez5uA",
   "top": 0.975,
   "waist": 0.926,
-  "max": 0.985
+  "max": 0.985,
+  "color": "#686a68"
  },
  "e02": {
   "image": "/static/catalog/e02.png",
@@ -865,7 +926,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTc9Tv91fmBlSmIY1NAJXNQXkGZ0sVjLlaFHchwdcXZJUB3wE1oC6jhW-zwnNOlWgdPQxSJlMqzCxZUn8T0jGNtjGdQ5Vp62azfA5Xqme99mn1EzCZkp-BC",
   "top": 0.941,
   "waist": 0.463,
-  "max": 0.945
+  "max": 0.945,
+  "color": "#fbfbfb"
  },
  "n01": {
   "image": "/static/catalog/n01.png",
@@ -879,7 +941,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcsDZDI111qU3BvtQcMABSXfKE3_mJBMdbt8ubvmH4rzUCVHi4KLb1-HssfyDYISXlMiFIoS5ser7w9Pd3FUNm3C5FClzFQtGIPku0D_QPBDIc3PihU5nPLw",
   "top": 0.81,
   "waist": 0.506,
-  "max": 0.949
+  "max": 0.949,
+  "color": "#fcfcfc"
  },
  "n02": {
   "image": "/static/catalog/n02.png",
@@ -893,7 +956,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSGiUSc3pskt0jB13iRJU-CalRogExm1s8XmMJNSw5vsDeJj2Ra7DVaLRWH4fuGot9CeZSWefzrAXnp4ilYDOMBcHudx7ttC81VZDdyK7eaisTYTvpIFVzpBA",
   "top": 0.78,
   "waist": 0.757,
-  "max": 0.929
+  "max": 0.929,
+  "color": "#e5e0dd"
  },
  "n03": {
   "image": "/static/catalog/n03.png",
@@ -907,7 +971,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRAE9kS1ficu3H3LdmXenPBSiQ2XMLtNeRicECk0vIr70bA47aAXPMqMgAcEmVZbXSJFL8vD20JYno4B_v_963EMLKbwGwgrYw3An7slyWRaty58feonn_e",
   "top": 1.0,
   "waist": 1.0,
-  "max": 1.0
+  "max": 1.0,
+  "color": "#d1b16f"
  },
  "n04": {
   "image": "/static/catalog/n04.png",
@@ -921,7 +986,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQBeu1nJpK6OTzg8r_HrpLOMRIsys3Xep9aBn2Ve15a_VXj_D35VpVIBPyMJK2Gq43t5qYmWYG_2KoKGaWg9qV2laR8K3n1pj25l1qezSa3b2v_QnlwyWA-",
   "top": 0.457,
   "waist": 0.25,
-  "max": 0.837
+  "max": 0.837,
+  "color": "#f5f1e6"
  },
  "l01": {
   "image": "/static/catalog/l01.png",
@@ -935,7 +1001,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT304YOy4i9p1nUuMLW1RztOyOBbfBq2P3wedg_CBkChcQUCY9cd0fpUj_lKLJ38SDHUAPwE8xtYrcAwrj9ca-sYx_nD31GeDkkivRL5Wv9YS6OHD3uSA-vdg",
   "top": 0.967,
   "waist": 0.91,
-  "max": 0.984
+  "max": 0.984,
+  "color": "#2b2b2c"
  },
  "l02": {
   "image": "/static/catalog/l02.png",
@@ -949,7 +1016,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSfLtU13BIKSagqVu1AcD4eIX45Cr3GObWgL03g6Bv5To-860hSG6LB2L4Ie-syTasGkacZXPq3Vxbl_7bpHgTkYX5T5VPa1ZN_bAClcOlnHWTmnKs6tFgi",
   "top": 0.848,
   "waist": 0.448,
-  "max": 0.94
+  "max": 0.94,
+  "color": "#2d2d2c"
  },
  "o07": {
   "image": "/static/catalog/o07.png",
@@ -963,7 +1031,8 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRnXzcpa23i1fyF1WVzzHPZIKEtp-bazYZCS7jf19tYJkwvRmThkkJ6YWD7FgS7D0OtsydupZNJoK4xC7GO3L-Zs746Z_2luJD4JF1X3-XW0G0YaoNAOCcgxQ",
   "top": 0.642,
   "waist": 0.441,
-  "max": 0.885
+  "max": 0.885,
+  "color": "#2b2b2d"
  },
  "t02": {
   "image": "/static/catalog/t02.png",
@@ -977,6 +1046,7 @@ window.CATALOG_PHOTOS = {
   "src": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQ3J6kNdzOc2q6qGfz0okDgR7kTvBDTqAggUIX3dSLJ4SCEoAGkqJejzcv774OO9q4lI6YXU0aw4dWyMpD8wAJj0Dimo1JjpQJDR47v9RKm8tCoykEUoRlw4dc",
   "top": 0.803,
   "waist": 0.618,
-  "max": 0.912
+  "max": 0.912,
+  "color": "#151319"
  }
 };

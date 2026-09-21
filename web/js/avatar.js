@@ -1055,50 +1055,12 @@ const Avatar = (() => {
 
   const INNER = "#e7e1d8";
 
-  // ───────── 실제 상품 사진(누끼) 레이어 ─────────
-  // 사진은 슬롯별 기준선에 종이인형처럼 올린다. 폭·길이는 골격 치수와 사진 비율로, 하의·원피스 길이는 모양 코드로 정함
-  const PHOTO_LEN = { shorts: 0.38, mini: 0.34, pleats: 0.44, midi: 0.74, long_skirt: 1, leggings: 0.98, jogger: 0.97, slip_dress: 0.8, knit_dress: 0.72, long_dress: 1 };
-  function headGeom(S, p) {
-    if (S.kit) { const H = kit().head; return { top: H.top, eye: H.eye, chin: H.chin, half: H.halfW }; }
-    const F = FACE[p.face] || FACE.puppy;
-    return { top: -30, eye: F.ey, chin: F.chin, half: F.cw + 2 };
-  }
-  function photoSlot(S, p, slot, it) {
-    const ph = it.photo, a = (ph.w || 1) / (ph.h || 1), H = headGeom(S, p);
-    let w = 0, h = 0, x = 0, y = 0;
-    const byW = (W, maxH) => { w = W; h = W / a; if (h > maxH) { h = maxH; w = h * a; } };
-    const byH = (Hh, maxW) => { h = Hh; w = Hh * a; if (w > maxW) { w = maxW; h = w / a; } };
-    // 사진 속 기준 폭(어깨선·허리선, 이미지 폭 대비 비율)이 target 단위가 되도록 전체 폭을 정함
-    const byAnchor = (ratio, target, maxH) => byW(target / clamp(ratio || 1, 0.3, 1), maxH);
-    const href = String(ph.image).replace(/"/g, "&quot;");
-    const img = (px) => `<image href="${href}" x="${f1(px)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" preserveAspectRatio="xMidYMid meet"/>`;
-    const isDress = DRESS_SET.has(it.shape);
-    switch (slot) {
-      case "top": byAnchor(ph.top, S.sw * 2 * 1.08, (SHORT_TOPS.has(it.shape) ? S.waistY + 10 : S.crotchY + 20) - S.shoulderY); x = -w / 2; y = S.shoulderY - 8; break;
-      case "outer": byAnchor(ph.top, S.sw * 2 * 1.14, S.kneeY + 30 - S.shoulderY); x = -w / 2; y = S.shoulderY - 10; break;
-      case "bottom":
-        if (isDress) { byAnchor(ph.top, S.sw * 2 * 1.02, S.ankleY + 10 - S.shoulderY); x = -w / 2; y = S.shoulderY - 6; }
-        else { byAnchor(ph.waist, S.hw * 2 * 1.02, S.soleY - 4 - S.waistY); x = -w / 2; y = S.waistY - 4; }
-        break;
-      case "shoes": // 옆모습 한 짝 사진(가로로 긴 경우)은 양발에 한 짝씩
-        if (a > 1.25) { byW((S.ax + S.foot) * 1.25, S.soleY - S.kneeY); y = S.soleY + 6 - h; return [-S.ax - 4, S.ax + 4].map((cx) => img(cx - w / 2)).join(""); }
-        byW((S.ax + S.foot) * 2 * 1.15, S.soleY - S.kneeY); x = -w / 2; y = S.soleY + 6 - h; break;
-      case "bag": byW(S.hw * 1.1, 170); x = -(S.hw + 10) - w * 0.6; y = S.waistY + 24; break;
-      case "hat": byAnchor(ph.max, H.half * 2 * 1.2, (H.eye - H.top) * 1.3); x = -w / 2; y = H.eye - 26 - h; break;
-      case "eyewear": byAnchor(ph.max, H.half * 2 * 0.98, 60); x = -w / 2; y = H.eye - h / 2; break;
-      case "neck":
-        if (it.shape === "scarf") { byW(S.sw * 1.7, S.waistY + 20 - S.neckY); x = -w / 2; y = S.neckY - 16; }
-        else { byW(S.nw * 2 * 1.9, 96); x = -w / 2; y = S.neckY - 4; }
-        break;
-      case "belt": byW(S.ww * 2 * 1.3, 34); x = -w / 2; y = S.waistY + 2 - h / 2; break;
-      default: return "";
-    }
-    return img(x);
-  }
+  // 실제 상품 사진이 있는 아이템도 아바타에는 체형 골격에 맞춰 그린 옷을 입힌다 (사진을 몸 위에 그대로 얹으면 종이인형처럼 떠 보임).
+  // 색은 사진에서 뽑은 대표색(photo.color)을 쓰고, 사진 자체는 옷장·룩북 카드에서 보여줌
+  const wornColor = (it) => (it.photo && /^#[0-9a-f]{6}$/i.test(it.photo.color || "") ? it.photo.color : it.color);
 
   function drawSlot(S, p, slot, it, ctx = {}) {
-    if (it.photo && it.photo.image) return photoSlot(S, p, slot, it);
-    const c = it.color, o = { ...it, tucked: ctx.tucked };
+    const c = wornColor(it), o = { ...it, color: c, tucked: ctx.tucked };
     switch (slot) {
       case "top": return (TOPS[it.shape] || TOPS.tee)(S, c, o);
       case "bottom": return DRESS_SET.has(it.shape) ? DRESSES[it.shape](S, c, o) : (BOTTOMS[it.shape] || BOTTOMS.straight)(S, c, o);
@@ -1106,7 +1068,7 @@ const Avatar = (() => {
       case "shoes": return (SHOES[it.shape] || SHOES.sneakers)(S.shoeS || S, c, o);
       case "bag": return (BAGS[it.shape] || BAGS.bag_shoulder)(S, c, o);
       case "hat": return (HATS[it.shape] || HATS.cap)(S, c, o);
-      case "eyewear": return eyewear(S, p, it);
+      case "eyewear": return eyewear(S, p, o);
       case "neck": return (NECKS[it.shape] || NECKS.necklace)(S, c, o);
       case "belt": return belt(S, c, o, ctx.beltEase ?? 4);
       default: return "";
@@ -1171,10 +1133,16 @@ const Avatar = (() => {
     const K = kit(), skinF = S.skin !== KIT_SKIN_BASE ? ` filter="url(#${S.uid}-skin)"` : "";
     const hairF = ` filter="url(#${S.uid}-hair)"`;
     const hairId = KIT_HAIR[p.hair];
+    // 헤어를 쓰면 얼굴·얼굴 자체 머리는 볼 폭 안쪽만 (귀·옆머리가 헤어 밖으로 삐져나오지 않게). 번 헤어는 귀까지 그대로
+    const half = K.head.coreHalf;
+    const coreClip = (inner) => (hairId && half ? `<g clip-path="url(#${S.uid}-core)">${inner}</g>` : inner);
+    // 눈높이 위로는 타원(둥근 두상), 아래로는 볼 폭 그대로
+    const eyeY = K.head.eye, ry = f1(eyeY - K.head.top + 3);
+    if (hairId && half) S.defs.push(`<clipPath id="${S.uid}-core"><path d="M${-half},${eyeY} A${half},${ry} 0 0 1 ${half},${eyeY} V400 H${-half}Z"/></clipPath>`);
     const hairImg = (name, box) => { const f = hairFile(p, name); return f ? kitImage(f, box) : kitImage(`${name}.png`, box, hairF); };
     return {
       body: kitImage(`bodies/${S.body}.png`, K.bodies[S.body], skinF) + kitImage(`bodies/${S.body}-cloth.png`, K.bodies[S.body]), // 옷은 피부톤 필터 제외
-      head: kitImage(`faces/${p.face}.png`, K.faces[p.face], skinF) + hairImg(`faces/${p.face}-hair`, K.faceHair[p.face]),
+      head: coreClip(kitImage(`faces/${p.face}.png`, K.faces[p.face], skinF) + hairImg(`faces/${p.face}-hair`, K.faceHair[p.face])),
       hair: hairId ? hairImg(`hair/${hairId}`, K.hair[hairId]) : "",
       hairBack: hairId && K.hairBack?.[hairId] ? hairImg(`hair/${hairId}-back`, K.hairBack[hairId]) : "",
     };
@@ -1238,8 +1206,7 @@ const Avatar = (() => {
       L.push(K.head, K.hair);
       for (const slot of ["eyewear", "hat"]) {
         if (!o[slot]) continue;
-        // 실제 상품 사진은 실사 머리 좌표로 바로 놓고, 벡터 모자·안경만 일러스트 머리 좌표에서 옮김
-        L.push(o[slot].photo ? drawSlot(S, p, slot, o[slot]) : `<g transform="${kitHeadTransform(slot)}">${drawSlot(S, p, slot, o[slot])}</g>`);
+        L.push(`<g transform="${kitHeadTransform(slot)}">${drawSlot(S, p, slot, o[slot])}</g>`);
       }
     } else {
       L.push(head(S, p));
@@ -1256,7 +1223,7 @@ const Avatar = (() => {
   const renderCache = new Map();
   const RENDER_CACHE_MAX = 300;
 
-  // 전신 SVG 문자열. opts.view: full | face | upper
+  // 전신 SVG 문자열. opts.view: full | face | upper | bust | body
   function render(profile, outfit, opts = {}) {
     const p = { ...DEFAULT_PROFILE, ...profile };
     const key = JSON.stringify([p, outfit || {}, opts.view || "", !!kit()]);
@@ -1270,12 +1237,24 @@ const Avatar = (() => {
     let vb = "0 0 400 980";
     if (opts.view === "face") vb = `${f1(200 - 80 * s)} ${f1(oy - 30 * s)} ${f1(160 * s)} ${f1(190 * s)}`;
     if (opts.view === "upper") vb = `${f1(200 - 150 * s)} ${f1(oy - 40 * s)} ${f1(300 * s)} ${f1(520 * s)}`;
+    if (opts.view === "bust") vb = `${f1(200 - 125 * s)} ${f1(oy - 22 * s)} ${f1(250 * s)} ${f1(330 * s)}`; // 얼굴·헤어 고르기 화면의 큰 미리보기 (정수리~가슴)
     if (opts.view === "body") vb = `${f1(200 - 190 * s)} ${f1(oy - 50 * s)} ${f1(380 * s)} ${f1(975 * s)}`; // AI 피팅용 전신 크롭
     const defs = baseDefs(S) + (S.kit ? kitDefs(S, p) : "") + S.defs.join("");
     const svg = `<svg xmlns="${NS}" viewBox="${vb}" preserveAspectRatio="xMidYMax meet" role="img" aria-label="아바타"><defs>${defs}</defs><g transform="translate(200,${f1(oy)}) scale(${f1(s * 1000) / 1000})">${inner}</g></svg>`;
     if (renderCache.size >= RENDER_CACHE_MAX) renderCache.delete(renderCache.keys().next().value);
     renderCache.set(key, svg);
     return opts.label ? svg.replace('aria-label="아바타"', `aria-label="${opts.label}"`) : svg;
+  }
+
+  // 헤어만 그린 썸네일 (얼굴 자리는 옅은 실루엣). 키트에 없는 헤어는 얼굴 미리보기로 대신함
+  function hairThumb(profile, hairId) {
+    const p = { ...DEFAULT_PROFILE, ...profile, hair: hairId };
+    if (!useKit(p)) return render(p, {}, { view: "face" });
+    const S = kitSkeleton(p), K = kitLayers(S, p), H = kit().head;
+    const own = KIT_HAIR[hairId] ? "" : K.head.replace(/<image[^>]*faces\/[a-z-]+\.png"[^>]*>/, ""); // 번 헤어 = 얼굴 자체 머리만
+    const sil = `<g fill="#e9e3de"><path d="M${-H.halfW * 0.92},${f1(H.eye - 6)} C${-H.halfW * 0.92},${f1(H.top + 6)} ${H.halfW * 0.92},${f1(H.top + 6)} ${H.halfW * 0.92},${f1(H.eye - 6)} C${H.halfW * 0.9},${f1(H.chin - 14)} ${H.halfW * 0.4},${f1(H.chin)} 0,${f1(H.chin)} C${-H.halfW * 0.4},${f1(H.chin)} ${-H.halfW * 0.9},${f1(H.chin - 14)} ${-H.halfW * 0.92},${f1(H.eye - 6)}Z"/><path d="M${-S.nw},${f1(H.chin - 12)} V${f1(S.shoulderY - 8)} Q${-S.nw - 6},${f1(S.shoulderY + 4)} ${-S.sw},${f1(S.shoulderY + 16)} V${H.top + 260} H${S.sw} V${f1(S.shoulderY + 16)} Q${S.nw + 6},${f1(S.shoulderY + 4)} ${S.nw},${f1(S.shoulderY - 8)} V${f1(H.chin - 12)}Z"/></g>`;
+    const vb = `-100 ${f1(H.top - 32)} 200 236`;
+    return `<svg xmlns="${NS}" viewBox="${vb}" preserveAspectRatio="xMidYMin meet" role="img" aria-hidden="true"><defs>${kitDefs(S, p)}${S.defs.join("")}</defs>${K.hairBack}${sil}${own}${K.hair}</svg>`;
   }
 
   // 옷 하나만 그린 썸네일 (DOM에서 bbox를 재서 딱 맞게 자름)
@@ -1303,5 +1282,5 @@ const Avatar = (() => {
     return svg;
   }
 
-  return { render, thumb, shade, DEFAULT_PROFILE, usesKit: (p) => useKit({ ...DEFAULT_PROFILE, ...p }), KIT_HAIR, SHAPES: { top: Object.keys(TOPS), bottom: [...Object.keys(BOTTOMS), ...Object.keys(DRESSES)], outer: Object.keys(OUTERS), shoes: Object.keys(SHOES) } };
+  return { render, thumb, hairThumb, shade, DEFAULT_PROFILE, usesKit: (p) => useKit({ ...DEFAULT_PROFILE, ...p }), KIT_HAIR, SHAPES: { top: Object.keys(TOPS), bottom: [...Object.keys(BOTTOMS), ...Object.keys(DRESSES)], outer: Object.keys(OUTERS), shoes: Object.keys(SHOES) } };
 })();
