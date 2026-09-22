@@ -5,7 +5,7 @@ colorFrom: blue
 colorTo: pink
 sdk: gradio
 sdk_version: 6.28.0
-python_version: "3.12"
+python_version: "3.11"
 app_file: app.py
 pinned: false
 ---
@@ -310,18 +310,27 @@ python app.py
 
 ## 배포 (Hugging Face Spaces)
 
-1. [huggingface.co/new-space](https://huggingface.co/new-space)에서 Space 생성 (SDK: **Gradio**, 하드웨어: CPU basic 무료)
-2. Space의 **Settings → Variables and secrets**에 `OPENAI_API_KEY`를 **Secret**으로 등록. `FITCAST_MODEL` 등을 바꾸고 싶으면 Variable로 추가
-3. Space 저장소를 리모트로 추가하고 푸시
+GitHub `main`에 푸시하면 Actions 워크플로([.github/workflows/sync-to-hf.yml](.github/workflows/sync-to-hf.yml))가 Space로 자동 동기화해요. 처음 한 번만 아래를 설정합니다.
+
+1. [huggingface.co/join](https://huggingface.co/join)에서 가입 (아이디는 영문·숫자만 가능, 예: `inseo6224`) → [huggingface.co/new-space](https://huggingface.co/new-space)에서 Space 생성 (이름 `Fitcast_OOTD`, SDK: **Gradio**, 하드웨어: CPU basic 무료, 공개)
+2. Space의 **Settings → Variables and secrets**에 `OPENAI_API_KEY`, `SERPAPI_KEY`를 **Secret**으로 등록. `FITCAST_MODEL` 등을 바꾸고 싶으면 Variable로 추가
+3. [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)에서 **Write** 권한 토큰 생성
+4. GitHub 저장소 **Settings → Secrets and variables → Actions**에 등록
+   - Secrets: `HF_TOKEN` = 3번 토큰
+   - Variables: `HF_SPACE` = `<HF아이디>/Fitcast_OOTD`
+5. GitHub **Actions** 탭에서 "Sync to Hugging Face Space"를 **Run workflow**로 한 번 실행 (이후엔 푸시마다 자동)
+6. Space의 **Logs** 탭에서 빌드 확인. 첫 빌드는 누끼 모델 다운로드 때문에 5~10분 걸리고, `Uvicorn running`이 보이면 성공이에요.
+
+수동으로 올리고 싶으면 리모트를 직접 추가해도 돼요.
 
 ```bash
 git remote add space https://huggingface.co/spaces/<HF아이디>/Fitcast_OOTD
 git push space main
 ```
 
-4. Space의 **Logs** 탭에서 빌드 확인. `Running on local URL`이 보이면 성공이에요.
-
 이 README 맨 위의 `---` 블록이 Spaces 설정이에요. `sdk_version`은 로컬에서 `pip show gradio`로 확인한 버전과 맞춰 주세요.
+
+> 💾 Space 디스크는 재시작·재빌드 때 초기화돼요. 회원 DB(SQLite)와 AI 피팅 캐시가 지워지니, 유지가 필요하면 Settings에서 Persistent storage(유료)를 켜세요.
 
 > 💸 공개 Space는 누구나 들어와서 내 API 키로 요청을 보낼 수 있어요. OpenAI 대시보드에서 **월 사용 한도**를 꼭 걸어두고, 심사·시연이 끝나면 Space를 Private으로 돌리거나 키를 폐기해요.
 
