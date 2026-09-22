@@ -29,6 +29,7 @@ NECK_BASE_REF = 160.0  # 목 밑단 기준 (이보다 목 밑단이 높은 체�
 NECK_COVER = 34  # 얼굴 사진의 목 컷 선을 몸 목 윗단보다 이 만큼 아래에 (골격 단위)
 HAIR_OVERLAP = 1.02  # 헤어 안쪽 가장자리가 볼 폭보다 살짝 넓게 (귀·옆머리를 덮음)
 BACK_FILL_R = 90  # 헤어 실루엣 홈을 메우는 닫힘 반지름 (헤어 원본 px)
+BACK_FILL_DEPTH = {"short-layered": 1.85}  # 채움을 정수리 아래 어디까지 둘지 (HAIR_HEAD_W 배수, 기본 1.3=눈높이, 1.85=턱)
 HEAD_SCALE = 0.84  # 목 폭 기준 배율에 곱하는 머리 크기 보정 (작을수록 머리가 작아 등신이 커짐)
 FACE_SQUEEZE = 0.94  # 얼굴 가로 배율 (살짝만 갸름하게)
 FACE_SY = 0.9  # 얼굴 세로 배율 (원본이 세로로 길어 머리 길이를 줄임 → 헤어를 올릴 때 정수리가 덜 튀어나옴)
@@ -269,6 +270,29 @@ def own_hair_layer(img: Image.Image, m: dict) -> Image.Image:
     return Image.fromarray(arr.astype(np.uint8), "RGBA")
 
 
+def skin_layer(img: Image.Image, own: Image.Image, m: dict) -> Image.Image:
+    """헤어 PNG를 쓸 때의 얼굴 레이어: 사진 자체 머리를 뺀 피부만.
+
+    - 얼굴 안쪽(볼 폭 + 8px): 정수리 머리만 뺌. 이마 살색은 헤어라인+10 아래 12px에 걸쳐 살려 둠
+    - 얼굴 바깥쪽: 눈높이 아래에서 살색이 이어지는 곳(귀·턱선)만 남김 → 사진 가장자리의 옆머리·옅은 띠가 헤어 틈으로 비치지 않음
+    빈 곳은 뒷머리 레이어(back_fill)의 머리 타원 바탕이 채운다.
+    """
+    arr = np.asarray(img, dtype=np.float32).copy()
+    rgb, alpha = arr[..., :3], arr[..., 3] / 255
+    h, w = alpha.shape
+    core = (np.abs(np.arange(w) - m["cx"]) <= m["cheek"] / 2 + 8)[None, :].repeat(h, 0)
+    is_skin = (alpha > 0.5) & (rgb[..., 0] - rgb[..., 2] > 16) & (rgb.min(2) > 140)
+    keep = core.copy()
+    for y in range(int(m["eye"]), h):
+        xs = np.flatnonzero(is_skin[y])
+        if len(xs):
+            keep[y, xs[0] : xs[-1] + 1] = True
+    forehead = np.clip((np.arange(h) - m["hairline"] - 10) / 12.0, 0, 1)[:, None]  # 헤어라인+10 아래는 1
+    own_a = np.asarray(own.getchannel("A"), dtype=np.float32) / 255
+    arr[..., 3] *= soften(keep, erode=0, blur=1.0) * (1 - own_a * (1 - forehead))
+    return Image.fromarray(arr.astype(np.uint8), "RGBA")
+
+
 def eye_offset(img: Image.Image, m: dict) -> float:
     """기준 얼굴에서 얼굴 중심 ~ 왼쪽 눈동자 가로 거리 (픽셀)."""
     lum = np.asarray(img.convert("RGB"), dtype=np.float32).mean(2)
@@ -345,12 +369,9 @@ def inner_edge(alpha: np.ndarray) -> float:
 
 # 헤어별 미세 보정: (배율 배수, 가로 이동, 세로 이동) — 헤어 원본 px 기준, 자동 맞춤 뒤에 적용
 HAIR_ADJUST = {
-    "long-straight": (1.0, 0, -10), "long-wave": (1.04, 0, 0), "hush-cut": (1.0, 0, -60),
-    "bob": (0.98, 0, -60), "ponytail": (0.94, 0, 0), "short-layered": (0.9, 30, -5),
+    "long-straight": (1.12, 0, -10), "long-wave": (1.1, 0, -25), "hush-cut": (0.9, 0, -60),
+    "bob": (0.78, 0, -90), "ponytail": (0.8, 12, 0), "short-layered": (0.74, 60, -5),
 }
-# 정수리와 안쪽 가장자리 두 점으로 배율을 정하는 헤어 (원본 정수리가 낮아 너무 커지므로 지금은 쓰지 않음)
-HAIR_TWO_ANCHOR: set[str] = set()
-CROWN_MARGIN = 16  # 헤어 정수리가 얼굴 머리 꼭대기보다 이만큼 위에 (정규화 얼굴 px)
 
 
 def fit_hair(name: str, alpha: np.ndarray, m: dict) -> tuple[float, float, float]:
@@ -362,12 +383,7 @@ def fit_hair(name: str, alpha: np.ndarray, m: dict) -> tuple[float, float, float
     k, adx, ady = HAIR_ADJUST[name]
     target = m["eye"] - 34 if HAIR_EDGE[name] == "brow" else m["hairline"] + 4
     edge = inner_edge(alpha) - ady
-    if name in HAIR_TWO_ANCHOR:
-        # 정수리~안쪽 가장자리 높이를 얼굴의 (머리 꼭대기-여백)~목표 높이에 맞춤 → 정수리가 얼굴 자체 머리를 완전히 덮음
-        crown = crown_y(alpha)
-        s = (target - (m["top"] - CROWN_MARGIN)) / max(1.0, edge - crown) * k
-    else:
-        s = m["head"] * HAIR_OVERLAP / HAIR_HEAD_W * k
+    s = m["head"] * HAIR_OVERLAP / HAIR_HEAD_W * k
     return float(s), float(m["cx"] - (HAIR_CX - adx) * s), float(target - edge * s)
 
 
@@ -377,11 +393,12 @@ def crown_y(alpha: np.ndarray) -> float:
     return float(np.flatnonzero(band.any(1))[0])
 
 
-def back_fill(rgb: np.ndarray, alpha: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def back_fill(rgb: np.ndarray, alpha: np.ndarray, head: tuple[float, float, float, float], depth: float = 1.3) -> tuple[np.ndarray, np.ndarray]:
     """헤어 실루엣의 움푹 파인 곳(귀·목 자리로 비워둔 홈)을 메우는 '뒷머리' 레이어.
 
     홈은 원본 일러스트의 넓은 머리 기준이라 우리 얼굴보다 바깥에 생겨 배경이 네모나게 비친다.
-    실루엣을 모폴로지 닫힘(반지름 BACK_FILL_R)으로 메운 뒤 원래 머리를 뺀 부분만, 머리 영역 안에서 남긴다.
+    ① 실루엣을 모폴로지 닫힘(반지름 BACK_FILL_R)으로 메운 부분 ② 얼굴 머리 타원(head=cx,cy,rx,ry, 헤어 원본 px) 안쪽,
+    두 곳에서 원래 머리를 뺀 부분만 남긴다. 얼굴 피부 레이어는 옆머리를 지운 상태라 이 레이어가 귀 뒤 머리가 된다.
     질감은 좌우를 뒤집은 머리로 채우고(홈 반대쪽엔 머리가 있음), 없으면 평균 머리색으로. 얼굴·몸 뒤에 그린다.
     """
     from scipy import ndimage
@@ -392,8 +409,10 @@ def back_fill(rgb: np.ndarray, alpha: np.ndarray) -> tuple[np.ndarray, np.ndarra
     closed = ndimage.distance_transform_edt(inside) > BACK_FILL_R  # 침식 → 닫힘
     yy, xx = np.mgrid[:h, :w]
     crown = crown_y(alpha)
-    band = (yy > crown + 80) & (yy < crown + HAIR_HEAD_W * 1.3) & (np.abs(xx - HAIR_CX) < HAIR_HEAD_W * 0.8)
-    fill = closed & ~mask & band
+    band = (yy > crown + 80) & (yy < crown + HAIR_HEAD_W * depth) & (np.abs(xx - HAIR_CX) < HAIR_HEAD_W * 0.8)
+    hx, hy, rx, ry = head
+    skull = (((xx - hx) / rx) ** 2 + ((yy - hy) / ry) ** 2 < 1) & (yy > crown + 80)
+    fill = (closed & band | skull) & ~mask
     fill_a = soften(fill, erode=0, blur=3.0)
     mirror_rgb, mirror_a = rgb[:, ::-1], alpha[:, ::-1]
     mean = rgb[alpha > 0.85].mean(0)
@@ -567,26 +586,18 @@ def build() -> dict:
     layout["hairColors"] = list(HAIR_COLORS)
     for n, img in faces.items():
         layout["faces"][n] = crop_save(img, OUT / "faces" / f"{n}.png", face_origin, face_unit)
-        # 얼굴 피부 대표색 (볼 부근 살색 평균) → 웹이 헤어 틈을 메우는 머리 바탕색으로 씀
-        arr = np.asarray(img, dtype=np.float32)
-        fm = fmarks[n]
-        band = arr[int(fm["eye"] + 30) : int(fm["eye"] + 70), int(fm["cx"] - fm["cheek"] / 3) : int(fm["cx"] + fm["cheek"] / 3)]
-        skin_px = band[(band[..., 3] > 200) & (band[..., 0] - band[..., 2] > 8)][:, :3]
-        layout["faces"][n]["skin"] = "#" + "".join(f"{int(v):02x}" for v in (skin_px.mean(0) if len(skin_px) else [239, 201, 173]))
         own = own_hair_layer(img, fmarks[n])
         layout["faceHair"][n] = crop_save(own, OUT / "faces" / f"{n}-hair.png", face_origin, face_unit, tinted=base)
-        # 정수리(헤어라인 위) 자체 머리만 뺀 레이어: 헤어 PNG를 쓸 때 정수리가 헤어 위로 튀지 않게. 관자놀이·옆머리는 남겨
-        # 헤어 틈(짧은 컷의 이마 옆 등)으로 보여도 살색 구멍이 아니라 자연스러운 옆머리로 보이게 함
-        skin = np.asarray(img, dtype=np.float32).copy()
-        crown = np.clip((fm["hairline"] + 10 - np.arange(skin.shape[0])) / 12.0, 0, 1)[:, None]  # 헤어라인 아래 12px에 걸쳐 0으로
-        skin[..., 3] *= 1 - (np.asarray(own.getchannel("A"), dtype=np.float32) / 255) * crown
-        layout["faceSkin"][n] = crop_save(Image.fromarray(skin.astype(np.uint8), "RGBA"), OUT / "faces" / f"{n}-skin.png", face_origin, face_unit)
+        # 헤어 PNG를 쓸 때의 얼굴: 사진 자체 머리를 뺀 피부만 (빈 곳은 뒷머리 레이어가 채움)
+        layout["faceSkin"][n] = crop_save(skin_layer(img, own, fmarks[n]), OUT / "faces" / f"{n}-skin.png", face_origin, face_unit)
     for n in HAIRS:
         rgb, alpha = hair_layers[n]
         s, dx, dy = fit_hair(n, alpha, ref)
         # 헤어 원본 픽셀 → 얼굴 프레임(×s, +dx,dy) → 골격 단위
         origin = F(dx, dy)
-        back_rgb, back = back_fill(rgb, alpha)
+        # 얼굴 머리 타원을 헤어 원본 px로 (정규화 프레임 px → 원본: (v - 이동) / 배율)
+        skull = ((ref["cx"] - dx) / s, ((ref["top"] + ref["chin"]) / 2 - dy) / s, ref["head"] / 2 / s, (ref["chin"] - ref["top"]) / 2 / s)
+        back_rgb, back = back_fill(rgb, alpha, skull, BACK_FILL_DEPTH.get(n, 1.3))
         if n == "ponytail":
             alpha, tail = split_ponytail(alpha)
             back_rgb = np.where((tail > back)[..., None], rgb, back_rgb)
