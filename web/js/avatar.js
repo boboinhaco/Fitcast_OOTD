@@ -1140,8 +1140,8 @@ const Avatar = (() => {
     const eyeY = K.head.eye, ry = f1(eyeY - K.head.top + 3);
     if (hairId && half) S.defs.push(`<clipPath id="${S.uid}-core"><path d="M${-half},${eyeY} A${half},${ry} 0 0 1 ${half},${eyeY} V400 H${-half}Z"/></clipPath>`);
     const hairImg = (name, box) => { const f = hairFile(p, name); return f ? kitImage(f, box) : kitImage(`${name}.png`, box, hairF); };
-    // 헤어 PNG를 쓸 때의 머리 구성: ① 머리 모양 바탕(피부색, 헤어 틈으로 배경이 비치지 않게) ② 자체 머리를 뺀 피부만 얼굴
-    // ③ 얼굴 자체 머리는 헤어 실루엣 안에서만 ④ 헤어. ①②는 '헤어라인 아래 + 헤어 실루엣'으로 한 번 더 제한 (정수리 위로 삐져나오지 않게)
+    // 헤어 PNG를 쓸 때의 머리 구성: ① 뒷머리(hairBack: 실루엣 홈 메움 + 머리 타원 바탕, 몸 뒤) ② 자체 머리를 뺀 피부만 얼굴(-skin)
+    // ③ 얼굴 자체 머리는 헤어 실루엣 안에서만 ④ 헤어. ②는 '헤어라인 아래 + 헤어 실루엣'으로 한 번 더 제한 (정수리 위로 삐져나오지 않게)
     let head;
     if (hairId && K.hair[hairId] && K.faceSkin?.[p.face]) {
       const sil = kitImage(`hair/${hairId}.png`, K.hair[hairId]) + (K.hairBack?.[hairId] ? kitImage(`hair/${hairId}-back.png`, K.hairBack[hairId]) : "");
@@ -1151,7 +1151,7 @@ const Avatar = (() => {
       S.defs.push(`<linearGradient id="${S.uid}-hg" x1="0" y1="${f1(hlY)}" x2="0" y2="${f1(hlY + 16)}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient>`);
       S.defs.push(`<mask id="${S.uid}-hm" ${mattrs}><rect x="-300" y="${f1(hlY)}" width="600" height="1600" fill="url(#${S.uid}-hg)"/>${sil}</mask>`);
       S.defs.push(`<mask id="${S.uid}-hs" ${mattrs}>${sil}</mask>`);
-      // 정수리 자체 머리를 뺀 얼굴(-skin) + 헤어 실루엣 안에서만 보이는 자체 머리(-hair) + 헤어
+      // 자체 머리를 뺀 얼굴(-skin) + 헤어 실루엣 안에서만 보이는 자체 머리(-hair) + 헤어
       head = `<g mask="url(#${S.uid}-hm)">${kitImage(`faces/${p.face}-skin.png`, K.faceSkin[p.face], skinF)}</g>`
         + `<g mask="url(#${S.uid}-hs)">${coreClip(hairImg(`faces/${p.face}-hair`, K.faceHair[p.face]))}</g>`;
     } else {
@@ -1255,7 +1255,7 @@ const Avatar = (() => {
     const s = clamp(p.height, 130, 210) / 200 * 0.95;
     const ground = 955, oy = ground - 900 * s;
     let vb = "0 0 400 980";
-    if (opts.view === "face") vb = `${f1(200 - 72 * s)} ${f1(oy - 46 * s)} ${f1(144 * s)} ${f1(172 * s)}`;
+    if (opts.view === "face") vb = `${f1(200 - 75 * s)} ${f1(oy - 12 * s)} ${f1(150 * s)} ${f1(165 * s)}`; // 헤어 꼭대기~턱 아래 (헤어 썸네일 카드 10:11)
     if (opts.view === "upper") vb = `${f1(200 - 150 * s)} ${f1(oy - 40 * s)} ${f1(300 * s)} ${f1(520 * s)}`;
     if (opts.view === "bust") vb = `${f1(200 - 125 * s)} ${f1(oy - 58 * s)} ${f1(250 * s)} ${f1(340 * s)}`; // 얼굴·헤어 고르기 화면의 큰 미리보기 (정수리~가슴)
     if (opts.view === "body") vb = `${f1(200 - 190 * s)} ${f1(oy - 50 * s)} ${f1(380 * s)} ${f1(975 * s)}`; // AI 피팅용 전신 크롭
