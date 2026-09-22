@@ -11,7 +11,7 @@ import nbformat
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "최인서_Fitcast.ipynb"
+OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "3반_최인서_Fitcast.ipynb"
 
 md = lambda s: nbformat.v4.new_markdown_cell(s.strip("\n"))
 code = lambda s: nbformat.v4.new_code_cell(s.strip("\n"))
