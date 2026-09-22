@@ -67,27 +67,45 @@ def download_product(url: str) -> bytes:
         raise TryOnError(str(e)) from e
 
 
-def cache_key(avatar_png: bytes, products: list[dict]) -> str:
-    """같은 아바타·상품·모델·프롬프트면 같은 키 (시연용 결과 재사용)."""
+def cache_key(avatar_png: bytes, products: list[dict], profile: dict | None = None) -> str:
+    """같은 아바타·상품·프로필·모델·프롬프트면 같은 키 (시연용 결과 재사용)."""
     h = hashlib.sha256(avatar_png)
     for p in products:
         h.update(f"|{p.get('image', '')}|{p.get('name', '')}".encode())
-    h.update(f"|{config.IMAGE_MODEL}|{TRYON_PROMPT}".encode())
+    h.update(f"|{config.IMAGE_MODEL}|{TRYON_PROMPT}|{profile_text(profile)}".encode())
     return h.hexdigest()[:32]
 
 
-def build_prompt(products: list[dict]) -> str:
+def profile_text(profile: dict | None) -> str:
+    """온보딩 프로필(키·몸무게·체형·헤어)을 프롬프트 한 문장으로."""
+    if not profile:
+        return ""
+    bits = []
+    if profile.get("height") and profile.get("weight"):
+        bits.append(f"{profile['height']} cm tall and {profile['weight']} kg")
+    if profile.get("body"):
+        bits.append(f"{profile['body']} body shape")
+    if profile.get("hair"):
+        bits.append(f"{profile['hair']} hairstyle")
+    if profile.get("face"):
+        bits.append(f"{profile['face']} facial mood")
+    if not bits:
+        return ""
+    return "The model is " + ", ".join(bits) + "; fit the garments to this body and keep this hairstyle."
+
+
+def build_prompt(products: list[dict], profile: dict | None = None) -> str:
     items = "; ".join(f"image {i + 2}: {p.get('label') or ''} {p.get('name') or 'item'}".strip() for i, p in enumerate(products))
-    return TRYON_PROMPT.format(items=items)
+    return TRYON_PROMPT.format(items=items, profile=profile_text(profile))
 
 
-def generate_tryon(avatar_data_url: str, products: list[dict]) -> dict:
-    """아바타(data URL)와 상품 목록[{image, name, label}]으로 입힌 이미지를 생성해 PNG data URL 반환."""
+def generate_tryon(avatar_data_url: str, products: list[dict], profile: dict | None = None) -> dict:
+    """아바타(data URL)와 상품 목록[{image, name, label}], 프로필(키·몸무게·체형·헤어)로 입힌 이미지를 생성해 PNG data URL 반환."""
     products = [p for p in products if p.get("image")][:MAX_PRODUCTS]
     if not products:
         raise TryOnError("실제 상품 이미지가 있는 아이템이 하나 이상 필요해요.")
     avatar_png = fit_canvas(to_png(decode_data_url(avatar_data_url), max_side=1536))
-    key = cache_key(avatar_png, products)
+    key = cache_key(avatar_png, products, profile)
     cached = config.TRYON_CACHE_DIR / f"{key}.png"
     if cached.exists():
         return {"image": "data:image/png;base64," + base64.b64encode(cached.read_bytes()).decode(), "cached": True, "key": key}
@@ -100,7 +118,7 @@ def generate_tryon(avatar_data_url: str, products: list[dict]) -> dict:
     files += [(f"product{i}.png", to_png(download_product(p["image"])), "image/png") for i, p in enumerate(products)]
     try:
         result = OpenAI().images.edit(
-            model=config.IMAGE_MODEL, image=files, prompt=build_prompt(products), size="1024x1536", n=1,
+            model=config.IMAGE_MODEL, image=files, prompt=build_prompt(products, profile), size="1024x1536", n=1,
         )
         b64 = result.data[0].b64_json
     except Exception as e:  # 모델·네트워크 오류는 화면에 안내만 하고 핵심 기능은 그대로

@@ -43,12 +43,25 @@
   const ui = {
     // 실제 상품: 검색 키워드 → { status: loading|ok|none, items, idx }
     products: {}, productsEnabled: false,
-    tryon: { open: false, loading: false, image: "", error: "", cached: false },
+    tryon: { open: false, loading: false, image: "", error: "", cached: false, key: "" },
+    // 회원: user(null이면 비로그인), auth 모달, 저장한 코디
+    user: null, auth: { open: false, mode: "login", error: "", loading: false },
+    looks: { items: [], loaded: false, loading: false },
     tab: "wardrobe", cat: "top", onlyMine: true,
     ai: { city: "", day: 0, tpo: "일상", note: "", loading: false, result: null, error: "" },
   };
   function save() {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch { /* 저장 불가 환경은 무시 */ }
+    syncProfile();
+  }
+  // 로그인 상태면 아바타 프로필을 계정에도 저장 (연타 방지로 잠깐 모아서)
+  let syncTimer;
+  function syncProfile() {
+    if (!ui.user) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+      fetch("/api/me/profile", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ profile: state.profile }) }).catch(() => {});
+    }, 800);
   }
 
   let toastTimer;
@@ -144,14 +157,40 @@
 
   const P = (o) => ({ ...Avatar.DEFAULT_PROFILE, ...o });
   const av = (profile, look, view) => Avatar.render(P(profile), typeof look === "string" ? lookFromSample(look) : look, { view });
+  // 얼굴 원본 사진(avatar-kit/photos)을 손대지 않고, 빌드 때 잰 정사각형 구도(crop: 눈이 중앙, 머리 폭 기준)로 잘라 보여줌.
+  // hair를 주면 그 위에 헤어 누끼(컬러별 PNG)를 올리고, 얼굴은 '헤어라인 아래 + 헤어 실루엣 안'으로 마스크 (자체 머리가 헤어 밖으로 튀지 않게).
+  // 아바타 렌더러와 같은 방식의 인라인 SVG. 좌표는 모두 원본 사진 px
+  let photoSeq = 0;
+  function photoHead(face, hair, colorId) {
+    const K = window.AVATAR_KIT, ph = K?.photos?.[face], hid = hair ? Avatar.KIT_HAIR[hair] : null;
+    if (!ph) return av({ face, hair: hair || "bun" }, {}, "face");
+    const c = ph.crop, uid = `ph${++photoSeq}`, col = colorId || "darkbrown";
+    const px = (box) => ({ x: (box.x / 100) * ph.w, y: (box.y / 100) * ph.h, w: (box.w / 100) * ph.w, h: (box.h / 100) * ph.h });
+    const img = (href, b, extra = "") => `<image href="${href}" x="${b.x.toFixed(1)}" y="${b.y.toFixed(1)}" width="${b.w.toFixed(1)}" height="${b.h.toFixed(1)}" preserveAspectRatio="none"${extra}/>`;
+    const faceBox = { x: 0, y: 0, w: ph.w, h: ph.h };
+    const boxes = hid ? ph.hair[hid] : null;
+    let defs = "", faceLayer = img(`/avatar-kit/${ph.file}`, faceBox), back = "", front = "";
+    if (boxes) {
+      const hb = px(boxes.hair), bb = boxes.back ? px(boxes.back) : null;
+      const hairHref = `/avatar-kit/hair/${hid}.${col}.png`, backHref = `/avatar-kit/hair/${hid}-back.${col}.png`;
+      defs = `<defs><mask id="${uid}" maskUnits="userSpaceOnUse" x="${c.x - 400}" y="${c.y - 400}" width="${c.size + 800}" height="${c.size + 800}" style="mask-type:alpha"><rect x="${c.x - 400}" y="${((ph.hairline / 100) * ph.h - 4).toFixed(1)}" width="${c.size + 800}" height="${c.size + 800}" fill="#fff"/>${img(hairHref, hb)}${bb ? img(backHref, bb) : ""}</mask></defs>`;
+      faceLayer = `<g mask="url(#${uid})">${faceLayer}</g>`;
+      back = bb ? img(backHref, bb) : "";
+      front = img(hairHref, hb);
+    }
+    return `<svg class="photo-head" viewBox="${c.x} ${c.y} ${c.size} ${c.size}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${defs}${back}${faceLayer}${front}</svg>`;
+  }
+
+  // 랜딩 룩북 사진 (web/img/fit1~7.jpg, 세로 1:3). 카드 비율에 맞춰 잘라 보여주고 사진 비율은 유지 (object-fit: cover)
+  const photo = (n, pos = "center top", alt = "핏캐스트 룩북") => `<img class="photo" src="/static/img/fit${n}.jpg" alt="${alt}" style="object-position:${pos}" loading="lazy" />`;
 
   // ───────── 랜딩 ─────────
   function viewLanding() {
     const faces = FACE_TYPES.map((f, i) => {
-      const hairs = ["long_straight", "bob", "hush", "ponytail", "long_wave", "bun", "short"];
+      const hairs = ["long_straight", "bob", "hush", "ponytail", "long_wave", "short", "short"];
       const male = f.genders && !f.genders.includes("female");
       if (male) return `<figure><div class="card bg-studio soon-card"><span>MEN<br><small>개발 중</small></span></div><figcaption>${f.ko} · 준비 중</figcaption></figure>`;
-      return `<figure><div class="card bg-studio">${av({ face: f.id, hair: hairs[i], hairColor: HAIR_COLORS[i % 4].hex }, {}, "face")}</div><figcaption>${f.ko}</figcaption></figure>`;
+      return `<figure><div class="card bg-studio">${photoHead(f.id, null)}</div><figcaption>${f.ko}</figcaption></figure>`;
     }).join("");
 
     return `
@@ -160,14 +199,14 @@
         ${bar("Fitcast OOTD", "핏캐스트 옷차림 예보", "_today", "item 01")}
         <div class="hero-grid">
           <div class="ghost" style="right:-60px;top:-30px">real<br>fit</div>
-          <div class="card hero-card bg-brick">${av({ face: "cat", hair: "long_straight", hairColor: "#3a2a22" }, "office", "upper")}</div>
+          <div class="card hero-card">${photo(1, "center 3%", "가을 룩북")}</div>
           <div>
             ${tagline("FIT", "FORECAST", 150)}
             <p class="copy"><b>일기예보는 봤는데, 뭘 입을지 모르겠다면.</b><br>
             내 <b>체형·얼굴상·헤어</b>로 만든 가상 아바타에<br>옷을 한 벌씩 입혀보고, 오늘 날씨에 맞는 코디를<br>AI가 예보해 드려요. 마음에 들면 바로 쇼핑까지❤︎</p>
             <div class="cta-row"><span class="name">Start My Fitting</span><a class="btn dark" href="#setup">start ${arrow}</a></div>
           </div>
-          <div class="stand">${av({ face: "puppy", hair: "bun", hairColor: "#1f1b1a" }, "mori")}</div>
+          <div class="stand">${photo(4, "center center", "비 오는 날 트렌치 룩")}</div>
         </div>
       </div>
     </section>
@@ -188,9 +227,9 @@
             <div class="cta-row"><span class="name">Build My Avatar</span><a class="btn dark" href="#setup">start ${arrow}</a></div>
           </div>
           <div class="collage">
-            <div class="card bg-studio" style="left:0;top:70px;width:34%;height:56%">${av({ face: "rabbit", hair: "hush", hairColor: "#5b3a28" }, "ballet", "upper")}</div>
-            <div class="card bg-ribbon" style="left:28%;top:230px;width:30%;height:44%;z-index:2">${av({ face: "hamster", hair: "bob", hairColor: "#a07a5c", height: 156 }, "preppy", "face")}</div>
-            <div class="card bg-stone" style="right:0;top:0;width:44%;height:100%">${av({ face: "cat", hair: "short", hairColor: "#1f1b1a", height: 170, body: "rect" }, "street")}</div>
+            <div class="card" style="left:0;top:40px;width:36%;height:60%">${photo(2, "center 12%", "블루 가디건 룩")}</div>
+            <div class="card" style="left:26%;top:52%;width:32%;height:44%;z-index:2">${photo(7, "center 6%", "옐로 자켓 룩")}</div>
+            <div class="card" style="right:0;top:0;width:46%;height:100%">${photo(3, "center center", "린넨 원피스 룩")}</div>
           </div>
         </div>
         <div class="face-row">${faces}</div>
@@ -202,10 +241,10 @@
         ${bar("Fitting Room", "피팅룸", `_${STYLES.length}styles`, "item 03")}
         <div class="trio-grid">
           <div class="collage">
-            <div class="card bg-garden" style="left:0;top:60px;width:52%;height:82%">${av({ face: "deer", hair: "long_wave", hairColor: "#3a2a22", height: 168 }, "boho")}</div>
-            <div class="card bg-stone" style="right:0;top:0;width:50%;height:66%;z-index:2">${av({ face: "fox", hair: "bob", hairColor: "#5b3a28", height: 168 }, "classic", "upper")}</div>
+            <div class="card" style="left:0;top:60px;width:52%;height:82%">${photo(5, "center center", "체크 스커트 룩")}</div>
+            <div class="card" style="right:0;top:0;width:50%;height:66%;z-index:2">${photo(6, "center 10%", "트랙 팬츠 룩")}</div>
           </div>
-          <div class="stand">${av({ face: "fox", hair: "ponytail", hairColor: "#1f1b1a", height: 170 }, "y2k")}</div>
+          <div class="stand cutout"><img src="/static/img/fit11.png" alt="가디건과 와이드 슬랙스 룩" loading="lazy" /></div>
           <div>
             ${tagline("STYLE", `${STYLES.length} LOOKS`, 90, true)}
             <p class="copy" style="text-align:right">상의·하의·아우터·신발·가방까지<br><b>옷장에서 하나씩 골라 아바타에 입혀보세요.</b><br>매거진 룩북처럼 착용한 아이템이 정리되고,<br>무신사·29CM·지그재그 검색 링크가 바로 붙어요.</p>
@@ -229,8 +268,8 @@
             <div class="cta-row"><span class="name">Weather Fit</span><a class="btn dark" href="${state.done ? "#fitting" : "#setup"}">forecast ${arrow}</a></div>
           </div>
           <div class="collage">
-            <div class="card bg-sky" style="left:4%;top:0;width:46%;height:100%">${av({ face: "deer", hair: "long_straight", hairColor: "#5b3a28" }, "classic")}</div>
-            <div class="card bg-blush" style="right:0;top:90px;width:42%;height:70%;z-index:2">${av({ face: "puppy", hair: "short", hairColor: "#a07a5c", height: 166 }, "gorp", "upper")}</div>
+            <div class="card" style="left:4%;top:0;width:46%;height:100%">${photo(8, "center top", "린넨 블라우스와 랩 스커트 룩")}</div>
+            <div class="card" style="right:0;top:90px;width:42%;height:70%;z-index:2">${photo(9, "center 8%", "레더 자켓과 카고 팬츠 룩")}</div>
           </div>
         </div>
       </div>
@@ -254,8 +293,9 @@
   ];
   const MAX_STYLES = 5;
 
+  // 온보딩 미리보기는 옷을 입히지 않은 기본 아바타 (스타일을 골라도 그대로)
   function previewLook() {
-    return state.profile.styles.length ? autoLook(state.profile.styles) : {};
+    return {};
   }
 
   function ruler() {
@@ -311,16 +351,17 @@
   const CHECK = `<span class="check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
   const bustPreview = () => Avatar.render(state.profile, {}, { view: "bust", label: "내 아바타 미리보기" });
 
+  const hairColorId = (p) => HAIR_COLORS.find((c) => c.hex.toLowerCase() === String(p.hairColor || "").toLowerCase())?.id || "darkbrown";
+
   function stepLook() {
     const p = state.profile;
-    const faceHair = Avatar.usesKit(p) ? "bun" : p.hair; // 얼굴만 비교되게 머리는 묶은 모습으로
     return `
       <div class="look-grid">
         <section class="look-panel" aria-label="얼굴 분위기">
           <h2>얼굴 분위기</h2><p>원하는 분위기의 얼굴을 선택하세요.</p>
           <div class="look-opts faces">${forGender(FACE_TYPES, p.gender).map((f) => `
             <button class="look-opt" data-k="f-${f.id}" data-act="face" data-v="${f.id}" aria-pressed="${p.face === f.id}" title="${esc(f.desc)}">
-              <span class="pic round">${Avatar.render({ ...p, face: f.id, hair: faceHair }, {}, { view: "face" })}</span>${CHECK}
+              <span class="pic round">${photoHead(f.id, null)}</span>${CHECK}
               <span class="t">${f.ko}</span>
             </button>`).join("")}</div>
         </section>
@@ -330,7 +371,7 @@
           <div class="swatches">${HAIR_COLORS.map((c) => `<button class="swatch" data-k="hc-${c.id}" data-act="hairColor" data-v="${c.hex}" style="background:${c.hex}" aria-pressed="${p.hairColor === c.hex}" aria-label="${c.ko}" title="${c.ko}"></button>`).join("")}</div>
           <div class="look-opts hairs">${forGender(HAIR_STYLES, p.gender).map((h) => `
             <button class="look-opt" data-k="h-${h.id}" data-act="hair" data-v="${h.id}" aria-pressed="${p.hair === h.id}">
-              <span class="pic">${Avatar.hairThumb(p, h.id)}</span>${CHECK}
+              <span class="pic">${photoHead(p.face, h.id === "bun" ? null : h.id, hairColorId(p))}</span>${CHECK}
               <span class="t">${h.ko}</span>
             </button>`).join("")}</div>
         </section>
@@ -402,16 +443,6 @@
     return c && c.status === "ok" ? c.items[c.idx] : null;
   }
 
-  // 아바타에 입힐 옷: 옷장 사진은 그대로, 검색된 상품은 누끼가 준비되면 사진으로 (그 전엔 벡터 옷)
-  function dressed(outfit = state.outfit) {
-    const out = {};
-    for (const [slot, e] of Object.entries(outfit)) {
-      const pr = e.photo ? null : productOf(e);
-      out[slot] = pr?.cutout ? { ...e, photo: pr.cutout } : e;
-    }
-    return out;
-  }
-
   // 입은 아이템마다 실제 상품을 한 번씩 검색 (같은 키워드는 재사용, 옷장 아이템은 사진이 있어 검색 안 함)
   function ensureProducts() {
     if (!ui.productsEnabled || route() !== "fitting") return;
@@ -420,7 +451,7 @@
       const k = keywordOf(e);
       if (ui.products[k]) continue;
       ui.products[k] = { status: "loading", items: [], idx: 0 };
-      fetch(`/api/products?q=${encodeURIComponent(k)}&n=6&cut=1`)
+      fetch(`/api/products?q=${encodeURIComponent(k)}&n=6&female=1`)
         .then((r) => r.json())
         .then((d) => { ui.products[k] = { status: d.items?.length ? "ok" : "none", items: d.items || [], idx: 0 }; })
         .catch(() => { ui.products[k] = { status: "none", items: [], idx: 0 }; })
@@ -454,17 +485,24 @@
     }).join("");
   }
 
+  // Shop the look: 입은 아이템의 실제 상품을 카드로 (사진·판매처·상품명·가격 + 판매처 링크·플랫폼 검색)
   function shopList() {
-    const entries = wornEntries().map(([, e]) => e);
+    const entries = wornEntries();
     if (!entries.length) return "";
-    return `<div class="shoplist"><h4>Shop the look</h4>${entries.map((e) => {
+    return `<section class="shoplist"><h4>Shop the look</h4><div class="shop-grid">${entries.map(([slot, e]) => {
       const pr = productOf(e);
-      const title = pr ? `${pr.brand ? `[${pr.brand}] ` : ""}${pr.name} · ${won(pr.price)}` : `${e.name}${e.colorName ? ` · ${e.colorName}` : ""}`;
-      return `<div class="shoprow"><b>${esc(title)}</b>
-        ${pr ? `<a class="direct" href="${esc(pr.link)}" target="_blank" rel="noopener">${esc(pr.mall || "상품")}에서 보기 ↗</a>` : ""}
-        ${Object.entries(shopLinks(e)).map(([k, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(k)} ↗</a>`).join("")}
-      </div>`;
-    }).join("")}</div>`;
+      const pic = pr ? `<img src="${esc(pr.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" />` : Avatar.thumb({ ...e, slot }, e.color);
+      const links = Object.entries(shopLinks(e)).map(([k, u]) => `<a class="chip" href="${esc(u)}" target="_blank" rel="noopener">${esc(k)}</a>`).join("");
+      return `<article class="shop-card">
+        <div class="pic">${pic}</div>
+        <div class="meta">
+          <span class="lab">${esc(tabOf(slot)?.ko || slot)}${pr && pr.mall ? ` · ${esc(pr.mall)}` : ""}</span>
+          <b class="nm" title="${esc(pr ? pr.name : e.name)}">${esc(pr ? pr.name : e.name)}</b>
+          ${pr && pr.price ? `<span class="price">${won(pr.price)}</span>` : ""}
+          <div class="links">${pr && pr.link ? `<a class="chip dark" href="${esc(pr.link)}" target="_blank" rel="noopener">${esc(pr.mall || "판매처")}에서 보기 ↗</a>` : ""}${links}</div>
+        </div>
+      </article>`;
+    }).join("")}</div></section>`;
   }
 
   // ───────── AI 피팅 보기 (이미지 편집 모델, 실패해도 나머지 기능은 그대로) ─────────
@@ -509,10 +547,11 @@
       if (!products.length) throw new Error("실제 상품 사진이 있는 아이템을 하나 이상 입혀 주세요.");
       // 옷을 벗은 기본 아바타를 보내고, 상품 이미지를 입히게 함
       const avatar = await svgToPng(Avatar.render(state.profile, {}, { view: "body" }), 720);
-      const res = await fetch("/api/tryon", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ avatar, products }) });
+      // 온보딩에서 적은 키·몸무게·체형·헤어를 함께 보내 그 몸에 맞게 입힘
+      const res = await fetch("/api/tryon", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ avatar, products, profile: aiProfile() }) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "AI 피팅을 만들지 못했어요.");
-      Object.assign(t, { image: data.image, cached: !!data.cached });
+      Object.assign(t, { image: data.image, cached: !!data.cached, key: data.key || "" });
     } catch (e) {
       t.error = e.message || "AI 피팅을 만들지 못했어요.";
     } finally {
@@ -533,11 +572,11 @@
       <div class="modal-card">
         <div class="board-title">AI FITTING · 실험 기능</div>
         <div class="tryon-grid">
-          <figure><div class="tryon-box">${Avatar.render(state.profile, dressed(), { view: "body" })}</div><figcaption>내 아바타</figcaption></figure>
+          <figure><div class="tryon-box">${Avatar.render(state.profile, {}, { view: "body" })}</div><figcaption>내 아바타</figcaption></figure>
           <figure><div class="tryon-box">${body}</div><figcaption>AI 피팅${t.cached ? " · 저장된 결과" : ""}</figcaption></figure>
         </div>
         <div class="board-actions">
-          ${t.image ? `<a class="btn" href="${t.image}" download="fitcast-ai-fitting.png">이미지 저장</a>` : ""}
+          ${t.image ? `<a class="btn" href="${t.image}" download="fitcast-ai-fitting.png">이미지 저장</a><button class="btn" data-act="saveLook" data-k="saveLook">♡ 이 코디 저장</button>` : ""}
           <button class="btn dark" data-act="tryonClose" data-k="tryonClose">닫기</button>
         </div>
       </div>
@@ -592,6 +631,113 @@
       </div>` : ""}`;
   }
 
+  // ───────── 회원 · 저장한 코디 ─────────
+  function authPill() {
+    const u = ui.user;
+    return `<div class="auth-pill">${u
+      ? `<span>${esc(u.name)}님</span><button data-act="tab-my" data-k="pill-my">내 코디</button><button data-act="logout" data-k="logout">로그아웃</button>`
+      : `<button data-act="authOpen" data-v="login" data-k="pill-login">로그인</button><button class="dark" data-act="authOpen" data-v="signup" data-k="pill-signup">회원가입</button>`}</div>`;
+  }
+
+  function authModal() {
+    const a = ui.auth;
+    if (!a.open) return "";
+    const signup = a.mode === "signup";
+    return `<div class="modal" role="dialog" aria-modal="true" aria-label="${signup ? "회원가입" : "로그인"}">
+      <div class="modal-card narrow">
+        <div class="tabs" role="tablist">
+          <button role="tab" data-act="authMode" data-v="login" data-k="am-l" aria-selected="${!signup}">로그인</button>
+          <button role="tab" data-act="authMode" data-v="signup" data-k="am-s" aria-selected="${signup}">회원가입</button>
+        </div>
+        <form class="form" data-form="auth">
+          ${signup ? `<label>이름(닉네임)<input type="text" name="name" maxlength="30" required placeholder="핏캐스트에서 쓸 이름" /></label>` : ""}
+          <label>이메일<input type="email" name="email" required autocomplete="email" /></label>
+          <label>비밀번호<input type="password" name="password" minlength="6" required autocomplete="${signup ? "new-password" : "current-password"}" placeholder="6자 이상" /></label>
+          ${signup ? `<p class="hint">지금 만든 아바타(체형·헤어·얼굴·키·몸무게)가 계정에 함께 저장돼요.</p>` : ""}
+          ${a.error ? `<p class="error" role="alert">${esc(a.error)}</p>` : ""}
+          <div class="board-actions">
+            <button class="btn" type="button" data-act="authClose" data-k="authClose">닫기</button>
+            <button class="btn dark" type="submit" ${a.loading ? "disabled" : ""}>${a.loading ? `<span class="spinner"></span>` : signup ? "가입하고 아바타 저장" : "로그인"}</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+  }
+
+  function myLooks() {
+    if (!ui.user) return `<div class="worn-empty">로그인하면 마음에 드는 코디를 AI 피팅 이미지와 함께 저장할 수 있어요.<br><br><button class="btn dark" data-act="authOpen" data-v="login" data-k="my-login">로그인 / 회원가입</button></div>`;
+    if (!ui.looks.loaded) { loadLooks(); return `<div class="worn-empty"><span class="spinner dark"></span></div>`; }
+    if (!ui.looks.items.length) return `<div class="worn-empty">저장한 코디가 없어요.<br>AI 피팅 보기 결과에서 <b>♡ 이 코디 저장</b>을 눌러보세요.</div>`;
+    return `<div class="looks-grid">${ui.looks.items.map((l) => `<article class="look-card">
+      <div class="pic">${l.tryon_image ? `<img src="${esc(l.tryon_image)}" alt="${esc(l.title)}" loading="lazy" />` : Avatar.render(state.profile, l.outfit, { view: "body" })}</div>
+      <div class="meta">
+        <b>${esc(l.title || "저장한 코디")}</b>
+        <span class="items">${Object.values(l.outfit).map((e) => esc(e.name)).join(" · ")}</span>
+        <span class="date">${esc(l.created.slice(0, 10))}</span>
+        <div class="row"><button class="btn sm" data-act="lookWear" data-v="${l.id}" data-k="lw-${l.id}">입어보기</button><button class="btn sm" data-act="lookDelete" data-v="${l.id}" data-k="ld-${l.id}">삭제</button></div>
+      </div>
+    </article>`).join("")}</div>`;
+  }
+
+  async function loadLooks() {
+    if (ui.looks.loading) return;
+    ui.looks.loading = true;
+    try {
+      const res = await fetch("/api/looks");
+      ui.looks.items = res.ok ? (await res.json()).looks : [];
+    } catch { ui.looks.items = []; }
+    ui.looks.loaded = true; ui.looks.loading = false;
+    render();
+  }
+
+  async function submitAuth(form) {
+    const fd = new FormData(form), a = ui.auth;
+    const body = { email: String(fd.get("email") || ""), password: String(fd.get("password") || "") };
+    if (a.mode === "signup") Object.assign(body, { name: String(fd.get("name") || ""), profile: state.profile });
+    a.loading = true; a.error = ""; render();
+    try {
+      const res = await fetch(`/api/auth/${a.mode}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "다시 시도해 주세요.");
+      setUser(data.user, a.mode === "login");
+      a.open = false;
+      toast(a.mode === "signup" ? "가입 완료! 아바타가 계정에 저장됐어요" : `${data.user.name}님, 어서 오세요`);
+    } catch (e) {
+      a.error = e.message;
+    } finally {
+      a.loading = false; render();
+    }
+  }
+
+  // 로그인하면 계정에 저장된 아바타 프로필을 불러옴 (가입 직후엔 지금 프로필을 그대로 둠)
+  function setUser(user, adoptProfile) {
+    ui.user = user;
+    ui.looks = { items: [], loaded: false, loading: false };
+    if (user && adoptProfile && user.profile && user.profile.height) {
+      state.profile = { ...Avatar.DEFAULT_PROFILE, styles: [], ...user.profile };
+      normalizeProfile(state.profile);
+      state.done = true;
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch { /* 무시 */ }
+    }
+  }
+
+  async function saveLook() {
+    if (!ui.user) { ui.auth = { ...ui.auth, open: true, mode: "login", error: "" }; render(); return; }
+    const entries = wornEntries();
+    if (!entries.length) { toast("먼저 아이템을 입혀 주세요"); return; }
+    const products = entries.map(([slot, e]) => ({ slot, ...(productOf(e) || {}) })).filter((p) => p.name);
+    const title = `${new Date().toLocaleDateString("ko-KR", { month: "long", day: "numeric" })} 코디`;
+    try {
+      const res = await fetch("/api/looks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title, outfit: state.outfit, products, tryon_key: ui.tryon.image ? ui.tryon.key : "" }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "저장하지 못했어요.");
+      ui.looks = { items: [], loaded: false, loading: false };
+      toast("코디를 저장했어요 · MY 탭에서 볼 수 있어요");
+    } catch (e) {
+      toast(e.message);
+    }
+  }
+
   function viewFitting() {
     return `
     <section class="band alt" style="min-height:100vh">
@@ -608,13 +754,14 @@
               ${ui.productsEnabled ? "" : `<p class="board-note">SERPAPI_KEY(또는 네이버 쇼핑 키)를 넣으면 AI 코디 아이템도 실제 상품 사진으로 표시돼요.</p>`}
               <div class="board-body">
                 <div class="worn">${wornList()}</div>
-                <div class="model">${Avatar.render(state.profile, dressed(), { label: "내 아바타 착용 모습" })}</div>
+                <div class="model">${Avatar.render(state.profile, {}, { label: "내 아바타" })}</div>
               </div>
               <div class="board-actions">
                 <button class="btn" data-act="random" data-k="random">랜덤 코디</button>
                 <button class="btn" data-act="styleLook" data-k="styleLook">내 스타일 추천 코디</button>
                 <button class="btn" data-act="clear" data-k="clear">모두 벗기</button>
                 <button class="btn dark" data-act="tryon" data-k="tryon" ${ui.tryon.loading ? "disabled" : ""}>AI 피팅 보기 ✦</button>
+                <button class="btn" data-act="saveLook" data-k="saveLook2" title="AI 피팅 이미지 없이 아이템만 저장">♡ 코디 저장</button>
               </div>
             </article>
             ${shopList()}
@@ -623,8 +770,9 @@
             <div class="tabs" role="tablist">
               <button role="tab" data-act="tab" data-v="wardrobe" data-k="t-w" aria-selected="${ui.tab === "wardrobe"}">WARDROBE · 옷장</button>
               <button role="tab" data-act="tab" data-v="ai" data-k="t-a" aria-selected="${ui.tab === "ai"}">AI · 날씨 코디</button>
+              <button role="tab" data-act="tab" data-v="my" data-k="t-m" aria-selected="${ui.tab === "my"}">MY · 저장 코디</button>
             </div>
-            ${ui.tab === "wardrobe" ? wardrobe() : aiPanel()}
+            ${ui.tab === "wardrobe" ? wardrobe() : ui.tab === "ai" ? aiPanel() : myLooks()}
           </aside>
         </div>
       </div>
@@ -640,7 +788,7 @@
     const r = route();
     const focusKey = document.activeElement?.dataset?.k;
     const view = r === "setup" ? viewSetup : r === "fitting" ? viewFitting : viewLanding;
-    $("#app").innerHTML = view();
+    $("#app").innerHTML = view() + authPill() + authModal();
     if (r !== lastRoute) window.scrollTo(0, 0);
     lastRoute = r;
     if (focusKey) $(`[data-k="${focusKey}"]`)?.focus({ preventScroll: true });
@@ -764,6 +912,20 @@
       }
       case "tryon": requestTryon(); return;
       case "tryonClose": ui.tryon.open = false; break;
+      case "authOpen": ui.auth = { ...ui.auth, open: true, mode: v || "login", error: "" }; break;
+      case "authClose": ui.auth.open = false; break;
+      case "authMode": ui.auth.mode = v; ui.auth.error = ""; break;
+      case "logout": fetch("/api/auth/logout", { method: "POST" }).catch(() => {}); setUser(null); toast("로그아웃했어요"); break;
+      case "tab-my": ui.tab = "my"; if (route() !== "fitting") { location.hash = state.done ? "fitting" : "setup"; return; } break;
+      case "saveLook": saveLook(); return;
+      case "lookWear": {
+        const l = ui.looks.items.find((x) => String(x.id) === v);
+        if (l) { state.outfit = l.outfit; toast("저장한 코디를 입혔어요"); }
+        break;
+      }
+      case "lookDelete":
+        fetch(`/api/looks/${v}`, { method: "DELETE" }).then(() => { ui.looks.items = ui.looks.items.filter((x) => String(x.id) !== v); render(); }).catch(() => {});
+        return;
       case "day": ui.ai.day = +v; break;
       default: return;
     }
@@ -788,11 +950,16 @@
   });
 
   document.addEventListener("submit", (ev) => {
+    const auth = ev.target.closest("[data-form='auth']");
+    if (auth) { ev.preventDefault(); submitAuth(auth); return; }
     const form = ev.target.closest("[data-form='ai']");
     if (!form) return;
     ev.preventDefault();
     requestAi(form);
   });
+
+  // 로그인 상태 확인 (쿠키 세션)
+  fetch("/api/auth/me").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d?.user) { setUser(d.user, false); render(); } }).catch(() => {});
 
   window.addEventListener("hashchange", render);
 

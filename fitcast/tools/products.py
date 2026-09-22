@@ -12,6 +12,8 @@ from fitcast import config
 # 네이버: 패션 카테고리 결과를 우선으로 (가구·생활용품이 섞여 나오는 걸 막음)
 FASHION_CATEGORIES = ("패션의류", "패션잡화")
 TAG_RE = re.compile(r"<[^>]+>")
+# 여성 사용자 서비스: 상품명에 남성·아동 표시가 있으면 제외
+EXCLUDE_RE = re.compile(r"남성|남자|맨즈|멘즈|\bmen'?s?\b|\bman\b|보이즈|키즈|아동|주니어|유아|베이비", re.I)
 
 
 class ProductSearchError(RuntimeError):
@@ -122,15 +124,25 @@ def _search(keyword: str, display: int) -> tuple:
     return tuple(best[:display])
 
 
-def fetch_products(keyword: str, display: int = 5) -> list[dict]:
-    """키워드로 실제 상품 목록 조회 (같은 키워드는 캐시)."""
+def is_excluded(name: str) -> bool:
+    return bool(EXCLUDE_RE.search(name or ""))
+
+
+def fetch_products(keyword: str, display: int = 5, female: bool = False) -> list[dict]:
+    """키워드로 실제 상품 목록 조회 (같은 키워드는 캐시). female=True면 '여성 키워드'로 먼저 찾고 남성·아동 상품은 뺌."""
     keyword = (keyword or "").strip()
     if not keyword:
         return []
     if not products_enabled():
         raise ProductSearchError("상품 검색 키(SERPAPI_KEY 또는 NAVER_CLIENT_ID·SECRET)가 설정되지 않았어요.")
     try:
-        return list(_search(keyword, max(1, min(display, 20))))
+        n = max(1, min(display, 20))
+        if female:
+            found = [p for p in _search(f"여성 {keyword}", n) if not is_excluded(p["name"])]
+            if len(found) >= 2:
+                return found
+            return [p for p in _search(keyword, n) if not is_excluded(p["name"])] or found
+        return list(_search(keyword, n))
     except requests.RequestException as e:
         raise ProductSearchError(f"상품 검색 중 오류가 났어요: {e}") from e
 

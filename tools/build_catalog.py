@@ -53,7 +53,7 @@ def search(item: dict, force: bool) -> list[dict]:
     for kw in products.fallback_keywords(item["q"])[:2]:
         for attempt in (1, 2):  # 구글 쇼핑은 가끔 60초를 넘겨서 한 번 더 시도
             try:
-                found = [p for p in products._serpapi(kw, 4) if p["image"] and p["name"]]
+                found = [p for p in products._serpapi(kw, 4) if p["image"] and p["name"] and not products.is_excluded(p["name"])]
                 break
             except requests.RequestException as e:
                 print(f"  검색 실패({attempt}/2) '{kw}': {e}")
@@ -80,7 +80,7 @@ def choose(item: dict, found: list[dict], pick: int | None) -> tuple[dict, Image
     cands = found[:CANDIDATES]
     with ThreadPoolExecutor(4) as ex:
         raws = list(ex.map(fetch, cands))
-    pairs = [(p, r) for p, r in zip(cands, raws) if r]
+    pairs = [(p, r) for p, r in zip(cands, raws) if r and not products.is_excluded(p["name"])]  # 남성·아동 상품 제외
     flags = product_only_flags([r for _, r in pairs])
     if flags is None:
         print("  (비전 판정 없이 누끼 모양 점수로 고름)")
