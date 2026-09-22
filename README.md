@@ -17,6 +17,8 @@ pinned: false
 > 일기예보는 봤는데, 뭘 입을지는 모르겠다면.
 > **오늘 날씨와 내 스타일에 딱 맞는 코디를 예보해주는 AI 옷차림 에이전트**
 
+🔗 **배포 주소**: https://fitcast-ootd.onrender.com · **GitHub**: https://github.com/boboinhaco/Fitcast_OOTD
+
 날씨를 조회하고, 사용자의 선호 스타일과 TPO를 반영해 상의·하의·외투·신발·악세사리를 한 세트로 추천한 뒤, 무신사·29CM·지그재그·에이블리·테무·쉬인에서 바로 찾아볼 수 있는 검색 링크까지 붙여주는 LangChain 미니 프로젝트예요.
 
 ## 목차
@@ -320,6 +322,7 @@ python app.py
 무료 플랜에서 알아둘 점
 
 - 메모리 512MB라 누끼 라이브러리(rembg)를 뺀 [requirements-render.txt](requirements-render.txt)로 설치해요. 옷장 사진은 미리 잘라 둔 파일을 쓰고, 새 상품 사진은 흰 배경만 걷어내는 방식으로 대체돼요. 실측 메모리는 약 190MB예요.
+- 배포 주소: https://fitcast-ootd.onrender.com
 - 15분 동안 요청이 없으면 잠들고, 다음 첫 접속에 30초~1분 걸려요. **발표 5분 전에 주소를 한 번 열어 두세요.**
 - 디스크가 재배포 때 초기화돼요. 회원 DB(SQLite)와 AI 피팅 캐시는 유지되지 않아요.
 
