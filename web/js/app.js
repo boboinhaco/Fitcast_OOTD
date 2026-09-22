@@ -371,7 +371,7 @@
           <div class="swatches">${HAIR_COLORS.map((c) => `<button class="swatch" data-k="hc-${c.id}" data-act="hairColor" data-v="${c.hex}" style="background:${c.hex}" aria-pressed="${p.hairColor === c.hex}" aria-label="${c.ko}" title="${c.ko}"></button>`).join("")}</div>
           <div class="look-opts hairs">${forGender(HAIR_STYLES, p.gender).map((h) => `
             <button class="look-opt" data-k="h-${h.id}" data-act="hair" data-v="${h.id}" aria-pressed="${p.hair === h.id}">
-              <span class="pic">${photoHead(p.face, h.id === "bun" ? null : h.id, hairColorId(p))}</span>${CHECK}
+              <span class="pic">${Avatar.render({ ...p, hair: h.id }, {}, { view: "face" })}</span>${CHECK}
               <span class="t">${h.ko}</span>
             </button>`).join("")}</div>
         </section>
