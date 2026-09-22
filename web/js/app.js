@@ -293,11 +293,6 @@
   ];
   const MAX_STYLES = 5;
 
-  // 온보딩 미리보기는 옷을 입히지 않은 기본 아바타 (스타일을 골라도 그대로)
-  function previewLook() {
-    return {};
-  }
-
   function ruler() {
     // 미리보기 SVG와 같은 좌표계(지면 955/980)에 맞춘 키 눈금
     const marks = [];
@@ -350,8 +345,6 @@
   // 얼굴 & 헤어: 왼쪽 얼굴 분위기 · 가운데 큰 미리보기 · 오른쪽 헤어스타일
   const CHECK = `<span class="check" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
   const bustPreview = () => Avatar.render(state.profile, {}, { view: "bust", label: "내 아바타 미리보기" });
-
-  const hairColorId = (p) => HAIR_COLORS.find((c) => c.hex.toLowerCase() === String(p.hairColor || "").toLowerCase())?.id || "darkbrown";
 
   function stepLook() {
     const p = state.profile;
@@ -417,7 +410,7 @@
             </div>
           </div>
           ${look ? "" : `<aside class="preview" aria-label="아바타 미리보기">
-            <div class="card bg-studio" id="preview-card">${ruler()}${Avatar.render(state.profile, previewLook(), { label: "내 아바타 미리보기" })}</div>
+            <div class="card bg-studio" id="preview-card">${ruler()}${Avatar.render(state.profile, {}, { label: "내 아바타 미리보기" })}</div>
             <span class="tag">@MY <b>FIT</b></span>
             <div class="summary" id="summary">${previewSummary()}</div>
           </aside>`}
@@ -428,7 +421,7 @@
 
   function refreshPreview() {
     const card = $("#preview-card");
-    if (card) card.innerHTML = ruler() + Avatar.render(state.profile, previewLook(), { label: "내 아바타 미리보기" });
+    if (card) card.innerHTML = ruler() + Avatar.render(state.profile, {}, { label: "내 아바타 미리보기" });
     const sum = $("#summary");
     if (sum) sum.innerHTML = previewSummary();
   }
