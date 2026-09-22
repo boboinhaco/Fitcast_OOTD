@@ -1,0 +1,25 @@
+# Render Blueprint: 대시보드에서 New → Blueprint → 이 저장소를 고르면 아래 설정대로 서비스가 만들어져요.
+# 비밀키(OPENAI_API_KEY, SERPAPI_KEY)는 sync: false라 생성 화면에서 직접 입력해요.
+services:
+  - type: web
+    name: fitcast-ootd
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements-render.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.15"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SERPAPI_KEY
+        sync: false
+      - key: FITCAST_MODEL
+        value: openai:gpt-4o-mini
+      - key: FITCAST_EMBEDDING_MODEL
+        value: openai:text-embedding-3-small
+      - key: FITCAST_DEFAULT_CITY
+        value: 서울
