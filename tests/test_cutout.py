@@ -135,6 +135,8 @@ def test_hair_color_pngs_match_data_js():
         assert (config.AVATAR_KIT_DIR / "hair" / f"long-straight.{cid}.png").exists()
         assert (config.AVATAR_KIT_DIR / "hair" / f"ponytail-back.{cid}.png").exists()
         assert (config.AVATAR_KIT_DIR / "faces" / f"puppy-hair.{cid}.png").exists()
+    for face in layout["faces"]:
+        assert face in layout["faceSkin"] and (config.AVATAR_KIT_DIR / "faces" / f"{face}-skin.png").exists()
 
 
 def test_body_cloth_layers_exist():

@@ -238,6 +238,7 @@ svg { display: block; }
   border: 1.3px solid var(--soft); background: #fff; border-radius: 20px; padding: 10px 10px 14px;
   text-align: center; transition: border-color 0.15s, transform 0.15s;
 }
+.opt { align-self: stretch; display: flex; flex-direction: column; } /* 설명 줄 수가 달라도 카드 높이·그림 위치를 같게 */
 .opt:hover { border-color: #b9b0aa; transform: translateY(-2px); }
 .opt[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .opt .pic { height: 150px; border-radius: 14px; background: var(--blush); overflow: hidden; margin-bottom: 10px; }

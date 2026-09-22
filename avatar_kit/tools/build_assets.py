@@ -25,8 +25,10 @@ REF_FACE = "puppy"  # 정수리까지 잘리지 않은 얼굴을 기준으로 �
 NECK_TOP = 124  # 몸 이미지의 목 윗단이 놓일 y
 SOLE = 900  # 발바닥 y
 NECK_OVERLAP = 1.05  # 얼굴 사진의 목을 몸 목보다 살짝 넓게 (이음새 숨김)
+NECK_BASE_REF = 160.0  # 목 밑단 기준 (이보다 목 밑단이 높은 체형은 머리를 그만큼 올려 목 길이를 맞춤)
 NECK_COVER = 34  # 얼굴 사진의 목 컷 선을 몸 목 윗단보다 이 만큼 아래에 (골격 단위)
 HAIR_OVERLAP = 1.02  # 헤어 안쪽 가장자리가 볼 폭보다 살짝 넓게 (귀·옆머리를 덮음)
+BACK_FILL_R = 90  # 헤어 실루엣 홈을 메우는 닫힘 반지름 (헤어 원본 px)
 HEAD_SCALE = 0.84  # 목 폭 기준 배율에 곱하는 머리 크기 보정 (작을수록 머리가 작아 등신이 커짐)
 FACE_SQUEEZE = 0.94  # 얼굴 가로 배율 (살짝만 갸름하게)
 FACE_SY = 0.9  # 얼굴 세로 배율 (원본이 세로로 길어 머리 길이를 줄임 → 헤어를 올릴 때 정수리가 덜 튀어나옴)
@@ -175,14 +177,23 @@ def jaw_line(rgb: np.ndarray, alpha: np.ndarray, m: dict) -> dict:
 NECK_KEEP = 0.62  # 턱끝~옷깃 사이에서 얼굴 사진의 목을 이 비율까지 남김 (그 아래는 몸 이미지의 목)
 
 
-def neck_mask(shape: tuple[int, int], m: dict) -> np.ndarray:
-    """턱 아래는 목 폭 안쪽만 남기고, 목 중간(cut_y)에서 부드럽게 끝냄. 몸 목 윗단이 이 뒤에 가려짐."""
-    h, w = shape
-    yy, xx = np.mgrid[:h, :w]
+def neck_mask(rgb: np.ndarray, alpha: np.ndarray, m: dict) -> np.ndarray:
+    """턱 아래는 행마다 실제 목 살색 구간(+2px)만 남기고, 목 중간(cut_y)에서 부드럽게 끝냄.
+
+    사각형으로 남기면 목 옆에 갇힌 흰 배경이 같이 남아 네모가 보이므로 살색 구간으로 자른다.
+    """
+    h, w = alpha.shape
+    yy = np.arange(h)[:, None]
     cut_y = m["chin"] + (m["collar"] - m["chin"]) * NECK_KEEP
-    half = m["neck_w"] / 2 * 1.04
-    keep = (yy <= m["chin"] - 6) | (np.abs(xx - m["neck_cx"]) <= half)
-    a = soften(keep, erode=0, blur=1.6)
+    skin = (alpha > 0.6) & (rgb[..., 0] - rgb[..., 2] > 12) & (rgb.min(2) > 120)
+    keep = np.zeros((h, w), bool)
+    keep[: int(m["chin"]) - 6] = True
+    x0, x1 = int(m["cx"] - m["head"] / 2), int(m["cx"] + m["head"] / 2) + 1  # 얼굴 폭 안에서만
+    for y in range(int(m["chin"]) - 6, min(h, int(cut_y) + 24)):
+        xs = np.flatnonzero(skin[y, x0:x1])  # 입술처럼 살색이 아닌 부분이 가운데 있어도 양끝 살색 사이는 모두 남김
+        if len(xs):
+            keep[y, max(0, x0 + xs[0] - 2) : x0 + xs[-1] + 3] = True
+    a = soften(keep, erode=0, blur=1.4)
     fade = np.clip((cut_y - yy) / 14.0, 0, 1)  # cut_y 위 14px에서 서서히 사라짐
     return a * fade
 
@@ -219,7 +230,7 @@ def normalize_faces() -> tuple[dict, dict]:
         # 턱 아래는 사진의 목을 중간까지 남김 (몸 이미지의 짧은 목 위에 겹쳐 목 길이를 살림)
         arr = np.asarray(img, dtype=np.float32).copy()
         jaw = jaw_line(arr[..., :3], arr[..., 3] / 255, norm[n])
-        arr[..., 3] *= neck_mask(arr.shape[:2], norm[n])
+        arr[..., 3] *= neck_mask(arr[..., :3], arr[..., 3] / 255, norm[n])
         faces[n] = Image.fromarray(arr.astype(np.uint8), "RGBA")
         norm[n]["jaw"] = jaw
         norm[n]["cut_y"] = norm[n]["chin"] + (norm[n]["collar"] - norm[n]["chin"]) * NECK_KEEP
@@ -298,10 +309,15 @@ PONY_HEAD = (627.0, 560.0, 262.0, 340.0)  # 포니테일 원본에서 머리 타
 
 
 def hair_layer(name: str) -> tuple[np.ndarray, np.ndarray]:
-    """누끼가 끝난 헤어 PNG를 그대로 읽음 (가장자리에 섞인 검은 배경색만 제거)."""
+    """누끼가 끝난 헤어 PNG를 그대로 읽음.
+
+    반투명 가장자리의 RGB가 이미 머리색(스트레이트 알파)이라 배경색 제거(decontaminate)를 하면
+    알파로 나눠져 희게 떠 버림 → 색은 손대지 않고 아주 옅은 알파(<0.08)만 잡티로 지움.
+    """
     a = load(SRC / "hair-front" / f"{name}.png")
     alpha = a[..., 3] / 255
-    return decontaminate(a[..., :3], alpha, 0.0), alpha
+    alpha = np.where(alpha < 0.08, 0.0, alpha)
+    return a[..., :3], alpha
 
 
 def inner_edge(alpha: np.ndarray) -> float:
@@ -329,8 +345,8 @@ def inner_edge(alpha: np.ndarray) -> float:
 
 # 헤어별 미세 보정: (배율 배수, 가로 이동, 세로 이동) — 헤어 원본 px 기준, 자동 맞춤 뒤에 적용
 HAIR_ADJUST = {
-    "long-straight": (1.12, 0, -10), "long-wave": (1.16, 0, 0), "hush-cut": (1.12, 0, -75),
-    "bob": (1.08, 0, -72), "ponytail": (1.0, 0, 0), "short-layered": (0.86, 0, -30),
+    "long-straight": (1.0, 0, -10), "long-wave": (1.04, 0, 0), "hush-cut": (1.0, 0, -60),
+    "bob": (0.98, 0, -60), "ponytail": (0.94, 0, 0), "short-layered": (0.9, 30, -5),
 }
 # 정수리와 안쪽 가장자리 두 점으로 배율을 정하는 헤어 (원본 정수리가 낮아 너무 커지므로 지금은 쓰지 않음)
 HAIR_TWO_ANCHOR: set[str] = set()
@@ -359,6 +375,31 @@ def crown_y(alpha: np.ndarray) -> float:
     """가운데 세로띠에서 머리카락이 시작되는 행 (정수리)."""
     band = alpha[:, int(HAIR_CX) - 60 : int(HAIR_CX) + 61] > 0.5
     return float(np.flatnonzero(band.any(1))[0])
+
+
+def back_fill(rgb: np.ndarray, alpha: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """헤어 실루엣의 움푹 파인 곳(귀·목 자리로 비워둔 홈)을 메우는 '뒷머리' 레이어.
+
+    홈은 원본 일러스트의 넓은 머리 기준이라 우리 얼굴보다 바깥에 생겨 배경이 네모나게 비친다.
+    실루엣을 모폴로지 닫힘(반지름 BACK_FILL_R)으로 메운 뒤 원래 머리를 뺀 부분만, 머리 영역 안에서 남긴다.
+    질감은 좌우를 뒤집은 머리로 채우고(홈 반대쪽엔 머리가 있음), 없으면 평균 머리색으로. 얼굴·몸 뒤에 그린다.
+    """
+    from scipy import ndimage
+
+    h, w = alpha.shape
+    mask = alpha > 0.3
+    inside = ndimage.distance_transform_edt(~mask) <= BACK_FILL_R  # 팽창
+    closed = ndimage.distance_transform_edt(inside) > BACK_FILL_R  # 침식 → 닫힘
+    yy, xx = np.mgrid[:h, :w]
+    crown = crown_y(alpha)
+    band = (yy > crown + 80) & (yy < crown + HAIR_HEAD_W * 1.3) & (np.abs(xx - HAIR_CX) < HAIR_HEAD_W * 0.8)
+    fill = closed & ~mask & band
+    fill_a = soften(fill, erode=0, blur=3.0)
+    mirror_rgb, mirror_a = rgb[:, ::-1], alpha[:, ::-1]
+    mean = rgb[alpha > 0.85].mean(0)
+    out_rgb = np.where((mirror_a > 0.3)[..., None], mirror_rgb, mean)
+    out_a = fill_a * np.maximum(mirror_a, 0.9)
+    return out_rgb, out_a
 
 
 def split_ponytail(alpha: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -512,7 +553,7 @@ def build() -> dict:
     face_origin = (-ref["cx"] * face_unit, NECK_TOP + NECK_COVER - ref["cut_y"] * face_unit)  # 머리 중심을 몸 중심에
     F = lambda px, py: (face_origin[0] + px * face_unit, face_origin[1] + py * face_unit)
 
-    layout = {"version": 3, "unit": "skeleton", "faces": {}, "faceHair": {}, "hair": {}, "hairBack": {}, "bodies": {}}
+    layout = {"version": 3, "unit": "skeleton", "faces": {}, "faceHair": {}, "faceSkin": {}, "hair": {}, "hairBack": {}, "bodies": {}}
     head_top, head_eye = F(0, ref["top"])[1], F(0, ref["eye"])[1]
     layout["head"] = {
         "top": round(head_top, 2), "eye": round(head_eye, 2), "chin": round(F(0, j["chin"])[1], 2), "hairline": round(F(0, ref["hairline"])[1], 2),
@@ -526,15 +567,32 @@ def build() -> dict:
     layout["hairColors"] = list(HAIR_COLORS)
     for n, img in faces.items():
         layout["faces"][n] = crop_save(img, OUT / "faces" / f"{n}.png", face_origin, face_unit)
-        layout["faceHair"][n] = crop_save(own_hair_layer(img, fmarks[n]), OUT / "faces" / f"{n}-hair.png", face_origin, face_unit, tinted=base)
+        # 얼굴 피부 대표색 (볼 부근 살색 평균) → 웹이 헤어 틈을 메우는 머리 바탕색으로 씀
+        arr = np.asarray(img, dtype=np.float32)
+        fm = fmarks[n]
+        band = arr[int(fm["eye"] + 30) : int(fm["eye"] + 70), int(fm["cx"] - fm["cheek"] / 3) : int(fm["cx"] + fm["cheek"] / 3)]
+        skin_px = band[(band[..., 3] > 200) & (band[..., 0] - band[..., 2] > 8)][:, :3]
+        layout["faces"][n]["skin"] = "#" + "".join(f"{int(v):02x}" for v in (skin_px.mean(0) if len(skin_px) else [239, 201, 173]))
+        own = own_hair_layer(img, fmarks[n])
+        layout["faceHair"][n] = crop_save(own, OUT / "faces" / f"{n}-hair.png", face_origin, face_unit, tinted=base)
+        # 정수리(헤어라인 위) 자체 머리만 뺀 레이어: 헤어 PNG를 쓸 때 정수리가 헤어 위로 튀지 않게. 관자놀이·옆머리는 남겨
+        # 헤어 틈(짧은 컷의 이마 옆 등)으로 보여도 살색 구멍이 아니라 자연스러운 옆머리로 보이게 함
+        skin = np.asarray(img, dtype=np.float32).copy()
+        crown = np.clip((fm["hairline"] + 10 - np.arange(skin.shape[0])) / 12.0, 0, 1)[:, None]  # 헤어라인 아래 12px에 걸쳐 0으로
+        skin[..., 3] *= 1 - (np.asarray(own.getchannel("A"), dtype=np.float32) / 255) * crown
+        layout["faceSkin"][n] = crop_save(Image.fromarray(skin.astype(np.uint8), "RGBA"), OUT / "faces" / f"{n}-skin.png", face_origin, face_unit)
     for n in HAIRS:
         rgb, alpha = hair_layers[n]
         s, dx, dy = fit_hair(n, alpha, ref)
         # 헤어 원본 픽셀 → 얼굴 프레임(×s, +dx,dy) → 골격 단위
         origin = F(dx, dy)
+        back_rgb, back = back_fill(rgb, alpha)
         if n == "ponytail":
-            alpha, back = split_ponytail(alpha)
-            layout["hairBack"][n] = crop_save(to_image(rgb, back), OUT / "hair" / f"{n}-back.png", origin, face_unit * s, tinted=base)
+            alpha, tail = split_ponytail(alpha)
+            back_rgb = np.where((tail > back)[..., None], rgb, back_rgb)
+            back = np.maximum(back, tail)
+        if (back > 0.5).sum() > 200:
+            layout["hairBack"][n] = crop_save(to_image(back_rgb, back), OUT / "hair" / f"{n}-back.png", origin, face_unit * s, tinted=base)
         layout["hair"][n] = crop_save(to_image(rgb, alpha), OUT / "hair" / f"{n}.png", origin, face_unit * s, tinted=base)
         layout["hair"][n]["fit"] = [round(s, 3), round(dx, 1), round(dy, 1)]
         print(f"  hair {n}: scale {s:.3f}, dy {dy:.0f}")
@@ -574,6 +632,7 @@ def build() -> dict:
         body_img = to_image(rgb, alpha)
         entry = crop_save(body_img, OUT / "bodies" / f"{n}.png", origin, b["unit"])
         entry["S"] = b["S"]
+        entry["headDy"] = round(b["S"]["neckY"] - NECK_BASE_REF, 2)  # 머리(얼굴·헤어) 세로 이동량
         # 회색 나시·반바지만 따로 (피부톤 필터가 옷 색까지 어둡게 하지 않도록 필터 없이 위에 덮음). 몸과 같은 사각형에 저장
         cloth = to_image(rgb, alpha * soften(cloth_mask(rgb, alpha), erode=0, blur=0.8))
         cloth.crop(body_img.getchannel("A").point(lambda a: 255 if a > 3 else 0).getbbox()).save(OUT / "bodies" / f"{n}-cloth.png", optimize=True)

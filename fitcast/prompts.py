@@ -93,10 +93,86 @@ AGENT_SYSTEM_PROMPT = (
 
 
 # =========================================================
+# 체형별 핏 연출 규칙 (아바타 생성·가상 피팅 공통)
+# =========================================================
+
+# 체형 키워드별 핏 규칙 — 프로필 문구와 매칭되는 항목만 이미지 모델이 적용
+BODY_FIT_RULES = {
+    "STRAIGHT / SLIM (마른 체형, 직사각형)": [
+        "Add volume with layering, structured shoulders and textured fabrics.",
+        "Create a waistline with tuck-in, belt or cropped top length.",
+        "Avoid clingy fabrics that flatten the body.",
+    ],
+    "INVERTED TRIANGLE (어깨 넓음, 상체 발달)": [
+        "Use soft, narrow or slightly dropped shoulder lines and V or U necklines.",
+        "Put visual volume on the lower body: A-line skirts, wide or flared trousers.",
+        "Avoid shoulder pads, puff sleeves, boat necks and horizontal stripes on top.",
+    ],
+    "TRIANGLE / PEAR (골반·허벅지 볼륨, 하체 발달)": [
+        "Add detail, brightness and structure on the upper body.",
+        "Use straight, A-line or wide-leg bottoms in darker tones, sitting at the natural waist.",
+        "End top and jacket hems at the hip bone, never at the widest point of the hips.",
+    ],
+    "HOURGLASS (허리 잘록, 상하체 균형)": [
+        "Define the waist: fitted waist, wrap styles, belted outerwear, tucked tops.",
+        "Follow the body curve with fitted or semi-fitted cuts.",
+        "Avoid boxy, shapeless oversized silhouettes that hide the waist.",
+    ],
+    "APPLE / ROUND (복부 볼륨, 상체 중심)": [
+        "Use V-necks, open collars and vertical lines to elongate.",
+        "Let tops fall straight past the waist; use mid-rise straight bottoms.",
+        "Avoid tight waistbands, belts at the belly and bulky mid-body layers.",
+    ],
+    "PLUS SIZE (통통한 체형)": [
+        "Use structured but not tight cuts with drapey fabrics that skim the body.",
+        "Keep clean vertical lines, matching tones and minimal bulk at the waist.",
+        "Avoid both clingy stretch fabrics and shapeless oversized pieces.",
+    ],
+    "PETITE (키 작음, 160cm 이하)": [
+        "Raise the waistline: high-rise bottoms, cropped jackets, tucked tops.",
+        "Keep hems at or above the knee or fully ankle length; avoid mid-calf cuts.",
+        "Use one-tone or tone-on-tone looks to lengthen the body line.",
+    ],
+    "TALL (키 큼, 170cm 이상)": [
+        "Longer outerwear, wide or voluminous bottoms and horizontal color breaks work well.",
+        "Sleeves and trouser hems must reach full length; no unintended cropped look.",
+    ],
+    "SHORT LEGS / LONG TORSO (다리 짧음, 상체 김)": [
+        "High-rise bottoms, cropped or tucked tops and shoes matching the bottom color.",
+        "Avoid low-rise trousers and long untucked tops.",
+    ],
+    "NARROW SHOULDERS (어깨 좁음)": [
+        "Structured or padded shoulders, boat necks and horizontal detail on top.",
+        "Avoid raglan sleeves and deep V-necks that narrow the shoulders further.",
+    ],
+    "SHORT NECK / ROUND FACE (목 짧음, 얼굴 둥긂)": [
+        "Open V or U necklines and hair pulled back from the neck.",
+        "Style turtlenecks and high collars loosely; never bulky at the neck.",
+    ],
+    "MUSCULAR / ATHLETIC (근육형)": [
+        "Semi-fitted cuts with fluid fabrics; avoid tight stretch that emphasizes bulk.",
+        "Soft draped fabrics on the shoulders and thighs; straight-leg bottoms.",
+    ],
+}
+
+
+def build_fit_guide() -> str:
+    """BODY_FIT_RULES를 프롬프트에 넣을 수 있는 텍스트로 변환한다."""
+    lines = []
+    for body_type, rules in BODY_FIT_RULES.items():
+        lines.append(f"[{body_type}]")
+        lines.extend(f"  - {rule}" for rule in rules)
+    return "\n".join(lines)
+
+
+BODY_FIT_GUIDE = build_fit_guide()
+
+
+# =========================================================
 # 기본 가상 피팅 모델 생성 프롬프트
 # =========================================================
 
-# 일러스트가 아닌 실사 룩북 사진이 나오도록 매체(사진)를 최우선으로 명시
+# 실사 룩북 사진 + 이후 피팅에서 얼굴을 고정하기 쉽도록 뚜렷한 이목구비 요구
 AVATAR_PROMPT = (
     "Generate a photorealistic full-body fashion lookbook PHOTOGRAPH of a "
     "real Korean model for a fashion styling service named Fitcast.\n"
@@ -118,7 +194,11 @@ AVATAR_PROMPT = (
     "subtle blush and natural tone variation.\n"
     "\n"
     "Face and hair:\n"
-    "- Reflect the requested face impression and hairstyle from the profile.\n"
+    "- Reflect the requested face impression and hairstyle from the profile "
+    "exactly: face shape, eye shape, eyebrow shape, nose, lips, skin tone, "
+    "bangs or no bangs, hair length and hair color.\n"
+    "- Give the face distinct, memorable and consistent features so the same "
+    "person can be recognized in every later try-on image.\n"
     "- Use realistic adult facial proportions of an actual Korean fashion "
     "model, with natural-sized eyes, nose and lips.\n"
     "- Use a calm neutral facial expression with a soft closed mouth.\n"
@@ -128,19 +208,23 @@ AVATAR_PROMPT = (
     "natural hair volume.\n"
     "\n"
     "Body and pose:\n"
-    "- Reflect the requested body shape, height and weight naturally with "
-    "real human anatomy.\n"
-    "- Full-body portrait from the top of the hair to the bottom of the shoes.\n"
-    "- Stand straight and face directly toward the camera.\n"
+    "- Reflect the requested body type, height and weight naturally with "
+    "real human anatomy; the body proportions must be visibly true to the "
+    "profile so later fit rules can be applied to this exact body.\n"
+    "- Full-body portrait from the top of the hair to the bottom of the feet.\n"
+    "- Stand straight with relaxed shoulders, slightly lifted chest and a "
+    "natural model posture, facing directly toward the camera.\n"
     "- Keep the shoulders and hips nearly symmetrical.\n"
     "- Place both feet close together and pointing forward.\n"
-    "- Keep both arms naturally lowered beside the body.\n"
+    "- Keep both arms naturally lowered beside the body, slightly away "
+    "from the torso so the waistline is visible.\n"
     "- Keep both hands and all fingers visible and anatomically correct.\n"
     "- Use a neutral virtual fitting pose without walking or fashion poses.\n"
     "\n"
     "Base clothing:\n"
-    "- Dress the model in a fitted light-gray sleeveless top and simple "
-    "straight black leggings.\n"
+    "- Dress the model in a fitted light-gray sleeveless tank top and "
+    "full-length fitted black leggings ending at the ankle.\n"
+    "- Feet bare or in plain thin black socks.\n"
     "- Show real fabric texture such as cotton weave and knit ribbing.\n"
     "- Use plain neutral clothing without patterns, logos, text, accessories "
     "or oversized silhouettes.\n"
@@ -156,8 +240,8 @@ AVATAR_PROMPT = (
     "Composition:\n"
     "- Use a tall vertical composition similar to a 9:16 fashion catalogue image.\n"
     "- Center the model exactly in the canvas.\n"
-    "- Leave a consistent margin above the hair and below the shoes.\n"
-    "- Do not crop the hair, elbows, hands, legs or shoes.\n"
+    "- Leave a consistent margin above the hair and below the feet.\n"
+    "- Do not crop the hair, elbows, hands, legs or feet.\n"
     "- Use a clean seamless warm-white studio background.\n"
     "- Add only a very soft natural grounding shadow below the feet.\n"
     "\n"
@@ -172,9 +256,10 @@ AVATAR_PROMPT = (
 # AI 가상 피팅 이미지 편집 프롬프트
 # =========================================================
 
-# 편집 후에도 그림체로 바뀌지 않도록 사진 리얼리즘 유지 규칙 추가
+# 얼굴 영역 보호 + 스타일리스트 연출 규칙 + 체형별 핏 가이드를 순서대로 배치
 TRYON_PROMPT = (
-    "This is a high-fidelity photorealistic virtual try-on image editing task.\n"
+    "This is a high-fidelity photorealistic virtual try-on image editing task "
+    "for a Korean fashion lookbook.\n"
     "\n"
     "INPUT IMAGE ORDER:\n"
     "- Image 1 is the canonical full-body Fitcast model photograph.\n"
@@ -188,10 +273,28 @@ TRYON_PROMPT = (
     "{profile}\n"
     "\n"
     "PRIMARY TASK:\n"
-    "Dress the person in Image 1 in exactly the listed products, using the "
-    "product reference images as the visual source of truth.\n"
+    "Dress the person in Image 1 in exactly the listed products, and style "
+    "them the way a professional Korean fashion stylist would for a "
+    "lookbook shoot, so the outfit looks intentionally worn and flattering "
+    "on this exact body. Only the clothing, shoes, bag and accessory regions "
+    "may change; everything else is copied from Image 1.\n"
     "\n"
-    "MEDIUM LOCK (HIGHEST PRIORITY):\n"
+    "FACE PROTECTION (HIGHEST PRIORITY):\n"
+    "- Treat the head region of Image 1 (face, ears, neck, hairline and hair) "
+    "as a locked, protected area. Copy it pixel-faithfully; do not "
+    "regenerate, repaint, beautify or reinterpret it.\n"
+    "- Preserve the exact face shape, jawline, forehead, eye shape, eye size, "
+    "eye spacing, double or mono eyelid, eyebrow shape, nose shape, lip "
+    "shape, skin tone, freckles or moles and makeup.\n"
+    "- Preserve the exact hairstyle, hair length, hair color, parting, "
+    "bangs or no bangs, hair volume and hairline.\n"
+    "- When a hat, cap or beanie is one of the products, place it over the "
+    "existing hairstyle and keep the visible hair below the hat identical; "
+    "never change the hairstyle to fit the hat.\n"
+    "- The person must be instantly recognizable as the same person as "
+    "Image 1. If the identity would change, the result is a failure.\n"
+    "\n"
+    "MEDIUM LOCK:\n"
     "- The output must remain a real photograph, exactly as photorealistic "
     "as Image 1.\n"
     "- Never convert the image into an illustration, anime, cartoon, "
@@ -199,16 +302,48 @@ TRYON_PROMPT = (
     "- Preserve photographic skin texture, real hair strands and real "
     "fabric texture throughout the image.\n"
     "\n"
-    "MODEL IDENTITY LOCK:\n"
-    "- Keep the model from Image 1 as the same person.\n"
-    "- Preserve the face, facial proportions, expression, eye shape, nose, "
-    "lips, skin tone and makeup.\n"
-    "- Preserve the exact hairstyle, hair length, hair color, hair volume "
-    "and hairline.\n"
-    "- Preserve the exact body shape, height, shoulder width, waist, hips, "
-    "arms and leg proportions.\n"
+    "BODY LOCK:\n"
+    "- Preserve the exact body type, height, shoulder width, bust, waist, "
+    "hips, arm and leg proportions from Image 1.\n"
     "- Preserve the pose, hand position, foot position and camera angle.\n"
-    "- Do not make the model slimmer, heavier, taller, shorter, younger or older.\n"
+    "- Do not make the model slimmer, heavier, taller, shorter, younger or "
+    "older, and do not change the body to fit the clothes.\n"
+    "\n"
+    "STYLING DIRECTION (how the outfit must look worn):\n"
+    "- Every garment must fit the body at the shoulders, chest, waist and "
+    "hips as if tailored and adjusted by a stylist, not hung loosely like "
+    "on a hanger.\n"
+    "- Define the waistline: tuck or half-tuck tops into bottoms whenever "
+    "the product allows; skirts and trousers sit at the natural waist "
+    "unless the product is designed as low-rise.\n"
+    "- Shoulder seams sit exactly at the shoulder edge; a dropped shoulder is "
+    "allowed only when the product is intentionally oversized, and then it "
+    "must look deliberate, with sleeves cuffed or pushed once if too long.\n"
+    "- Sleeve length ends at the wrist bone; trouser hems break cleanly at "
+    "the shoe; skirt hems fall straight and even.\n"
+    "- Outerwear hangs with flat lapels, aligned buttons and clean front "
+    "edges; open or closed according to the product's intended styling.\n"
+    "- Balance silhouette volume: volume on top pairs with a slim bottom, "
+    "volume on the bottom pairs with a fitted top; never box-on-box or "
+    "baggy-on-baggy.\n"
+    "- Keep proportions elongating: continuous vertical lines, hems that "
+    "lengthen the legs, shoes visually connected to the bottom.\n"
+    "- Fabric must show natural tension at the shoulders, bust and hips, "
+    "with gravity-correct drape and realistic folds, not random wrinkles.\n"
+    "- Bags hang naturally on the shoulder or in the hand with a visible "
+    "strap; accessories sit in their real positions.\n"
+    "- Absolutely avoid a shapeless, sagging, sloppy, thrown-on or "
+    "\"airport traveler\" look; the result must read as a polished, "
+    "editorial, intentionally styled outfit.\n"
+    "\n"
+    "BODY-TYPE FIT GUIDE:\n"
+    "Read the USER PROFILE, identify every body-type keyword that matches "
+    "the categories below, and apply those rules when deciding tuck, "
+    "length, layering order, opening and drape. Product shape is never "
+    "altered to follow a rule; instead adjust how the product is worn "
+    "(tucked, open, cuffed, layered, positioned) to flatter this body.\n"
+    + BODY_FIT_GUIDE +
+    "\n"
     "\n"
     "OUTFIT REPLACEMENT RULES:\n"
     "- Replace existing clothing in the same body area before applying the "
@@ -218,8 +353,6 @@ TRYON_PROMPT = (
     "- Do not keep old trousers, skirts, shoes, bags or accessories when a "
     "replacement product is provided.\n"
     "- Do not add unrequested fashion items.\n"
-    "- Do not change the model's body to fit the clothes; fit the clothes "
-    "naturally to the existing body.\n"
     "- Respect realistic garment construction, gravity, overlap and layering.\n"
     "\n"
     "PRODUCT FIDELITY:\n"
@@ -229,30 +362,26 @@ TRYON_PROMPT = (
     "leather grain, suede nap, cotton weave, wool fibers and satin sheen.\n"
     "- Preserve the product's intended fit, including cropped, fitted, "
     "oversized, straight, wide-leg or flared shapes.\n"
-    "- Show realistic wrinkles, folds, tension and contact shadows where "
-    "the garment touches the body.\n"
     "- Do not invent, alter or hallucinate logos, labels, text, prints, "
     "buttons, pockets or decorations.\n"
     "- If a logo or text is unclear in the reference, omit it rather than "
     "inventing it.\n"
     "\n"
     "TARGET VISUAL STYLE:\n"
-    "- Produce a polished photorealistic Korean fashion lookbook photograph.\n"
+    "- A polished photorealistic Korean fashion lookbook photograph.\n"
     "- Clothing must look genuinely worn by the model, not pasted on, "
     "floating or composited incorrectly.\n"
     "- Prioritize realistic fabric texture, garment structure and natural "
     "photographic lighting on every material.\n"
-    "- Keep the final image clean, modern and suitable for a fashion service UI.\n"
     "\n"
     "POSE AND FRAMING LOCK:\n"
     "- Keep exactly the same canvas size and aspect ratio as Image 1.\n"
-    "- Keep the model centered in the same position.\n"
+    "- Keep the model centered in the same position with the same scale "
+    "and margins.\n"
     "- Keep the same front-facing neutral fitting pose.\n"
-    "- Keep the same scale and margins around the model.\n"
     "- The entire body from the top of the hair to the bottom of the shoes "
-    "must remain visible.\n"
-    "- Do not crop the head, hair, hands, elbows, legs, bag or shoes.\n"
-    "- Keep both feet visible and close together.\n"
+    "must remain visible; do not crop the head, hair, hands, elbows, legs, "
+    "bag or shoes.\n"
     "- Keep both hands anatomically correct and clearly separated from clothing.\n"
     "\n"
     "BACKGROUND AND LIGHTING:\n"
