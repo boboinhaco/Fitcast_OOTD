@@ -44,6 +44,9 @@ TRYON_IMAGE_HOSTS = ("gstatic.com", "serpapi.com", "pstatic.net", "naver.net")
 CUTOUT_CACHE_DIR = DATA_DIR / "cutout_cache"  # 검색 결과 이미지의 누끼 (화면은 /cutouts/ 경로로 읽음)
 CATALOG_DIR = WEB_DIR / "catalog"  # 옷장 카탈로그 상품 사진 (tools/build_catalog.py 결과물)
 
+# 회원·저장한 코디 (SQLite)
+DB_PATH = DATA_DIR / "fitcast.db"
+
 # UI 선택지: 선호 스타일
 STYLE_OPTIONS = [
     "캐주얼", "미니멀", "스트릿", "모리걸", "걸리시", "페미닌",

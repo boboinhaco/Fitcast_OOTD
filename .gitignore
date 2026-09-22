@@ -21,3 +21,7 @@ flagged/
 
 # 실행 중 생기는 캐시 (AI 코디 상품 사진 누끼)
 data/cutout_cache/
+
+# 랜딩 사진 원본 (웹은 줄인 jpg 사용)
+web/img/original/
+data/fitcast.db

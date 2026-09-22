@@ -122,6 +122,7 @@ svg { display: block; }
   background: var(--card);
 }
 .card svg { width: 100%; height: 100%; }
+.card .photo, .stand .photo { width: 100%; height: 100%; object-fit: cover; display: block; } /* 사진은 카드에 맞춰 자르고 비율 유지 */
 .ghost {
   position: absolute;
   font: 800 clamp(96px, 17vw, 210px)/0.82 var(--latin);
@@ -165,6 +166,7 @@ svg { display: block; }
 .hero-card svg { transform: translateY(5%) scale(1.1); transform-origin: 50% 100%; }
 .stand { height: 440px; }
 .stand svg { width: 100%; height: 100%; }
+.stand .photo { border-radius: 22px; }
 
 .duo-grid { display: grid; grid-template-columns: 0.95fr 1.4fr; gap: 40px; align-items: center; position: relative; }
 .collage { position: relative; height: 420px; }
@@ -274,7 +276,7 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
 .ruler { position: absolute; left: 14px; top: 0; bottom: 0; z-index: 0; pointer-events: none; }
 .ruler span { position: absolute; left: 0; font: 600 9px/1 var(--latin); color: rgba(0, 0, 0, 0.35); display: flex; align-items: center; gap: 4px; }
 .ruler span::before { content: ""; width: 8px; height: 1px; background: rgba(0, 0, 0, 0.25); }
-.preview .tag { position: absolute; left: -14px; top: 26px; z-index: 2; }
+.preview .tag { position: absolute; right: -14px; top: 26px; z-index: 2; } /* 왼쪽 키 눈금을 가리지 않게 오른쪽에 */
 .summary { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .summary span { font-size: 12px; padding: 5px 11px; border-radius: 999px; background: #fff; border: 1px solid var(--soft); }
 .nav-row { display: flex; justify-content: space-between; gap: 12px; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--soft); }
@@ -335,7 +337,7 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
 
 .panel { background: #fff; border: 1px solid var(--soft); border-radius: 22px; padding: 18px; position: sticky; top: 16px; }
 .tabs { display: flex; gap: 4px; background: var(--blush); border-radius: 999px; padding: 4px; margin-bottom: 16px; }
-.tabs button { flex: 1; border: 0; background: transparent; border-radius: 999px; padding: 10px 8px; font: 700 12.5px/1 var(--latin); letter-spacing: 0.02em; }
+.tabs button { flex: 1; border: 0; background: transparent; border-radius: 999px; padding: 10px 6px; font: 700 11.5px/1 var(--latin); letter-spacing: 0.01em; white-space: nowrap; }
 .tabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
 .cats { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 8px; scrollbar-width: thin; }
 .cats .chip { white-space: nowrap; padding: 7px 13px; font-size: 12.5px; }
@@ -420,3 +422,43 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
 .seg button.soon small { font-size: 10px; margin-left: 4px; }
 .soon-card { display: flex; align-items: center; justify-content: center; text-align: center; font: 800 22px/1.2 var(--latin); letter-spacing: 0.06em; color: #b5aca6; }
 .soon-card small { display: block; font: 600 12px/1.6 var(--kr); letter-spacing: 0; }
+
+/* 얼굴 원본 사진 + 헤어 누끼 (인라인 SVG, 정사각형 구도) */
+.photo-head { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #fff; }
+.face-row .card { aspect-ratio: 1; }
+
+/* Shop the look 카드 */
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.shop-card { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; padding: 12px; background: #fff; border: 1px solid var(--soft); border-radius: 16px; }
+.shop-card .pic { width: 88px; height: 104px; border-radius: 12px; background: #f7f4f2; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.shop-card .pic img { max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.shop-card .pic svg { max-width: 100%; max-height: 100%; width: auto; height: 100%; }
+.shop-card .meta { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.shop-card .lab { font: 600 10px/1 var(--latin); letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; }
+.shop-card .nm { font-size: 12.5px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.shop-card .price { font: 700 12px/1 var(--latin); }
+.shop-card .links { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.shop-card .chip { font-size: 11px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--soft); color: var(--muted); text-decoration: none; }
+.shop-card .chip.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* 회원 배지·로그인 모달·저장한 코디 */
+.auth-pill { position: fixed; top: 14px; right: 16px; z-index: 30; display: flex; gap: 6px; align-items: center; background: #fff; border: 1px solid var(--soft); border-radius: 999px; padding: 5px 6px 5px 12px; font-size: 12.5px; box-shadow: 0 6px 20px rgba(28, 27, 27, 0.08); }
+.auth-pill span { font-weight: 700; margin-right: 4px; }
+.auth-pill button { border: 1px solid var(--soft); background: #fff; border-radius: 999px; padding: 6px 11px; font: 600 12px/1 var(--kr); }
+.auth-pill button.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+.modal-card.narrow { width: min(420px, 100%); }
+.form .hint { font-size: 12px; color: var(--muted); margin: -4px 0 0; }
+.looks-grid { display: grid; gap: 12px; max-height: 620px; overflow-y: auto; padding: 2px; }
+.look-card { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; border: 1.3px solid var(--soft); border-radius: 16px; padding: 10px; background: #fff; }
+.look-card .pic { height: 150px; border-radius: 12px; background: #f7f4f2; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.look-card .pic img, .look-card .pic svg { width: 100%; height: 100%; object-fit: cover; }
+.look-card .meta { display: flex; flex-direction: column; gap: 5px; min-width: 0; font-size: 12.5px; }
+.look-card .items { color: var(--muted); font-size: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.look-card .date { font: 600 10.5px/1 var(--latin); color: var(--muted); }
+.look-card .row { display: flex; gap: 6px; margin-top: auto; }
+.btn.sm { padding: 7px 12px; font-size: 12px; }
+@media (max-width: 640px) { .auth-pill { top: auto; bottom: 14px; right: 12px; } }
+
+/* 랜딩 스탠드 누끼 사진 · 얼굴 고르기 카드 사진 */
+.stand.cutout img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; display: block; }
+.look-opt .pic { position: relative; }
