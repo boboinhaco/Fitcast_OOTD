@@ -46,7 +46,6 @@ const Avatar = (() => {
     if (Math.abs(left[0][0]) < 0.01) right.pop();
     return [...left, ...right];
   }
-  const shiftPts = (pts, dx, dy) => pts.map(([x, y, c]) => [x + dx, y + dy, c]);
 
   // 중심선+반폭으로 팔다리·소매 같은 관 모양 외곽선 생성
   function limb(cs, ws, capStart = false, capEnd = false, capK = 0.9) {
@@ -1266,17 +1265,6 @@ const Avatar = (() => {
     return opts.label ? svg.replace('aria-label="아바타"', `aria-label="${opts.label}"`) : svg;
   }
 
-  // 헤어만 그린 썸네일 (얼굴 자리는 옅은 실루엣). 키트에 없는 헤어는 얼굴 미리보기로 대신함
-  function hairThumb(profile, hairId) {
-    const p = { ...DEFAULT_PROFILE, ...profile, hair: hairId };
-    if (!useKit(p)) return render(p, {}, { view: "face" });
-    const S = kitSkeleton(p), K = kitLayers(S, p), H = kit().head;
-    const own = KIT_HAIR[hairId] ? "" : K.head.replace(/<image[^>]*faces\/[a-z-]+\.png"[^>]*>/, ""); // 번 헤어 = 얼굴 자체 머리만
-    const sil = `<g fill="#e9e3de"><path d="M${-H.halfW * 0.92},${f1(H.eye - 6)} C${-H.halfW * 0.92},${f1(H.top + 6)} ${H.halfW * 0.92},${f1(H.top + 6)} ${H.halfW * 0.92},${f1(H.eye - 6)} C${H.halfW * 0.9},${f1(H.chin - 14)} ${H.halfW * 0.4},${f1(H.chin)} 0,${f1(H.chin)} C${-H.halfW * 0.4},${f1(H.chin)} ${-H.halfW * 0.9},${f1(H.chin - 14)} ${-H.halfW * 0.92},${f1(H.eye - 6)}Z"/><path d="M${-S.nw},${f1(H.chin - 12)} V${f1(S.shoulderY - 8)} Q${-S.nw - 6},${f1(S.shoulderY + 4)} ${-S.sw},${f1(S.shoulderY + 16)} V${H.top + 260} H${S.sw} V${f1(S.shoulderY + 16)} Q${S.nw + 6},${f1(S.shoulderY + 4)} ${S.nw},${f1(S.shoulderY - 8)} V${f1(H.chin - 12)}Z"/></g>`;
-    const vb = `-100 ${f1(H.top - 32)} 200 236`;
-    return `<svg xmlns="${NS}" viewBox="${vb}" preserveAspectRatio="xMidYMin meet" role="img" aria-hidden="true"><defs>${kitDefs(S, p)}${S.defs.join("")}</defs>${K.hairBack}${sil}${own}${K.hair}</svg>`;
-  }
-
   // 옷 하나만 그린 썸네일 (DOM에서 bbox를 재서 딱 맞게 자름)
   const thumbCache = new Map();
   let meas = null;
@@ -1302,5 +1290,5 @@ const Avatar = (() => {
     return svg;
   }
 
-  return { render, thumb, hairThumb, shade, DEFAULT_PROFILE, usesKit: (p) => useKit({ ...DEFAULT_PROFILE, ...p }), KIT_HAIR, SHAPES: { top: Object.keys(TOPS), bottom: [...Object.keys(BOTTOMS), ...Object.keys(DRESSES)], outer: Object.keys(OUTERS), shoes: Object.keys(SHOES) } };
+  return { render, thumb, shade, DEFAULT_PROFILE, usesKit: (p) => useKit({ ...DEFAULT_PROFILE, ...p }), KIT_HAIR, SHAPES: { top: Object.keys(TOPS), bottom: [...Object.keys(BOTTOMS), ...Object.keys(DRESSES)], outer: Object.keys(OUTERS), shoes: Object.keys(SHOES) } };
 })();

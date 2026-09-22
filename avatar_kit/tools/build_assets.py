@@ -199,18 +199,6 @@ def neck_mask(rgb: np.ndarray, alpha: np.ndarray, m: dict) -> np.ndarray:
     return a * fade
 
 
-def jaw_mask(shape: tuple[int, int], j: dict) -> np.ndarray:
-    """턱 모서리 → 턱끝을 잇는 곡선 아래(원래 목 자리 사각형)를 지우는 마스크."""
-    h, w = shape
-    yy, xx = np.mgrid[:h, :w]
-    cm, half = (j["xl"] + j["xr"]) / 2, (j["xr"] - j["xl"]) / 2
-    t = np.clip(np.abs(xx - cm) / half, 0, 1)
-    limit = j["gy"] + (j["chin"] - j["gy"]) * (1 - t ** 2)
-    keep = (yy <= limit) | (yy < j["gy"])
-    keep &= (yy < j["gy"]) | ((xx >= j["xl"]) & (xx <= j["xr"]))
-    return soften(keep, erode=0, blur=1.4)
-
-
 def normalize_faces() -> tuple[dict, dict]:
     """모든 얼굴을 기준 얼굴의 눈 높이·중심·볼 폭에 맞춘 같은 프레임으로."""
     raw = {n: face_layer(n) for n in FACES}
@@ -369,8 +357,8 @@ def inner_edge(alpha: np.ndarray) -> float:
 
 # 헤어별 미세 보정: (배율 배수, 가로 이동, 세로 이동) — 헤어 원본 px 기준, 자동 맞춤 뒤에 적용
 HAIR_ADJUST = {
-    "long-straight": (1.12, 0, -10), "long-wave": (1.1, 0, -25), "hush-cut": (0.9, 0, -60),
-    "bob": (0.78, 0, -90), "ponytail": (0.8, 12, 0), "short-layered": (0.74, 60, -5),
+    "long-straight": (1.22, 0, 27), "long-wave": (1.14, 0, -25), "hush-cut": (0.94, 0, -100),
+    "bob": (0.74, 0, -160), "ponytail": (0.8, 66, 0), "short-layered": (0.66, -27, 10),
 }
 
 
