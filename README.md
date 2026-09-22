@@ -10,7 +10,7 @@ app_file: app.py
 pinned: false
 ---
 
-<!-- 위 블록은 Hugging Face Spaces 배포 설정이에요. GitHub에서는 표로 보이는데 지우면 배포가 깨져요. -->
+<!-- 위 블록은 Hugging Face Spaces(PRO)용 설정이에요. Render 배포에는 쓰이지 않지만 지우면 Space 배포가 깨져요. -->
 
 # 🌤️ Fitcast — 옷차림 예보
 
@@ -30,7 +30,7 @@ pinned: false
 7. [개발 규칙](#개발-규칙)
 8. [확장 가이드](#확장-가이드)
 9. [구현 체크리스트](#구현-체크리스트)
-10. [배포 (Hugging Face Spaces)](#배포-hugging-face-spaces)
+10. [배포 (Render 무료 플랜)](#배포-render-무료-플랜)
 11. [트러블슈팅](#트러블슈팅)
 12. [한계와 주의사항](#한계와-주의사항)
 
@@ -116,7 +116,7 @@ flowchart LR
 
 ```
 Fitcast_OOTD/
-├── app.py                    # 실행 진입점: FastAPI(/) + Gradio(/lab) (Spaces도 이 파일 실행)
+├── app.py                    # 실행 진입점: FastAPI(/) + Gradio(/lab) (Render·Spaces도 이 파일 실행)
 ├── avatar_kit/               # 실사풍 아바타 에셋 키트 (원본 assets/ → 빌드 결과 dist/)
 │   ├── tools/build_assets.py # 누끼 복구·정렬·골격 측정·헤어 맞춤
 │   └── dist/                 # 웹이 /avatar-kit 으로 쓰는 레이어 PNG + layout.js
@@ -211,7 +211,7 @@ python app.py
 
 ### 1. 비밀키
 
-- API 키는 **`.env`와 Spaces Secrets에만** 둬요. 코드·README·커밋 메시지·스크린샷 어디에도 쓰지 않아요.
+- API 키는 **`.env`와 배포 서비스의 환경변수(Render Environment / Spaces Secrets)에만** 둬요. 코드·README·커밋 메시지·스크린샷 어디에도 쓰지 않아요.
 - 커밋 전에 `git status`로 `.env`가 안 잡히는지 확인해요. (`.gitignore`에 이미 등록돼 있어요)
 - 키를 실수로 푸시했다면 파일을 지우는 걸로 끝내지 말고 **즉시 키를 폐기하고 재발급**해요. 깃 히스토리에 남기 때문이에요.
 
@@ -219,7 +219,7 @@ python app.py
 
 혼자 하는 프로젝트라 가볍게 가요.
 
-- `main`: 항상 실행되는 상태 유지. Spaces에 올라가는 브랜치예요.
+- `main`: 항상 실행되는 상태 유지. Render가 자동 배포하는 브랜치예요.
 - `feat/기능명`, `fix/버그명`: 작업 브랜치. 끝나면 `main`에 머지해요.
 - 시간이 촉박하면 `main`에 바로 커밋해도 되지만, **커밋 전에 `python app.py`가 뜨는지는 꼭 확인**해요.
 
@@ -306,33 +306,28 @@ python app.py
 - [ ] **5. 챗봇 탭** — Tool 호출 순서 확인. 디버깅할 땐 `create_agent(..., debug=True)`
 - [ ] **6. 사진 탭** — 로고 있는 옷 / 없는 옷 각각 테스트
 - [ ] **7. 배포** — 아래 절 참고. **마감 3시간 전에는 시작하기**
-- [ ] **8. 마무리** — README에 Spaces 링크와 스크린샷 추가
+- [ ] **8. 마무리** — README에 배포 링크와 스크린샷 추가
 
-## 배포 (Hugging Face Spaces)
+## 배포 (Render 무료 플랜)
 
-GitHub `main`에 푸시하면 Actions 워크플로([.github/workflows/sync-to-hf.yml](.github/workflows/sync-to-hf.yml))가 Space로 자동 동기화해요. 처음 한 번만 아래를 설정합니다.
+[render.yaml](render.yaml) Blueprint가 있어서 대시보드에서 저장소만 고르면 돼요. GitHub `main`에 푸시할 때마다 자동으로 다시 배포됩니다.
 
-1. [huggingface.co/join](https://huggingface.co/join)에서 가입 (아이디는 영문·숫자만 가능, 예: `inseo6224`) → [huggingface.co/new-space](https://huggingface.co/new-space)에서 Space 생성 (이름 `Fitcast_OOTD`, SDK: **Gradio**, 하드웨어: CPU basic 무료, 공개)
-2. Space의 **Settings → Variables and secrets**에 `OPENAI_API_KEY`, `SERPAPI_KEY`를 **Secret**으로 등록. `FITCAST_MODEL` 등을 바꾸고 싶으면 Variable로 추가
-3. [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)에서 **Write** 권한 토큰 생성
-4. GitHub 저장소 **Settings → Secrets and variables → Actions**에 등록
-   - Secrets: `HF_TOKEN` = 3번 토큰
-   - Variables: `HF_SPACE` = `<HF아이디>/Fitcast_OOTD`
-5. GitHub **Actions** 탭에서 "Sync to Hugging Face Space"를 **Run workflow**로 한 번 실행 (이후엔 푸시마다 자동)
-6. Space의 **Logs** 탭에서 빌드 확인. 첫 빌드는 누끼 모델 다운로드 때문에 5~10분 걸리고, `Uvicorn running`이 보이면 성공이에요.
+1. [render.com](https://render.com)에 GitHub 계정으로 가입·로그인
+2. **New → Blueprint** → 저장소 `boboinhaco/Fitcast_OOTD` 선택 → 서비스 이름 확인 후 **Apply**
+3. 생성 화면에서 묻는 비밀키 입력: `OPENAI_API_KEY`, `SERPAPI_KEY` (값은 `.env`에 있는 것과 같게)
+4. 첫 빌드 3~5분. **Logs**에 `Uvicorn running`이 보이면 `https://fitcast-ootd.onrender.com` 같은 주소로 접속돼요
 
-수동으로 올리고 싶으면 리모트를 직접 추가해도 돼요.
+무료 플랜에서 알아둘 점
 
-```bash
-git remote add space https://huggingface.co/spaces/<HF아이디>/Fitcast_OOTD
-git push space main
-```
+- 메모리 512MB라 누끼 라이브러리(rembg)를 뺀 [requirements-render.txt](requirements-render.txt)로 설치해요. 옷장 사진은 미리 잘라 둔 파일을 쓰고, 새 상품 사진은 흰 배경만 걷어내는 방식으로 대체돼요. 실측 메모리는 약 190MB예요.
+- 15분 동안 요청이 없으면 잠들고, 다음 첫 접속에 30초~1분 걸려요. **발표 5분 전에 주소를 한 번 열어 두세요.**
+- 디스크가 재배포 때 초기화돼요. 회원 DB(SQLite)와 AI 피팅 캐시는 유지되지 않아요.
 
-이 README 맨 위의 `---` 블록이 Spaces 설정이에요. `sdk_version`은 로컬에서 `pip show gradio`로 확인한 버전과 맞춰 주세요.
+### 대안: Hugging Face Spaces (PRO 구독 필요)
 
-> 💾 Space 디스크는 재시작·재빌드 때 초기화돼요. 회원 DB(SQLite)와 AI 피팅 캐시가 지워지니, 유지가 필요하면 Settings에서 Persistent storage(유료)를 켜세요.
+Gradio Space는 2026년부터 무료 CPU라도 PRO 구독(월 9달러)이 있어야 만들 수 있어요. 구독이 있으면 README 맨 위의 `---` 블록이 Space 설정이고, [.github/workflows/sync-to-hf.yml](.github/workflows/sync-to-hf.yml)을 GitHub Actions에서 수동 실행(Run workflow)하면 Space로 올라가요. 그 전에 GitHub 저장소 Secrets에 `HF_TOKEN`(Write 토큰), Variables에 `HF_SPACE`(`boboinhaco/Fitcast_OOTD`)를 넣고, Space Settings에 `OPENAI_API_KEY`·`SERPAPI_KEY`를 Secret으로 등록해요.
 
-> 💸 공개 Space는 누구나 들어와서 내 API 키로 요청을 보낼 수 있어요. OpenAI 대시보드에서 **월 사용 한도**를 꼭 걸어두고, 심사·시연이 끝나면 Space를 Private으로 돌리거나 키를 폐기해요.
+> 💸 공개 주소는 누구나 들어와서 내 API 키로 요청을 보낼 수 있어요. OpenAI 대시보드에서 **월 사용 한도**를 꼭 걸어두고, 심사·시연이 끝나면 서비스를 내리거나 키를 폐기해요.
 
 ## 트러블슈팅
 
@@ -345,7 +340,8 @@ git push space main
 | 날씨 조회 실패 (400) | 예보는 약 16일 이내만 가능해요 |
 | 도시를 못 찾음 | 영문 도시명으로 시도. 자주 쓰는 도시는 `weather.CITY_FALLBACK`에 좌표 추가 |
 | 첫 추천만 유독 느림 | 첫 호출 때 스타일 가이드를 임베딩해서 그래요. 이후엔 캐시돼요 |
-| Spaces 빌드 실패 | Logs에서 실패한 패키지 확인 → `requirements.txt` 버전 범위 조정, README의 `sdk_version` 확인 |
+| Render 빌드 실패 | Logs에서 실패한 패키지 확인 → `requirements-render.txt` 버전 범위 조정. Spaces면 README의 `sdk_version`도 확인 |
+| Render 첫 접속이 느림 | 무료 플랜은 15분 유휴 후 잠들어요. 시연 전에 미리 한 번 열어 두기 |
 | 챗봇이 날씨를 안 부르고 추측함 | `AGENT_SYSTEM_PROMPT` 1번 규칙을 더 강하게, 또는 Tool docstring 첫 문장을 보강 |
 
 ## 한계와 주의사항

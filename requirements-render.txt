@@ -1,0 +1,11 @@
+# Render 무료 플랜(메모리 512MB)용: 누끼 라이브러리(rembg·onnxruntime)와 테스트 도구를 뺀 목록.
+# 누끼가 없으면 fitcast/cutout.py가 흰 배경만 걷어내는 방식으로 대체하고, 옷장 사진은 이미 잘라 둔 파일을 씀.
+langchain>=1.4,<2
+langchain-openai>=1.6,<2
+langchain-text-splitters>=1.1,<2
+gradio>=6.0,<7
+python-dotenv>=1.0
+requests>=2.31
+pillow>=10.0
+numpy>=1.26
+uvicorn>=0.30
