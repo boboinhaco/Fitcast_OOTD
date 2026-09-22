@@ -1,0 +1,27 @@
+# GitHub main 브랜치에 푸시될 때마다 Hugging Face Space로 그대로 밀어 넣는 워크플로.
+# 준비: GitHub 저장소 Settings → Secrets and variables → Actions 에
+#   - Secret  HF_TOKEN : huggingface.co/settings/tokens 에서 만든 Write 권한 토큰
+#   - Variable HF_SPACE: Space 경로 (예: inseo6224/Fitcast_OOTD)
+name: Sync to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push to Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          test -n "$HF_TOKEN" || { echo "HF_TOKEN secret이 없어요"; exit 1; }
+          test -n "$HF_SPACE" || { echo "HF_SPACE variable이 없어요 (예: inseo6224/Fitcast_OOTD)"; exit 1; }
+          git push --force "https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" HEAD:main
