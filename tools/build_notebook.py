@@ -22,6 +22,8 @@ md("""
 
 **LangChain 종합실습 · 최인서**
 
+**배포 주소**: https://fitcast-ootd.onrender.com · **GitHub 저장소**: https://github.com/boboinhaco/Fitcast_OOTD
+
 > 이 노트북은 서비스 **Fitcast OOTD**(웹 아바타 피팅룸)에서 **LLM · LangChain 부분만** 떼어 설명·시연합니다.
 > 전체 서비스 코드는 같은 저장소의 `fitcast/` 패키지에 있고, 노트북은 그 모듈을 그대로 import해서 실행합니다.
 
@@ -45,17 +47,39 @@ md("""
 md("""
 ### 0. 준비 — 프로젝트 모듈 불러오기
 
-`.env`의 `OPENAI_API_KEY`를 읽습니다(키 값은 출력하지 않습니다). 모델은 `FITCAST_MODEL`(기본 `openai:gpt-4o-mini`).
+이 노트북은 저장소의 `fitcast` 패키지를 import해서 씁니다. **노트북 파일만 따로 받은 경우**에도 아래 셀이 GitHub에서 저장소를 옆 폴더에 내려받고, 없는 패키지를 설치한 뒤 실행하도록 돼 있어요(Colab·새 환경 모두 가능, git과 인터넷만 있으면 됨).
+
+`OPENAI_API_KEY`는 `.env`에서 읽고(키 값은 출력하지 않음), 없으면 입력창으로 받습니다. 모델은 `FITCAST_MODEL`(기본 `openai:gpt-4o-mini`).
 """),
 code("""
-import sys, json, os
+import sys, json, os, subprocess, importlib.util
 from pathlib import Path
 
-ROOT = Path.cwd() if (Path.cwd() / "fitcast").exists() else Path.cwd().parent
+# 1) 저장소 위치 찾기: 현재 폴더나 상위 폴더에 fitcast/가 있으면 그걸 쓰고, 없으면 GitHub에서 내려받음
+REPO_URL = "https://github.com/boboinhaco/Fitcast_OOTD.git"
+ROOT = next((d for d in [Path.cwd(), *Path.cwd().parents] if (d / "fitcast").is_dir()), None)
+if ROOT is None:
+    ROOT = Path.cwd() / "Fitcast_OOTD"
+    if not (ROOT / "fitcast").is_dir():
+        subprocess.run(["git", "clone", "--depth", "1", REPO_URL, str(ROOT)], check=True)
+    print("저장소를 내려받아 사용:", ROOT)
 sys.path.insert(0, str(ROOT))
 
+# 2) 필요한 패키지가 없으면 설치 (버전 범위는 저장소 requirements.txt와 동일)
+NEEDED = [("langchain>=1.4,<2", "langchain"), ("langchain-openai>=1.6,<2", "langchain_openai"),
+          ("langchain-text-splitters>=1.1,<2", "langchain_text_splitters"), ("python-dotenv>=1.0", "dotenv"),
+          ("requests>=2.31", "requests"), ("numpy>=1.26", "numpy"), ("grandalf", "grandalf")]
+missing = [spec for spec, mod in NEEDED if importlib.util.find_spec(mod) is None]
+if missing:
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", *missing], check=True)
+    print("설치한 패키지:", missing)
+
+# 3) API 키: .env → 환경변수 → 입력창 순서 (값은 출력하지 않음)
 from dotenv import load_dotenv
 load_dotenv(ROOT / ".env")
+if not os.getenv("OPENAI_API_KEY"):
+    from getpass import getpass
+    os.environ["OPENAI_API_KEY"] = getpass("OPENAI_API_KEY 입력: ")
 
 from IPython.display import Markdown, display
 from fitcast import config
