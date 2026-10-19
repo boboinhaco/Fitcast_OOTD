@@ -17,9 +17,25 @@ pinned: false
 > 일기예보는 봤는데, 뭘 입을지는 모르겠다면.
 > **오늘 날씨와 내 스타일에 딱 맞는 코디를 예보해주는 AI 옷차림 에이전트**
 
-🔗 **배포 주소**: https://fitcast-ootd.onrender.com · **GitHub**: https://github.com/boboinhaco/Fitcast_OOTD
+🔗 **배포 주소**: https://fitcast-ootd.onrender.com (무료 플랜이라 첫 접속에 30초~1분 걸려요)
 
-날씨를 조회하고, 사용자의 선호 스타일과 TPO를 반영해 상의·하의·외투·신발·악세사리를 한 세트로 추천한 뒤, 무신사·29CM·지그재그·에이블리·테무·쉬인에서 바로 찾아볼 수 있는 검색 링크까지 붙여주는 LangChain 미니 프로젝트예요.
+<p align="center"><img src="docs/screenshots/landing.jpg" width="900" alt="Fitcast 랜딩 화면"></p>
+
+날씨를 조회하고, 사용자의 체형·선호 스타일·TPO를 반영해 상의·하의·외투·신발·악세사리를 한 세트로 추천한 뒤, 실제 판매 상품 사진을 찾아 아바타에 입히고 구매 링크까지 붙여주는 LangChain 프로젝트예요.
+
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Agent%20%C2%B7%20LCEL%20%C2%B7%20RAG-1C3C3C?logo=langchain&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-gpt--4o-412991?logo=openai&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![Gradio](https://img.shields.io/badge/Gradio-F97316)
+![Render](https://img.shields.io/badge/Render-deployed-46E3B7?logo=render&logoColor=black)
+
+| | |
+|---|---|
+| **형태** | 개인 프로젝트 (SKALA 4기 LangChain 미니 프로젝트, 2026.09) · 기획 → 구현 → 배포 전 과정 |
+| **AI 구성** | Tool calling 에이전트(날씨·스타일 가이드·실제 상품 검색) · LCEL 추천 체인 + Pydantic 구조화 출력 · 미니 RAG · 비전 모델(사진 분석, 착용컷 걸러내기) · 이미지 편집 모델(AI 피팅) |
+| **프론트** | 빌드 없는 정적 웹(아바타 렌더러, 4단계 온보딩, 피팅룸) + Gradio Lab 화면 |
+| **그 외** | 회원·저장 코디(SQLite, PBKDF2) · 상품 누끼 파이프라인(SerpApi → 비전 선별 → rembg) · API 키 없이 도는 단위 테스트 5파일 · Render Blueprint 배포 |
 
 ## 목차
 
@@ -29,12 +45,9 @@ pinned: false
 4. [폴더 구조](#폴더-구조)
 5. [시작하기](#시작하기)
 6. [환경변수](#환경변수)
-7. [개발 규칙](#개발-규칙)
-8. [확장 가이드](#확장-가이드)
-9. [구현 체크리스트](#구현-체크리스트)
-10. [배포 (Render 무료 플랜)](#배포-render-무료-플랜)
-11. [트러블슈팅](#트러블슈팅)
-12. [한계와 주의사항](#한계와-주의사항)
+7. [배포 (Render 무료 플랜)](#배포-render-무료-플랜)
+8. [한계와 주의사항](#한계와-주의사항)
+9. [개발 가이드 (별도 문서)](docs/DEVELOPMENT.md) — 개발 규칙 · 확장 가이드 · 체크리스트 · 트러블슈팅
 
 ## 주요 기능
 
@@ -209,107 +222,6 @@ python app.py
 
 날씨는 [Open-Meteo](https://open-meteo.com/)를 써서 별도 키가 필요 없어요.
 
-## 개발 규칙
-
-### 1. 비밀키
-
-- API 키는 **`.env`와 배포 서비스의 환경변수(Render Environment / Spaces Secrets)에만** 둬요. 코드·README·커밋 메시지·스크린샷 어디에도 쓰지 않아요.
-- 커밋 전에 `git status`로 `.env`가 안 잡히는지 확인해요. (`.gitignore`에 이미 등록돼 있어요)
-- 키를 실수로 푸시했다면 파일을 지우는 걸로 끝내지 말고 **즉시 키를 폐기하고 재발급**해요. 깃 히스토리에 남기 때문이에요.
-
-### 2. 브랜치
-
-혼자 하는 프로젝트라 가볍게 가요.
-
-- `main`: 항상 실행되는 상태 유지. Render가 자동 배포하는 브랜치예요.
-- `feat/기능명`, `fix/버그명`: 작업 브랜치. 끝나면 `main`에 머지해요.
-- 시간이 촉박하면 `main`에 바로 커밋해도 되지만, **커밋 전에 `python app.py`가 뜨는지는 꼭 확인**해요.
-
-### 3. 커밋 메시지
-
-`타입: 한 줄 요약` 형식, 한국어로 써요.
-
-| 타입 | 용도 | 예시 |
-|---|---|---|
-| `feat` | 기능 추가 | `feat: 날씨 Tool에 자외선 지수 추가` |
-| `fix` | 버그 수정 | `fix: 도시명 공백 입력 시 오류 처리` |
-| `prompt` | 프롬프트만 수정 | `prompt: 코디 추천에 브랜드 생성 금지 규칙 추가` |
-| `data` | `data/` 문서 수정 | `data: 스타일 가이드에 Y2K 추가` |
-| `docs` | 문서 | `docs: README 배포 절 보강` |
-| `refactor` | 동작 변화 없는 구조 개선 | `refactor: 링크 생성 함수 분리` |
-| `chore` | 설정·의존성 | `chore: gradio 버전 고정` |
-
-프롬프트 수정을 `prompt:`로 따로 떼어두면 "언제부터 답변 품질이 바뀌었는지" 추적하기 쉬워요.
-
-### 4. 코드 스타일
-
-- **주석은 한 줄로 간단하게.** 여러 줄 설명이 필요하면 코드가 복잡하다는 신호니까 함수를 쪼개요.
-- 함수·변수는 `snake_case`, 클래스는 `PascalCase`, 상수는 `UPPER_SNAKE_CASE`.
-- 함수에는 타입 힌트를 붙여요. 구조화 출력과 Tool이 타입 정보를 실제로 사용해요.
-- 모듈 맨 위에 한 줄짜리 docstring으로 "이 파일이 뭘 하는지" 적어요.
-
-### 5. 어디에 무엇을 두는가
-
-| 바꾸고 싶은 것 | 고칠 파일 | 규칙 |
-|---|---|---|
-| 프롬프트 문구 | `prompts.py` | 프롬프트 문자열은 **여기에만**. 체인·에이전트 파일에 하드코딩하지 않아요 |
-| LLM 출력 형태 | `schemas.py` | 필드마다 `description`을 써요. LLM이 이 설명을 읽고 채워요 |
-| UI 선택지, URL 패턴 | `config.py` | 매직 스트링 금지. 선택지는 config에서 가져와요 |
-| 패션 지식 | `data/` | 코드가 아니라 문서를 고쳐요 |
-| 외부 API 호출 | `tools/` | 순수 함수(`fetch_*`, `make_*`)와 `@tool` 래퍼를 분리해요 |
-
-### 6. Tool 작성 규칙
-
-- **docstring이 곧 프롬프트예요.** 에이전트는 docstring과 `Args` 설명만 보고 Tool을 고르니까, "언제 호출해야 하는지"를 첫 문장에 써요.
-- Tool 안에서 예외를 밖으로 던지지 않고 **오류 내용을 문자열로 반환**해요. 그래야 에이전트가 읽고 사용자에게 안내하거나 다시 시도해요.
-- 반환값은 LLM이 읽기 좋은 짧은 문자열로. 원본 JSON을 통째로 넘기면 토큰만 낭비돼요.
-- 로직은 순수 함수에 두고 `@tool`은 얇은 래퍼로만 만들어요. 그래야 체인에서 직접 호출할 수 있고 테스트도 쉬워요.
-
-### 7. 테스트
-
-- `tests/`에는 **API 키와 네트워크 없이 통과하는 테스트만** 둬요. (URL 인코딩, 기온 구간, 문서 분할 등)
-- LLM이 끼는 부분은 자동 테스트 대신 아래 시나리오를 손으로 돌려봐요.
-
-| 시나리오 | 확인할 것 |
-|---|---|
-| 서울 / 오늘 / 모리걸 / 일상 | 기온에 맞게 레이어드가 조절되는지 |
-| 한여름 기온 + 출근/오피스 | 민소매·반바지가 안 나오는지 |
-| 강수확률 높은 날 | 우산·레인부츠 제안, 밝은 하의 회피 |
-| 챗봇: "이번 주 토요일 제주도" | 날짜를 계산해서 `get_weather`를 호출하는지 |
-| 챗봇: "신발만 바꿔줘" (후속 질문) | 이전 코디를 기억하는지 |
-| 챗봇: "파이썬 코드 짜줘" | 정중히 거절하는지 |
-| 사진: 로고 없는 무지 티 | 브랜드를 지어내지 않는지 |
-
-## 확장 가이드
-
-**아바타 옷 추가**: ① `web/js/data.js`의 `CATALOG`에 아이템 추가(기존 `shape` 재사용이면 끝) → ② 새 모양이면 `web/js/avatar.js`에 그리는 함수를 추가하고 `config.AVATAR_SHAPES`에도 코드를 넣어요. `tests/test_web.py`가 두 목록이 어긋나면 알려줘요.
-
-**스타일 추가**: ① `config.STYLE_OPTIONS`에 이름 추가 → ② `data/style_guide.md`에 `## 스타일명` 섹션 추가(더운 날 / 추운 날 예시 포함). 코드 수정은 필요 없어요.
-
-**쇼핑 플랫폼 추가**: `config.SHOP_SEARCH_URLS`에 `"이름": "검색URL?keyword={q}"` 한 줄 추가. 해당 사이트에서 직접 검색해 보고 주소창의 URL 패턴을 복사해 와요.
-
-**Tool 추가**: ① `fitcast/tools/새파일.py`에 순수 함수 + `@tool` 작성 → ② `tools/__init__.py`에 export → ③ `agent.py`의 `tools=[...]`에 등록 → ④ `AGENT_SYSTEM_PROMPT`에 "언제 쓰는지" 한 줄 추가.
-
-**실제 상품 검색 튜닝**: `fitcast/tools/products.py`의 `FASHION_CATEGORIES`로 결과 카테고리를 거르고, 검색 키워드는 코디 추천 프롬프트의 `search_keyword` 규칙(색·소재 포함 2~4단어)을 따라요. 결과가 엉뚱하면 프롬프트 규칙부터 조정하세요.
-
-**AI 피팅 프롬프트**: `prompts.TRYON_PROMPT`를 고치면 캐시 키가 바뀌어 새로 생성돼요. 시연 전에 대표 코디 몇 개를 미리 생성해 `data/tryon_cache/`에 남겨두면 안전해요.
-
-**벡터스토어 교체**: 지금은 문서가 작아서 `InMemoryVectorStore`를 쓰고 앱 시작 후 첫 검색 때 임베딩해요. 문서가 커지면 `rag/style_guide.py`의 `get_vectorstore()`만 FAISS나 Chroma로 바꾸면 돼요.
-
-## 구현 체크리스트
-
-초기 세팅에 뼈대 코드는 다 들어 있어요. 아래 순서대로 **실제 키를 넣고 검증·튜닝**하면 돼요. 앞 단계가 안 되면 뒤 단계로 넘어가지 않는 게 핵심이에요.
-
-- [ ] **0. 환경** — `pytest` 통과, `python app.py`로 화면 확인
-- [ ] **1. 쇼핑 링크 검증** — 6개 플랫폼 링크를 전부 눌러보고 검색 결과가 뜨는지 확인. 안 되는 곳은 `config.SHOP_SEARCH_URLS` 수정 ⚠️ *URL 패턴은 사이트 개편으로 바뀔 수 있어서 직접 확인이 꼭 필요해요*
-- [ ] **2. 날씨 Tool** — 터미널에서 `python -c "from fitcast.tools.weather import fetch_weather; print(fetch_weather('서울'))"` 실행. 한글 도시명, 해외 도시명 둘 다 확인
-- [ ] **3. 코디 추천 탭** — 위 시나리오 표대로 돌려보고 `OUTFIT_PROMPT` 튜닝
-- [ ] **4. RAG 품질** — `retrieve_style_context('모리걸 더운 날')`이 모리걸 섹션을 가져오는지 확인. 이상하면 `_style_query()`나 `k` 조정
-- [ ] **5. 챗봇 탭** — Tool 호출 순서 확인. 디버깅할 땐 `create_agent(..., debug=True)`
-- [ ] **6. 사진 탭** — 로고 있는 옷 / 없는 옷 각각 테스트
-- [ ] **7. 배포** — 아래 절 참고. **마감 3시간 전에는 시작하기**
-- [ ] **8. 마무리** — README에 배포 링크와 스크린샷 추가
-
 ## 배포 (Render 무료 플랜)
 
 [render.yaml](render.yaml) Blueprint가 있어서 대시보드에서 저장소만 고르면 돼요. GitHub `main`에 푸시할 때마다 자동으로 다시 배포됩니다.
@@ -331,21 +243,6 @@ python app.py
 Gradio Space는 2026년부터 무료 CPU라도 PRO 구독(월 9달러)이 있어야 만들 수 있어요. 구독이 있으면 README 맨 위의 `---` 블록이 Space 설정이고, [.github/workflows/sync-to-hf.yml](.github/workflows/sync-to-hf.yml)을 GitHub Actions에서 수동 실행(Run workflow)하면 Space로 올라가요. 그 전에 GitHub 저장소 Secrets에 `HF_TOKEN`(Write 토큰), Variables에 `HF_SPACE`(`boboinhaco/Fitcast_OOTD`)를 넣고, Space Settings에 `OPENAI_API_KEY`·`SERPAPI_KEY`를 Secret으로 등록해요.
 
 > 💸 공개 주소는 누구나 들어와서 내 API 키로 요청을 보낼 수 있어요. OpenAI 대시보드에서 **월 사용 한도**를 꼭 걸어두고, 심사·시연이 끝나면 서비스를 내리거나 키를 폐기해요.
-
-## 트러블슈팅
-
-| 증상 | 원인과 해결 |
-|---|---|
-| `OPENAI_API_KEY` 관련 오류 | `.env` 파일이 프로젝트 루트에 있는지, 키 앞뒤에 따옴표·공백이 없는지 확인 |
-| `Unsupported parameter: temperature` | 온도 조절을 지원하지 않는 모델이에요. `FITCAST_TEMPERATURE`를 비워요 |
-| 모델을 찾을 수 없다는 오류 | `FITCAST_MODEL`의 모델명이 현재 계정에서 쓸 수 있는 이름인지 확인 |
-| 사진 탭만 오류 | 이미지 입력을 지원하지 않는 모델이에요. 비전 지원 모델로 바꿔요 |
-| 날씨 조회 실패 (400) | 예보는 약 16일 이내만 가능해요 |
-| 도시를 못 찾음 | 영문 도시명으로 시도. 자주 쓰는 도시는 `weather.CITY_FALLBACK`에 좌표 추가 |
-| 첫 추천만 유독 느림 | 첫 호출 때 스타일 가이드를 임베딩해서 그래요. 이후엔 캐시돼요 |
-| Render 빌드 실패 | Logs에서 실패한 패키지 확인 → `requirements-render.txt` 버전 범위 조정. Spaces면 README의 `sdk_version`도 확인 |
-| Render 첫 접속이 느림 | 무료 플랜은 15분 유휴 후 잠들어요. 시연 전에 미리 한 번 열어 두기 |
-| 챗봇이 날씨를 안 부르고 추측함 | `AGENT_SYSTEM_PROMPT` 1번 규칙을 더 강하게, 또는 Tool docstring 첫 문장을 보강 |
 
 ## 한계와 주의사항
 
